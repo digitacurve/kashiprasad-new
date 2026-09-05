@@ -1,7 +1,7 @@
 .heroWrapper {
   position: relative;
   width: 100%;
-  height: 320vh;
+  height: 260vh;
   background-color: #06080c;
   color: #f5f5f7;
 }
@@ -133,33 +133,35 @@
   box-shadow: 0 0 20px rgba(223, 171, 82, 0.2);
 }
 
-/* Headline overlay container - Left editorial composition */
+/* Headline overlay container - Centered bottom composition (Scaled from Mobile) */
 .headlineOverlay {
   position: absolute;
-  top: 17%;
-  left: 8vw;
-  right: auto;
+  top: auto;
+  bottom: clamp(1.2rem, 3vh, 2.5rem);
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   z-index: 30;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  text-align: center;
   pointer-events: none;
-  max-width: 600px;
+  width: 90vw;
+  max-width: 720px;
   padding: 0;
 }
 
 /* Subtle localized atmospheric gradient behind text */
 .editorialBackdrop {
   position: absolute;
-  top: -25%;
-  left: -20%;
-  width: 155%;
-  height: 150%;
-  background: radial-gradient(ellipse 75% 65% at 25% 40%,
-      rgba(6, 8, 12, 0.74) 0%,
-      rgba(6, 8, 12, 0.46) 35%,
-      rgba(6, 8, 12, 0.14) 65%,
+  top: -15%;
+  left: -12%;
+  width: 124%;
+  height: 130%;
+  background: radial-gradient(ellipse 80% 65% at 50% 50%,
+      rgba(6, 8, 12, 0.55) 0%,
+      rgba(6, 8, 12, 0.2) 55%,
       transparent 85%);
   filter: blur(42px);
   pointer-events: none;
@@ -169,89 +171,89 @@
 .sacredBadge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.68rem;
+  justify-content: center;
+  gap: 0.45rem;
+  font-size: clamp(0.58rem, 0.72vw, 0.72rem);
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #dfab52;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
   background: transparent;
   border: none;
   padding: 0;
 }
 
 .sacredBadgeDot {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   color: #fed88b;
   opacity: 0.9;
 }
 
 .mainHeading {
   font-family: var(--font-cinzel), serif;
-  font-size: clamp(2.85rem, 3.6vw, 3.8rem);
+  font-size: clamp(1.6rem, 2.4vw, 2.35rem);
   font-weight: 700;
-  line-height: 1.06;
-  letter-spacing: 0.03em;
+  line-height: 1.08;
+  letter-spacing: 0.05em;
   color: #fbf8f2;
   text-transform: uppercase;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
-  max-width: 600px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.95), 0 1px 6px rgba(0, 0, 0, 0.85);
+  margin: 0 auto;
+  text-align: center;
 }
 
 .desktopHeading {
-  display: block;
-}
-
-.mobileHeading {
   display: none;
 }
 
-.headingPart1 {
+.mobileHeading {
   display: block;
+  width: 100%;
   white-space: nowrap;
 }
 
-.headingWord {
+.mobileHeadingPart1,
+.mobileHeadingPart2 {
   display: inline;
-}
-
-.headingPart2 {
-  display: block;
   white-space: nowrap;
 }
 
 .subHeading {
   font-family: var(--font-cormorant), serif;
-  font-size: clamp(0.98rem, 1.15vw, 1.15rem);
+  font-size: clamp(0.88rem, 1.05vw, 1.1rem);
   font-weight: 400;
   font-style: italic;
   color: #cbd5e1;
-  max-width: 420px;
-  margin-top: 0.85rem;
-  line-height: 1.45;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
+  max-width: 560px;
+  margin: 0.4rem auto 0;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
 }
 
 .ctaRow {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin-top: 1.35rem;
+  justify-content: center;
+  margin-top: 0.75rem;
   pointer-events: auto;
+  width: 100%;
 }
 
 .primaryBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.75rem 1.75rem;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 2.2rem;
   border-radius: 9999px;
   background: linear-gradient(135deg, #dfab52 0%, #b88628 100%);
   color: #06080c;
   font-weight: 600;
-  font-size: 0.82rem;
-  letter-spacing: 0.1em;
+  font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   box-shadow: 0 4px 20px rgba(223, 171, 82, 0.35);
   transition: all 0.25s ease;
@@ -266,21 +268,7 @@
 }
 
 .secondaryBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.6rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  color: #f1f5f9;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  backdrop-filter: blur(8px);
-  transition: all 0.25s ease;
-  text-decoration: none;
-  white-space: nowrap;
+  display: none;
 }
 
 .secondaryBtn:hover {
@@ -307,7 +295,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-46.88%, -50%);
   aspect-ratio: 1536 / 1024;
   min-width: 100vw;
   min-height: 100svh;
@@ -628,24 +616,27 @@
 
 /* Desktop default tag positions (100% identical to previous inline coordinates) */
 .tagMala {
-  top: 78%;
-  left: 37%;
+  top: 86%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  align-items: center;
 }
 
 .tagGuru {
-  top: 74%;
-  left: 57%;
+  display: none !important;
 }
 
 .tagBead {
-  top: 45%;
-  left: 64%;
+  top: 32%;
+  left: 68%;
+  display: flex;
 }
 
 /* Exploded state title banner (Desktop master reference scaled from mobile) */
 .explodedStateTitle {
   position: absolute;
-  top: clamp(100px, 13.5vh, 135px);
+  top: 9%;
   left: 0;
   right: 0;
   display: flex;
@@ -697,25 +688,21 @@
 
 /* Bottom status / scroll indicator */
 .footerBar {
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   width: 100%;
-  max-width: 1380px;
-  padding: 0 2rem 1.5rem;
+  padding: 0 1.5rem 0.45rem;
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
 }
 
 .originBadge {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #94a3b8;
+  display: none;
 }
 
 .originDot {
@@ -742,32 +729,35 @@
 }
 
 .scrollPrompt {
+  position: relative;
+  left: auto;
+  transform: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
+  gap: 0.25rem;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #fed88b;
   opacity: 0.85;
 }
 
 .scrollMouse {
-  width: 18px;
-  height: 28px;
-  border: 1.5px solid rgba(223, 171, 82, 0.5);
-  border-radius: 12px;
+  width: 14px;
+  height: 22px;
+  border: 1.3px solid rgba(223, 171, 82, 0.5);
+  border-radius: 10px;
   position: relative;
 }
 
 .scrollWheel {
-  width: 2.5px;
-  height: 6px;
+  width: 2px;
+  height: 4.5px;
   background-color: #fed88b;
-  border-radius: 2px;
+  border-radius: 1.5px;
   position: absolute;
-  top: 5px;
+  top: 4px;
   left: 50%;
   transform: translateX(-50%);
   animation: wheelMove 1.6s infinite ease-in-out;
@@ -780,7 +770,7 @@
   }
 
   80% {
-    transform: translate(-50%, 9px);
+    transform: translate(-50%, 7px);
     opacity: 0.2;
   }
 
@@ -793,30 +783,32 @@
 /* Tablet Adjustments */
 @media (min-width: 769px) and (max-width: 1150px) {
   .headlineOverlay {
-    left: 5vw;
-    top: 16%;
-    max-width: 480px;
+    bottom: clamp(1.1rem, 2.5vh, 2rem);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 500px;
   }
 
   .mainHeading {
-    font-size: clamp(2.2rem, 3.2vw, 2.75rem);
-    max-width: 460px;
+    font-size: clamp(1.45rem, 2.2vw, 1.95rem);
+    max-width: 480px;
   }
 
   .subHeading {
-    max-width: 380px;
-    font-size: 1rem;
+    max-width: 420px;
+    font-size: 0.85rem;
+    line-height: 1.28;
+    margin-top: 0.35rem;
   }
 
   .ctaRow {
-    gap: 0.8rem;
-    margin-top: 1.15rem;
+    margin-top: 0.6rem;
   }
 
-  .primaryBtn,
-  .secondaryBtn {
-    padding: 0.65rem 1.25rem;
-    font-size: 0.76rem;
+  .primaryBtn {
+    padding: 0.55rem 1.6rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -1029,6 +1021,9 @@
   }
 
   .scrollPrompt {
+    position: relative;
+    left: auto;
+    transform: none;
     font-size: 0.58rem;
     letter-spacing: 0.18em;
     gap: 0.22rem;

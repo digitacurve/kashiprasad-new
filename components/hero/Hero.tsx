@@ -78,7 +78,7 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // DESKTOP FULL-BLEED EXPERIENCE (min-width: 768px)
+      // DESKTOP RESPONSIVE EXPLODED COMPOSITION (min-width: 768px)
       mm.add("(min-width: 768px)", () => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -90,20 +90,12 @@ export default function Hero() {
           },
         });
 
-        // 1. Initial State -> Transition Start (0.0 to 0.2)
-        // Headline fades out gently and floats up
         tl.to(
           headlineRef.current,
-          {
-            opacity: 0,
-            y: -35,
-            duration: 0.18,
-            ease: "power1.out",
-          },
+          { opacity: 0, y: "-3vh", duration: 0.18, ease: "power1.out" },
           0
         );
 
-        // Hero Banner begins cross-fade: statue presence remains subtly in background
         tl.to(
           heroBannerRef.current,
           {
@@ -116,130 +108,64 @@ export default function Hero() {
           0.04
         );
 
-        // Individual transparent Rudraksha assets fade in at exact matching coordinates
+        gsap.set(
+          [malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current],
+          { xPercent: -50, yPercent: -50 }
+        );
+
         tl.fromTo(
-          [
-            malaRef.current,
-            guruRef.current,
-            beadRightRef.current,
-            beadLeftRef.current,
-          ],
+          [malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current],
           { opacity: 0 },
-          {
-            opacity: 1,
-            duration: 0.18,
-            ease: "power1.in",
-          },
+          { opacity: 1, duration: 0.18, ease: "power1.in" },
           0.04
         );
 
-        // 2. Physical Dismantle & Balanced Editorial Composition (0.15 to 0.72)
-        // Full Rudraksha Mala (The Hero of the Composition, slightly left/center)
+        // Responsive Proportional Scaling using VW / VH
         tl.to(
           malaRef.current,
-          {
-            x: -75,
-            y: -25,
-            rotation: -4,
-            scale: 1.45,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { x: "-2vw", y: "-3vh", rotation: -4, scale: 1.6, duration: 0.55, ease: "power2.out" },
           0.16
         );
 
-        // Guru Bead (Detaches from the base of the mala, moves lower center/right)
         tl.to(
           guruRef.current,
-          {
-            x: 120,
-            y: 105,
-            rotation: 12,
-            scale: 2.3,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { x: "4vw", y: "15vh", rotation: 12, scale: 3.2, duration: 0.55, ease: "power2.out" },
           0.19
         );
 
-        // 5-Mukhi Rudraksha Bead (Main / Right side, pops forward with organic depth)
         tl.to(
           beadRightRef.current,
-          {
-            x: 190,
-            y: -15,
-            rotation: 15,
-            scale: 2.4,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { x: "18vw", y: "0vh", rotation: 15, scale: 2.8, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
-        // Rudraksha Bead (Accent / Left side for balanced editorial framing)
         tl.to(
           beadLeftRef.current,
-          {
-            x: -175,
-            y: 70,
-            rotation: -18,
-            scale: 2.0,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { x: "-15vw", y: "10vh", rotation: -18, scale: 2.5, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
-        // 3. Exploded Storytelling Header & Luxury Product Callouts (0.38 to 0.75)
         tl.fromTo(
           explodedTitleRef.current,
-          { opacity: 0, y: -15 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.25,
-            ease: "power1.out",
-          },
+          { opacity: 0, y: "-2vh" },
+          { opacity: 1, y: 0, duration: 0.25, ease: "power1.out" },
           0.38
         );
 
         tl.fromTo(
-          [tagMalaRef.current, tagGuruRef.current, tagBeadRef.current],
-          { opacity: 0, y: 12 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.25,
-            stagger: 0.05,
-            ease: "power2.out",
-          },
+          [tagMalaRef.current, tagBeadRef.current],
+          { opacity: 0, y: "2vh" },
+          { opacity: 1, y: 0, duration: 0.25, stagger: 0.05, ease: "power2.out" },
           0.44
         );
 
-        // 4. Parallax Depth Drift on Continued Scroll (0.75 to 1.0)
-        tl.to(
-          malaRef.current,
-          { x: "-=8", duration: 0.25, ease: "sine.inOut" },
-          0.75
-        );
-        tl.to(
-          guruRef.current,
-          { y: "+=10", rotation: "+=1.5", duration: 0.25, ease: "sine.inOut" },
-          0.75
-        );
-        tl.to(
-          beadRightRef.current,
-          { y: "-=8", rotation: "+=2", duration: 0.25, ease: "sine.inOut" },
-          0.75
-        );
-        tl.to(
-          beadLeftRef.current,
-          { y: "-=6", rotation: "-=2", duration: 0.25, ease: "sine.inOut" },
-          0.75
-        );
+        tl.to(malaRef.current, { x: "-=1vw", duration: 0.25, ease: "sine.inOut" }, 0.75);
+        tl.to(guruRef.current, { y: "+=2vh", rotation: "+=1.5", duration: 0.25, ease: "sine.inOut" }, 0.75);
+        tl.to(beadRightRef.current, { y: "-=2vh", rotation: "+=2", duration: 0.25, ease: "sine.inOut" }, 0.75);
+        tl.to(beadLeftRef.current, { y: "-=1.5vh", rotation: "-=2", duration: 0.25, ease: "sine.inOut" }, 0.75);
       });
 
-      // MOBILE EXPERIENCE (max-width: 767px)
+      // MOBILE EXPERIENCE (max-width: 767px) - UNTOUCHED
       mm.add("(max-width: 767px)", () => {
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -263,7 +189,6 @@ export default function Hero() {
           0.04
         );
 
-        // Ensure all exploded items use center anchoring (xPercent: -50, yPercent: -50)
         gsap.set(
           [
             malaRef.current,
@@ -286,68 +211,27 @@ export default function Hero() {
           0.04
         );
 
-        // Exact Desktop Dismantled Composition proportionally scaled down to fit mobile
-        // 1. Full Rudraksha Mala (Centered horizontally, compact and balanced)
         tl.to(
           malaRef.current,
-          {
-            xPercent: -50,
-            yPercent: -50,
-            x: 0,
-            y: -22,
-            rotation: -4,
-            scale: 0.65,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { xPercent: -50, yPercent: -50, x: 0, y: -22, rotation: -4, scale: 0.65, duration: 0.55, ease: "power2.out" },
           0.16
         );
 
-        // 2. Guru Bead (Lower-right of Mala, detaches cleanly exactly like desktop)
         tl.to(
           guruRef.current,
-          {
-            xPercent: -50,
-            yPercent: -50,
-            x: 48,
-            y: 42,
-            rotation: 12,
-            scale: 1.25,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { xPercent: -50, yPercent: -50, x: 48, y: 42, rotation: 12, scale: 1.25, duration: 0.55, ease: "power2.out" },
           0.19
         );
 
-        // 3. 5-Mukhi Rudraksha Bead (Upper-right of Mala, relative position identical to desktop)
         tl.to(
           beadRightRef.current,
-          {
-            xPercent: -50,
-            yPercent: -50,
-            x: 42,
-            y: -18,
-            rotation: 15,
-            scale: 1.25,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { xPercent: -50, yPercent: -50, x: 42, y: -18, rotation: 15, scale: 1.25, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
-        // 4. Accent Rudraksha Bead (Lower-left of Mala, relative position identical to desktop)
         tl.to(
           beadLeftRef.current,
-          {
-            xPercent: -50,
-            yPercent: -50,
-            x: -44,
-            y: 36,
-            rotation: -18,
-            scale: 1.10,
-            duration: 0.55,
-            ease: "power2.out",
-          },
+          { xPercent: -50, yPercent: -50, x: -44, y: 36, rotation: -18, scale: 1.10, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
@@ -358,7 +242,6 @@ export default function Hero() {
           0.38
         );
 
-        // Mobile annotation: ONLY ONE label (108-Bead Rudraksha Mala)
         tl.fromTo(
           tagMalaRef.current,
           { opacity: 0 },
@@ -413,16 +296,7 @@ export default function Hero() {
           </div>
 
           <h1 className={styles.mainHeading}>
-            {/* Desktop 2-line structure (Preserved 100%) */}
-            <span className={styles.desktopHeading}>
-              <span className={styles.headingPart1}>
-                <span className={styles.headingWord}>SACRED</span>{" "}
-                <span className={styles.headingWord}>ADORNMENTS</span>
-              </span>{" "}
-              <span className={styles.headingPart2}>OF THE DIVINE</span>
-            </span>
-
-            {/* Mobile H1: ROOTED IN SANATAN */}
+            {/* Desktop and Mobile H1: ROOTED IN SANATAN */}
             <span className={styles.mobileHeading}>
               <span className={styles.mobileHeadingPart1}>ROOTED IN</span>{" "}
               <span className={styles.mobileHeadingPart2}>SANATAN</span>
