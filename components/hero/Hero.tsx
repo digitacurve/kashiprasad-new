@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import CategoryNavigation from "@/components/CategoryNavigation";
 import styles from "./Hero.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,7 +24,6 @@ export default function Hero() {
   const headlineRef = useRef<HTMLDivElement | null>(null);
   const explodedTitleRef = useRef<HTMLDivElement | null>(null);
   const tagMalaRef = useRef<HTMLDivElement | null>(null);
-  const tagGuruRef = useRef<HTMLDivElement | null>(null);
   const tagBeadRef = useRef<HTMLDivElement | null>(null);
 
   // Cloud lightning refs (independent of scroll)
@@ -213,25 +213,25 @@ export default function Hero() {
 
         tl.to(
           malaRef.current,
-          { xPercent: -50, yPercent: -50, x: 0, y: -22, rotation: -4, scale: 0.65, duration: 0.55, ease: "power2.out" },
+          { xPercent: -50, yPercent: -50, x: 0, y: -22, rotation: -4, scale: 0.98, duration: 0.55, ease: "power2.out" },
           0.16
         );
 
         tl.to(
           guruRef.current,
-          { xPercent: -50, yPercent: -50, x: 48, y: 42, rotation: 12, scale: 1.25, duration: 0.55, ease: "power2.out" },
+          { xPercent: -50, yPercent: -50, x: 48, y: 42, rotation: 12, scale: 1.88, duration: 0.55, ease: "power2.out" },
           0.19
         );
 
         tl.to(
           beadRightRef.current,
-          { xPercent: -50, yPercent: -50, x: 42, y: -18, rotation: 15, scale: 1.25, duration: 0.55, ease: "power2.out" },
+          { xPercent: -50, yPercent: -50, x: 42, y: -18, rotation: 15, scale: 1.88, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
         tl.to(
           beadLeftRef.current,
-          { xPercent: -50, yPercent: -50, x: -44, y: 36, rotation: -18, scale: 1.10, duration: 0.55, ease: "power2.out" },
+          { xPercent: -50, yPercent: -50, x: -44, y: 36, rotation: -18, scale: 1.65, duration: 0.55, ease: "power2.out" },
           0.2
         );
 
@@ -263,26 +263,29 @@ export default function Hero() {
 
         {/* Top Navigation */}
         <header className={styles.navbar}>
-          <a href="#hero-section" className={styles.brandLink}>
-            <span className={styles.brandName}>KASHI PRASAD</span>
-            <span className={styles.brandSub}>VARANASI • ESTD. CONSECRATED</span>
-          </a>
+          <div className={styles.navbarTopRow}>
+            <a href="#hero-section" className={styles.brandLink}>
+              <span className={styles.brandName}>KASHI PRASAD</span>
+              <span className={styles.brandSub}>VARANASI • ESTD. CONSECRATED</span>
+            </a>
 
-          <nav className={styles.navLinks} aria-label="Main navigation">
-            <a href="#collection" className={styles.navLink}>
-              Sacred Malas
-            </a>
-            <a href="#craftsmanship" className={styles.navLink}>
-              Temple Craft
-            </a>
-            <a href="#consecration" className={styles.navLink}>
-              Vedic Consecration
-            </a>
-          </nav>
+            {/* Desktop Visual Category Navigation (Top Center Zone) */}
+            <div className={styles.desktopNavWrapper}>
+              <CategoryNavigation />
+            </div>
 
-          <a href="#collection" className={styles.navCta}>
-            Acquire Relic
-          </a>
+            <div className={styles.utilityLinks}>
+              <button type="button" aria-label="Search" className={styles.utilityButton}>⌕</button>
+              <a href="/account#wishlist" aria-label="Wishlist" className={styles.utilityButton}>♡</a>
+              <a href="/account" aria-label="Account" className={styles.utilityButton}>◯</a>
+              <a href="/cart" className={styles.navCta}>Cart</a>
+            </div>
+          </div>
+
+          {/* Mobile Visual Category Navigation (Top Horizontal Rail) */}
+          <div className={styles.mobileNavWrapper}>
+            <CategoryNavigation isMobile />
+          </div>
         </header>
 
         {/* Phase 1 Initial Hero Headline & CTA (Scrolls away) */}
@@ -488,20 +491,7 @@ export default function Hero() {
                 </span>
               </div>
 
-              {/* Callout 2: Sumeru Guru Bead (Desktop only - completely hidden on mobile) */}
-              <div
-                ref={tagGuruRef}
-                className={`${styles.annotationTag} ${styles.tagGuru}`}
-              >
-                <span className={styles.annotationTagTitle}>
-                  SUMERU GURU BEAD
-                </span>
-                <span className={styles.annotationTagSub}>
-                  Carved centerpiece
-                </span>
-              </div>
-
-              {/* Callout 3: 5-Mukhi Rudraksha (Single representative loose bead annotation) */}
+              {/* Callout 2: 5-Mukhi Rudraksha (Single representative loose bead annotation) */}
               <div
                 ref={tagBeadRef}
                 className={`${styles.annotationTag} ${styles.tagBead}`}
