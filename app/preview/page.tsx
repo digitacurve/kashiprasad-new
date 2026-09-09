@@ -18,7 +18,8 @@ const assets: AssetInfo[] = [
     dimensions: "2455 × 1686",
     size: "4.01 MB",
     bbox: "(16, 0, 2439, 1686)",
-    description: "Monumental Adiyogi bust with isolated background. Hair strands and basalt stone preserved.",
+    description:
+      "Monumental Adiyogi bust with isolated background. Hair strands and basalt stone preserved.",
   },
   {
     name: "crescent.png",
@@ -26,7 +27,8 @@ const assets: AssetInfo[] = [
     dimensions: "1461 × 1228",
     size: "1.14 MB",
     bbox: "(16, 16, 1445, 1212)",
-    description: "Golden Chandra adornment. Full interior curvature transparent with antique sheen.",
+    description:
+      "Golden Chandra adornment. Full interior curvature transparent with antique sheen.",
   },
   {
     name: "tilak.png",
@@ -98,7 +100,8 @@ const assets: AssetInfo[] = [
     dimensions: "752 × 1420",
     size: "1.07 MB",
     bbox: "(16, 16, 736, 1404)",
-    description: "Brown thread tassel. Outer dangling strands & base fringe threads fully isolated.",
+    description:
+      "Brown thread tassel. Outer dangling strands & base fringe threads fully isolated.",
   },
 ];
 
@@ -134,8 +137,7 @@ export default function AssetPreviewPage() {
   };
 
   const categories = ["All", "Statue", "Ornaments", "Mala Components"];
-  const filteredAssets =
-    filter === "All" ? assets : assets.filter((a) => a.category === filter);
+  const filteredAssets = filter === "All" ? assets : assets.filter((a) => a.category === filter);
 
   return (
     <div className="min-h-screen bg-[#07080b] text-zinc-100 font-sans p-6 sm:p-10">
@@ -143,9 +145,7 @@ export default function AssetPreviewPage() {
       <header className="max-w-7xl mx-auto mb-10 pb-6 border-b border-zinc-800 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div>
           <div className="flex items-center gap-3">
-            <span className="text-amber-500 font-serif text-2xl tracking-wide">
-              KASHI PRASAD
-            </span>
+            <span className="text-amber-500 font-serif text-2xl tracking-wide">KASHI PRASAD</span>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
               Inspection Mode
             </span>
@@ -224,7 +224,10 @@ export default function AssetPreviewPage() {
                 : "bg-zinc-900/50 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-zinc-300"
             }`}
           >
-            {cat} {cat === "All" ? `(${assets.length})` : `(${assets.filter((a) => a.category === cat).length})`}
+            {cat}{" "}
+            {cat === "All"
+              ? `(${assets.length})`
+              : `(${assets.filter((a) => a.category === cat).length})`}
           </button>
         ))}
       </div>
@@ -271,14 +274,16 @@ export default function AssetPreviewPage() {
                       {asset.size}
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-                    {asset.description}
-                  </p>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">{asset.description}</p>
                 </div>
 
                 <div className="pt-2 border-t border-zinc-900 flex items-center justify-between text-[11px] text-zinc-500 font-mono">
-                  <span>Dims: <strong className="text-zinc-400">{asset.dimensions}</strong></span>
-                  <span>Pad: <strong className="text-amber-400/90">16px RGBA</strong></span>
+                  <span>
+                    Dims: <strong className="text-zinc-400">{asset.dimensions}</strong>
+                  </span>
+                  <span>
+                    Pad: <strong className="text-amber-400/90">16px RGBA</strong>
+                  </span>
                 </div>
               </div>
             </div>

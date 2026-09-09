@@ -61,9 +61,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateQuantity(lineId: string, quantity: number) {
         setItems((current) =>
           quantity > 0
-            ? current.map((item) =>
-                item.lineId === lineId ? { ...item, quantity } : item
-              )
+            ? current.map((item) => (item.lineId === lineId ? { ...item, quantity } : item))
             : current.filter((item) => item.lineId !== lineId)
         );
       },

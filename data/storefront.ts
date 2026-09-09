@@ -13,11 +13,41 @@ export interface StoreCategory {
 }
 
 export const storeCategories: StoreCategory[] = [
-  { id: "puja-kits", name: "Puja Kits", href: "/puja-kits", description: "Curated essentials for meaningful rituals.", image: "/assets/puja-kits/01-satyanarayan-pooja-kit.png" },
-  { id: "malas", name: "Mala", href: "/malas", description: "Prayer malas made for daily devotion.", image: "/assets/mala/01_mala_regenerated_01.png" },
-  { id: "rudraksha", name: "Rudraksha", href: "/rudraksha", description: "A dedicated catalogue for sacred beads and mukhi types.", image: "/hero/assets/rudraksha-bead.png" },
-  { id: "ratnas", name: "Ratnas", href: "/ratnas", description: "Natural gems and stones, organised in one sacred collection.", subcategories: ["Gemstones", "Stones"] },
-  { id: "puja-services", name: "Puja Services", href: "/puja-services", description: "Book a personalised ritual experience when services are available.", isService: true },
+  {
+    id: "puja-kits",
+    name: "Puja Kits",
+    href: "/puja-kits",
+    description: "Curated essentials for meaningful rituals.",
+    image: "/assets/puja-kits/01-satyanarayan-pooja-kit.png",
+  },
+  {
+    id: "malas",
+    name: "Mala",
+    href: "/malas",
+    description: "Prayer malas made for daily devotion.",
+    image: "/assets/mala/01_mala_regenerated_01.png",
+  },
+  {
+    id: "rudraksha",
+    name: "Rudraksha",
+    href: "/rudraksha",
+    description: "A dedicated catalogue for sacred beads and mukhi types.",
+    image: "/hero/assets/rudraksha-bead.png",
+  },
+  {
+    id: "ratnas",
+    name: "Ratnas",
+    href: "/ratnas",
+    description: "Natural gems and stones, organised in one sacred collection.",
+    subcategories: ["Gemstones", "Stones"],
+  },
+  {
+    id: "puja-services",
+    name: "Puja Services",
+    href: "/puja-services",
+    description: "Book a personalised ritual experience when services are available.",
+    isService: true,
+  },
 ];
 
 export const featuredProducts = allProducts

@@ -92,16 +92,16 @@ export default function CategoryNavigation({
       const targetBorderColor = isCurrentHovered
         ? "rgba(223, 171, 82, 0.75)"
         : isAnyHovered
-        ? "rgba(223, 171, 82, 0.12)"
-        : "rgba(223, 171, 82, 0.22)";
+          ? "rgba(223, 171, 82, 0.12)"
+          : "rgba(223, 171, 82, 0.22)";
       const targetShadow = isCurrentHovered
         ? "0 4px 20px rgba(223, 171, 82, 0.25)"
         : "0 2px 10px rgba(0, 0, 0, 0.35)";
       const targetBg = isCurrentHovered
         ? "rgba(18, 22, 34, 0.95)"
         : isAnyHovered
-        ? "rgba(8, 10, 15, 0.75)"
-        : "rgba(10, 13, 20, 0.85)";
+          ? "rgba(8, 10, 15, 0.75)"
+          : "rgba(10, 13, 20, 0.85)";
 
       gsap.to(card, {
         flexGrow: targetFlexGrow,
@@ -158,15 +158,9 @@ export default function CategoryNavigation({
               >
                 <div className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-zinc-900 border border-amber-500/30 flex items-center justify-center p-0.5 flex-shrink-0 overflow-hidden">
                   {cat.image ? (
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="w-full h-full object-contain"
-                    />
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-contain" />
                   ) : (
-                    <span className="text-[10px] text-amber-300 font-serif">
-                      {cat.icon || "✦"}
-                    </span>
+                    <span className="text-[10px] text-amber-300 font-serif">{cat.icon || "✦"}</span>
                   )}
                 </div>
 

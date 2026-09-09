@@ -1,10 +1,5 @@
 /** Canonical Storefront Category Enum / Union */
-export type ProductCategory =
-  | "Puja Kits"
-  | "Mala"
-  | "Rudraksha"
-  | "Ratnas"
-  | "Puja Services";
+export type ProductCategory = "Puja Kits" | "Mala" | "Rudraksha" | "Ratnas" | "Puja Services";
 
 export interface SpecItem {
   label: string;

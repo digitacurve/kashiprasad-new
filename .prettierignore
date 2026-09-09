@@ -1,0 +1,16 @@
+# Dependencies and build artifacts
+node_modules
+.next
+out
+build
+package-lock.json
+
+# Large Catalog / Product Data (preserve verbatim)
+data/pujaKits.ts
+data/malas.ts
+
+# Asset / media staging directories
+public
+Mala_1_to_10_Products
+Rudrashaks pngs
+PUJA_KITS_DETAILS.md

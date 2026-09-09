@@ -132,9 +132,7 @@ function RudrakshaProductCard({ product }: { product: CollectionProduct }) {
       {cardContent}
     </Link>
   ) : (
-    <div key={product.id}>
-      {cardContent}
-    </div>
+    <div key={product.id}>{cardContent}</div>
   );
 }
 
@@ -167,13 +165,18 @@ function StandardProductCard({ product }: { product: CollectionProduct }) {
       {cardContent}
     </Link>
   ) : (
-    <div key={product.id}>
-      {cardContent}
-    </div>
+    <div key={product.id}>{cardContent}</div>
   );
 }
 
-export default function CollectionPage({ eyebrow, title, description, products, emptyMessage, subcategories }: CollectionPageProps) {
+export default function CollectionPage({
+  eyebrow,
+  title,
+  description,
+  products,
+  emptyMessage,
+  subcategories,
+}: CollectionPageProps) {
   const isRudraksha = eyebrow.toLowerCase() === "rudraksha";
 
   return (
@@ -183,11 +186,16 @@ export default function CollectionPage({ eyebrow, title, description, products, 
         <section className="border-b border-amber-500/10 px-4 py-16 text-center sm:px-8 sm:py-24">
           <p className="text-xs uppercase tracking-[.22em] text-amber-400">{eyebrow}</p>
           <h1 className="mt-3 font-serif text-4xl font-bold uppercase sm:text-6xl">{title}</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-zinc-400">{description}</p>
+          <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-zinc-400">
+            {description}
+          </p>
           {subcategories && (
             <div className="mt-7 flex justify-center gap-2">
               {subcategories.map((item) => (
-                <span key={item} className="rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-xs text-amber-300">
+                <span
+                  key={item}
+                  className="rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-xs text-amber-300"
+                >
                   {item}
                 </span>
               ))}
@@ -207,7 +215,8 @@ export default function CollectionPage({ eyebrow, title, description, products, 
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/40 p-10 text-center text-zinc-500">
-              {emptyMessage ?? "This collection is being prepared. Product details and imagery will appear here once approved."}
+              {emptyMessage ??
+                "This collection is being prepared. Product details and imagery will appear here once approved."}
             </div>
           )}
         </section>
@@ -216,5 +225,3 @@ export default function CollectionPage({ eyebrow, title, description, products, 
     </div>
   );
 }
-
-

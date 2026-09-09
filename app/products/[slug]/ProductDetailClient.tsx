@@ -11,23 +11,23 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product }: ProductDetailClientProps) {
   const { addItem } = useCart();
-  const [selectedVariantId, setSelectedVariantId] = useState<string>(
-    product.variants[0]?.id || ""
-  );
+  const [selectedVariantId, setSelectedVariantId] = useState<string>(product.variants[0]?.id || "");
 
   const imagesList =
     product.images && product.images.length > 0
       ? product.images
       : product.image
-      ? [product.image]
-      : [];
+        ? [product.image]
+        : [];
 
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
   const activeImage = imagesList[activeImageIndex] || product.image;
 
   const isMala = product.category === "Mala";
   const defaultTab = isMala ? "specs" : "samagri";
-  const [activeTab, setActiveTab] = useState<"overview" | "samagri" | "specs" | "highlights" | "faqs">(defaultTab);
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "samagri" | "specs" | "highlights" | "faqs"
+  >(defaultTab);
 
   const selectedVariant =
     product.variants.find((v) => v.id === selectedVariantId) || product.variants[0];
@@ -44,15 +44,14 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
       variantName: selectedVariant.name,
       price: selectedVariant.price,
       mrp: selectedVariant.mrp,
-      divineOffering: Boolean(selectedVariant.divineOfferingOption?.toLowerCase().includes("with divine")),
+      divineOffering: Boolean(
+        selectedVariant.divineOfferingOption?.toLowerCase().includes("with divine")
+      ),
     });
   };
 
   const totalSamagriItems =
-    selectedVariant?.samagriChecklist?.reduce(
-      (acc, cat) => acc + cat.items.length,
-      0
-    ) || 0;
+    selectedVariant?.samagriChecklist?.reduce((acc, cat) => acc + cat.items.length, 0) || 0;
 
   const categoryHref = isMala ? "/#mala" : "/#puja-kits";
   const categoryLabel = isMala ? "Mala" : "Puja Kits";
@@ -107,9 +106,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 ) : (
                   <div className="flex flex-col items-center justify-center text-center p-8">
                     <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full border border-amber-500/20 bg-amber-500/5 flex items-center justify-center text-center mb-4">
-                      <span className="text-3xl sm:text-4xl text-amber-400/60 font-serif">
-                        🕉️
-                      </span>
+                      <span className="text-3xl sm:text-4xl text-amber-400/60 font-serif">🕉️</span>
                     </div>
                     <span className="text-xs font-mono tracking-widest text-zinc-400 uppercase">
                       Sacred Offering
@@ -192,7 +189,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   {product.reviewCount} Verified Devotee Reviews
                 </span>
                 <span className="text-zinc-600">•</span>
-                <span className="text-amber-400/90 font-mono text-[11px] sm:text-xs">Vedic Purity Assured</span>
+                <span className="text-amber-400/90 font-mono text-[11px] sm:text-xs">
+                  Vedic Purity Assured
+                </span>
               </div>
 
               {/* Short Description */}
@@ -220,7 +219,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   const hasKashiPrasad =
                     v.name.toLowerCase().includes("kashi prasad") ||
                     v.badge?.toLowerCase().includes("consecrated") ||
-                    (v as { divineOfferingOption?: string }).divineOfferingOption?.includes("Kashi Prasad");
+                    (v as { divineOfferingOption?: string }).divineOfferingOption?.includes(
+                      "Kashi Prasad"
+                    );
 
                   return (
                     <button
@@ -447,9 +448,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                       <h4 className="font-serif text-sm sm:text-base font-semibold text-amber-300 mb-2">
                         {faq.q}
                       </h4>
-                      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                        {faq.a}
-                      </p>
+                      <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">{faq.a}</p>
                     </div>
                   ))}
                 </div>

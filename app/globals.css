@@ -34,7 +34,8 @@ body {
 }
 
 /* Lenis Recommended CSS */
-html.lenis, html.lenis body {
+html.lenis,
+html.lenis body {
   height: auto;
 }
 
@@ -68,4 +69,3 @@ html.lenis, html.lenis body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(223, 171, 82, 0.6);
 }
-

@@ -108,10 +108,10 @@ export default function Hero() {
           0.04
         );
 
-        gsap.set(
-          [malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current],
-          { xPercent: -50, yPercent: -50 }
-        );
+        gsap.set([malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current], {
+          xPercent: -50,
+          yPercent: -50,
+        });
 
         tl.fromTo(
           [malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current],
@@ -160,9 +160,21 @@ export default function Hero() {
         );
 
         tl.to(malaRef.current, { x: "-=1vw", duration: 0.25, ease: "sine.inOut" }, 0.75);
-        tl.to(guruRef.current, { y: "+=2vh", rotation: "+=1.5", duration: 0.25, ease: "sine.inOut" }, 0.75);
-        tl.to(beadRightRef.current, { y: "-=2vh", rotation: "+=2", duration: 0.25, ease: "sine.inOut" }, 0.75);
-        tl.to(beadLeftRef.current, { y: "-=1.5vh", rotation: "-=2", duration: 0.25, ease: "sine.inOut" }, 0.75);
+        tl.to(
+          guruRef.current,
+          { y: "+=2vh", rotation: "+=1.5", duration: 0.25, ease: "sine.inOut" },
+          0.75
+        );
+        tl.to(
+          beadRightRef.current,
+          { y: "-=2vh", rotation: "+=2", duration: 0.25, ease: "sine.inOut" },
+          0.75
+        );
+        tl.to(
+          beadLeftRef.current,
+          { y: "-=1.5vh", rotation: "-=2", duration: 0.25, ease: "sine.inOut" },
+          0.75
+        );
       });
 
       // MOBILE EXPERIENCE (max-width: 767px) - UNTOUCHED
@@ -177,11 +189,7 @@ export default function Hero() {
           },
         });
 
-        tl.to(
-          headlineRef.current,
-          { opacity: 0, y: -20, duration: 0.18, ease: "power1.out" },
-          0
-        );
+        tl.to(headlineRef.current, { opacity: 0, y: -20, duration: 0.18, ease: "power1.out" }, 0);
 
         tl.to(
           heroBannerRef.current,
@@ -189,23 +197,13 @@ export default function Hero() {
           0.04
         );
 
-        gsap.set(
-          [
-            malaRef.current,
-            guruRef.current,
-            beadRightRef.current,
-            beadLeftRef.current,
-          ],
-          { xPercent: -50, yPercent: -50 }
-        );
+        gsap.set([malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current], {
+          xPercent: -50,
+          yPercent: -50,
+        });
 
         tl.fromTo(
-          [
-            malaRef.current,
-            guruRef.current,
-            beadRightRef.current,
-            beadLeftRef.current,
-          ],
+          [malaRef.current, guruRef.current, beadRightRef.current, beadLeftRef.current],
           { opacity: 0 },
           { opacity: 1, duration: 0.16 },
           0.04
@@ -213,25 +211,61 @@ export default function Hero() {
 
         tl.to(
           malaRef.current,
-          { xPercent: -50, yPercent: -50, x: 0, y: -22, rotation: -4, scale: 0.98, duration: 0.55, ease: "power2.out" },
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: 0,
+            y: -22,
+            rotation: -4,
+            scale: 0.98,
+            duration: 0.55,
+            ease: "power2.out",
+          },
           0.16
         );
 
         tl.to(
           guruRef.current,
-          { xPercent: -50, yPercent: -50, x: 48, y: 42, rotation: 12, scale: 1.88, duration: 0.55, ease: "power2.out" },
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: 48,
+            y: 42,
+            rotation: 12,
+            scale: 1.88,
+            duration: 0.55,
+            ease: "power2.out",
+          },
           0.19
         );
 
         tl.to(
           beadRightRef.current,
-          { xPercent: -50, yPercent: -50, x: 42, y: -18, rotation: 15, scale: 1.88, duration: 0.55, ease: "power2.out" },
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: 42,
+            y: -18,
+            rotation: 15,
+            scale: 1.88,
+            duration: 0.55,
+            ease: "power2.out",
+          },
           0.2
         );
 
         tl.to(
           beadLeftRef.current,
-          { xPercent: -50, yPercent: -50, x: -44, y: 36, rotation: -18, scale: 1.65, duration: 0.55, ease: "power2.out" },
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: -44,
+            y: 36,
+            rotation: -18,
+            scale: 1.65,
+            duration: 0.55,
+            ease: "power2.out",
+          },
           0.2
         );
 
@@ -246,7 +280,7 @@ export default function Hero() {
           tagMalaRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 0.25, ease: "power2.out" },
-          0.30
+          0.3
         );
       });
     }, sectionRef);
@@ -275,10 +309,18 @@ export default function Hero() {
             </div>
 
             <div className={styles.utilityLinks}>
-              <button type="button" aria-label="Search" className={styles.utilityButton}>⌕</button>
-              <a href="/account#wishlist" aria-label="Wishlist" className={styles.utilityButton}>♡</a>
-              <a href="/account" aria-label="Account" className={styles.utilityButton}>◯</a>
-              <a href="/cart" className={styles.navCta}>Cart</a>
+              <button type="button" aria-label="Search" className={styles.utilityButton}>
+                ⌕
+              </button>
+              <a href="/account#wishlist" aria-label="Wishlist" className={styles.utilityButton}>
+                ♡
+              </a>
+              <a href="/account" aria-label="Account" className={styles.utilityButton}>
+                ◯
+              </a>
+              <a href="/cart" className={styles.navCta}>
+                Cart
+              </a>
             </div>
           </div>
 
@@ -307,8 +349,8 @@ export default function Hero() {
           </h1>
 
           <p className={styles.subHeading}>
-            Authentic 5-Mukhi Rudraksha malas and consecrated celestial emblems,
-            sanctified along the eternal ghats of Varanasi.
+            Authentic 5-Mukhi Rudraksha malas and consecrated celestial emblems, sanctified along
+            the eternal ghats of Varanasi.
           </p>
 
           <div className={styles.ctaRow}>
@@ -362,12 +404,7 @@ export default function Hero() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <path
-                  d="M32 55 L15 80"
-                  stroke="#fed88b"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
+                <path d="M32 55 L15 80" stroke="#fed88b" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
 
               {/* Right sky cloud flash & SVG bolt */}
@@ -385,12 +422,7 @@ export default function Hero() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <path
-                  d="M65 50 L85 75"
-                  stroke="#fed88b"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
+                <path d="M65 50 L85 75" stroke="#fed88b" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </div>
 
@@ -411,14 +443,38 @@ export default function Hero() {
 
             {/* Subtle Floating Golden Dust Particles */}
             <div className={styles.particleLayer} aria-hidden="true">
-              <div className={styles.particle} style={{ top: "35%", left: "28%", animationDelay: "0s" }} />
-              <div className={styles.particle} style={{ top: "45%", left: "72%", animationDelay: "2.5s" }} />
-              <div className={styles.particle} style={{ top: "60%", left: "34%", animationDelay: "5s" }} />
-              <div className={styles.particle} style={{ top: "25%", left: "62%", animationDelay: "1.2s" }} />
-              <div className={styles.particle} style={{ top: "70%", left: "55%", animationDelay: "7s" }} />
-              <div className={styles.particle} style={{ top: "52%", left: "80%", animationDelay: "3.8s" }} />
-              <div className={styles.particle} style={{ top: "38%", left: "18%", animationDelay: "6.2s" }} />
-              <div className={styles.particle} style={{ top: "65%", left: "42%", animationDelay: "4.1s" }} />
+              <div
+                className={styles.particle}
+                style={{ top: "35%", left: "28%", animationDelay: "0s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "45%", left: "72%", animationDelay: "2.5s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "60%", left: "34%", animationDelay: "5s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "25%", left: "62%", animationDelay: "1.2s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "70%", left: "55%", animationDelay: "7s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "52%", left: "80%", animationDelay: "3.8s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "38%", left: "18%", animationDelay: "6.2s" }}
+              />
+              <div
+                className={styles.particle}
+                style={{ top: "65%", left: "42%", animationDelay: "4.1s" }}
+              />
             </div>
 
             {/* Individual Exploded Rudraksha Elements Layer (Crescent & Tilak completely removed) */}
@@ -479,29 +535,15 @@ export default function Hero() {
             {/* Dedicated Product Callout Annotations Layer */}
             <div className={styles.annotationsLayer}>
               {/* Callout 1: 108-Bead Rudraksha Mala (Main Product Annotation) */}
-              <div
-                ref={tagMalaRef}
-                className={`${styles.annotationTag} ${styles.tagMala}`}
-              >
-                <span className={styles.annotationTagTitle}>
-                  108-BEAD RUDRAKSHA MALA
-                </span>
-                <span className={styles.annotationTagSub}>
-                  Traditional 5-Mukhi Rudraksha
-                </span>
+              <div ref={tagMalaRef} className={`${styles.annotationTag} ${styles.tagMala}`}>
+                <span className={styles.annotationTagTitle}>108-BEAD RUDRAKSHA MALA</span>
+                <span className={styles.annotationTagSub}>Traditional 5-Mukhi Rudraksha</span>
               </div>
 
               {/* Callout 2: 5-Mukhi Rudraksha (Single representative loose bead annotation) */}
-              <div
-                ref={tagBeadRef}
-                className={`${styles.annotationTag} ${styles.tagBead}`}
-              >
-                <span className={styles.annotationTagTitle}>
-                  5-MUKHI RUDRAKSHA
-                </span>
-                <span className={styles.annotationTagSub}>
-                  Natural organic formation
-                </span>
+              <div ref={tagBeadRef} className={`${styles.annotationTag} ${styles.tagBead}`}>
+                <span className={styles.annotationTagTitle}>5-MUKHI RUDRAKSHA</span>
+                <span className={styles.annotationTagSub}>Natural organic formation</span>
               </div>
             </div>
           </div>

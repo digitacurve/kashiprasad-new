@@ -1,2 +1,19 @@
 import CommerceShell, { EmptyState } from "@/components/CommerceShell";
-export default function CheckoutPage() { return <CommerceShell title="Checkout" copy="A secure, modular checkout flow ready for customer details, addresses, shipping, payment and confirmation."><div className="mt-10 grid gap-3 sm:grid-cols-4">{["Customer details", "Address", "Shipping", "Payment"].map((step, index) => <div key={step} className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4"><p className="text-xs text-amber-400">0{index + 1}</p><p className="mt-3 font-serif text-lg">{step}</p></div>)}</div><EmptyState message="Payment is intentionally not connected yet. Razorpay, COD and order confirmation can be connected once the backend is ready." /></CommerceShell>; }
+export default function CheckoutPage() {
+  return (
+    <CommerceShell
+      title="Checkout"
+      copy="A secure, modular checkout flow ready for customer details, addresses, shipping, payment and confirmation."
+    >
+      <div className="mt-10 grid gap-3 sm:grid-cols-4">
+        {["Customer details", "Address", "Shipping", "Payment"].map((step, index) => (
+          <div key={step} className="rounded-xl border border-zinc-800 bg-zinc-950/60 p-4">
+            <p className="text-xs text-amber-400">0{index + 1}</p>
+            <p className="mt-3 font-serif text-lg">{step}</p>
+          </div>
+        ))}
+      </div>
+      <EmptyState message="Payment is intentionally not connected yet. Razorpay, COD and order confirmation can be connected once the backend is ready." />
+    </CommerceShell>
+  );
+}

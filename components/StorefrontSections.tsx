@@ -1,25 +1,189 @@
 import Image from "next/image";
 import Link from "next/link";
-import { comingSoonProductSlots, featuredProducts, storeCategories, trustPillars } from "@/data/storefront";
+import {
+  comingSoonProductSlots,
+  featuredProducts,
+  storeCategories,
+  trustPillars,
+} from "@/data/storefront";
 
 const sectionClass = "border-t border-amber-500/10 px-4 py-16 sm:px-8 sm:py-24";
 
 function Title({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) {
-  return <div className="mb-9 max-w-2xl"><p className="text-xs uppercase tracking-[.22em] text-amber-400">{eyebrow}</p><h2 className="mt-3 font-serif text-3xl font-bold uppercase text-zinc-100 sm:text-5xl">{title}</h2><p className="mt-3 text-base leading-relaxed text-zinc-400 sm:text-lg">{copy}</p></div>;
+  return (
+    <div className="mb-9 max-w-2xl">
+      <p className="text-xs uppercase tracking-[.22em] text-amber-400">{eyebrow}</p>
+      <h2 className="mt-3 font-serif text-3xl font-bold uppercase text-zinc-100 sm:text-5xl">
+        {title}
+      </h2>
+      <p className="mt-3 text-base leading-relaxed text-zinc-400 sm:text-lg">{copy}</p>
+    </div>
+  );
 }
 
 function Placeholder({ label }: { label: string }) {
-  return <div className="flex aspect-[4/5] items-center justify-center rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#090a0d] p-6 text-center text-xs uppercase tracking-[.18em] text-zinc-500">{label}</div>;
+  return (
+    <div className="flex aspect-[4/5] items-center justify-center rounded-xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#090a0d] p-6 text-center text-xs uppercase tracking-[.18em] text-zinc-500">
+      {label}
+    </div>
+  );
 }
 
 export function FeaturedCollection() {
-  return <section id="collection" className={sectionClass}><div className="mx-auto max-w-7xl"><Title eyebrow="Curated selection" title="Featured Collection" copy="A rotating selection across the physical collections. Puja services remain separate from the product catalogue." /><div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] sm:grid sm:grid-cols-2 lg:grid-cols-4">{featuredProducts.map((product) => <Link href={`/products/${product.slug}`} key={product.id} className="group w-[78vw] shrink-0 snap-start rounded-2xl border border-zinc-800 bg-zinc-950/80 p-3 sm:w-auto"><div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-zinc-900"><Image src={product.image} alt={product.name} fill className="object-contain p-3 transition duration-500 group-hover:scale-105" sizes="(min-width: 1024px) 25vw, 78vw" /></div><p className="mt-4 text-[10px] uppercase tracking-[.16em] text-amber-400">{product.category}</p><h3 className="mt-1 font-serif text-lg text-zinc-100">{product.name}</h3>{product.price !== undefined && <p className="mt-2 text-sm text-zinc-400">₹{product.price.toLocaleString("en-IN")}</p>}</Link>)}{comingSoonProductSlots.map((slot) => <article key={slot.id} className="w-[78vw] shrink-0 snap-start rounded-2xl border border-zinc-800 bg-zinc-950/80 p-3 sm:w-auto"><Placeholder label={slot.label} /><p className="mt-4 text-[10px] uppercase tracking-[.16em] text-amber-400">{slot.category}</p><h3 className="mt-1 font-serif text-lg text-zinc-100">Collection placeholder</h3></article>)}</div></div></section>;
+  return (
+    <section id="collection" className={sectionClass}>
+      <div className="mx-auto max-w-7xl">
+        <Title
+          eyebrow="Curated selection"
+          title="Featured Collection"
+          copy="A rotating selection across the physical collections. Puja services remain separate from the product catalogue."
+        />
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] sm:grid sm:grid-cols-2 lg:grid-cols-4">
+          {featuredProducts.map((product) => (
+            <Link
+              href={`/products/${product.slug}`}
+              key={product.id}
+              className="group w-[78vw] shrink-0 snap-start rounded-2xl border border-zinc-800 bg-zinc-950/80 p-3 sm:w-auto"
+            >
+              <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-zinc-900">
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-3 transition duration-500 group-hover:scale-105"
+                  sizes="(min-width: 1024px) 25vw, 78vw"
+                />
+              </div>
+              <p className="mt-4 text-[10px] uppercase tracking-[.16em] text-amber-400">
+                {product.category}
+              </p>
+              <h3 className="mt-1 font-serif text-lg text-zinc-100">{product.name}</h3>
+              {product.price !== undefined && (
+                <p className="mt-2 text-sm text-zinc-400">
+                  ₹{product.price.toLocaleString("en-IN")}
+                </p>
+              )}
+            </Link>
+          ))}
+          {comingSoonProductSlots.map((slot) => (
+            <article
+              key={slot.id}
+              className="w-[78vw] shrink-0 snap-start rounded-2xl border border-zinc-800 bg-zinc-950/80 p-3 sm:w-auto"
+            >
+              <Placeholder label={slot.label} />
+              <p className="mt-4 text-[10px] uppercase tracking-[.16em] text-amber-400">
+                {slot.category}
+              </p>
+              <h3 className="mt-1 font-serif text-lg text-zinc-100">Collection placeholder</h3>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export function ShopByCategory() {
-  return <section className={sectionClass}><div className="mx-auto max-w-7xl"><Title eyebrow="Explore the store" title="Shop by Category" copy="Five carefully organised paths into the Kashi Prasad experience." /><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">{storeCategories.map((category) => <Link href={category.href} key={category.id} className="group rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 transition hover:-translate-y-1 hover:border-amber-500/50"><div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-zinc-900">{category.image ? <Image src={category.image} alt="" fill className="object-contain p-4 transition duration-500 group-hover:scale-105" sizes="(min-width: 1024px) 20vw, 50vw" /> : <div className="flex h-full items-center justify-center text-3xl text-amber-400/60">✦</div>}</div><h3 className="font-serif text-xl text-zinc-100">{category.name}</h3><p className="mt-2 text-sm leading-relaxed text-zinc-500">{category.description}</p><span className="mt-5 inline-block text-xs uppercase tracking-widest text-amber-400">Explore →</span></Link>)}</div></div></section>;
+  return (
+    <section className={sectionClass}>
+      <div className="mx-auto max-w-7xl">
+        <Title
+          eyebrow="Explore the store"
+          title="Shop by Category"
+          copy="Five carefully organised paths into the Kashi Prasad experience."
+        />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {storeCategories.map((category) => (
+            <Link
+              href={category.href}
+              key={category.id}
+              className="group rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 transition hover:-translate-y-1 hover:border-amber-500/50"
+            >
+              <div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-zinc-900">
+                {category.image ? (
+                  <Image
+                    src={category.image}
+                    alt=""
+                    fill
+                    className="object-contain p-4 transition duration-500 group-hover:scale-105"
+                    sizes="(min-width: 1024px) 20vw, 50vw"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center text-3xl text-amber-400/60">
+                    ✦
+                  </div>
+                )}
+              </div>
+              <h3 className="font-serif text-xl text-zinc-100">{category.name}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{category.description}</p>
+              <span className="mt-5 inline-block text-xs uppercase tracking-widest text-amber-400">
+                Explore →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-export function CustomerExperience() { return <section className={sectionClass}><div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.8fr_1.2fr]"><Title eyebrow="My Kashi Prasad" title="A considered experience" copy="The store is designed to make every part of discovery, purchase and future ritual booking clear and dependable." /><div className="grid gap-3 sm:grid-cols-3">{trustPillars.map(([title, copy], index) => <article key={title} className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5"><span className="text-xs text-amber-400">0{index + 1}</span><h3 className="mt-8 font-serif text-xl text-zinc-100">{title}</h3><p className="mt-3 text-sm leading-relaxed text-zinc-500">{copy}</p></article>)}</div></div></section>; }
+export function CustomerExperience() {
+  return (
+    <section className={sectionClass}>
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.8fr_1.2fr]">
+        <Title
+          eyebrow="My Kashi Prasad"
+          title="A considered experience"
+          copy="The store is designed to make every part of discovery, purchase and future ritual booking clear and dependable."
+        />
+        <div className="grid gap-3 sm:grid-cols-3">
+          {trustPillars.map(([title, copy], index) => (
+            <article key={title} className="rounded-2xl border border-zinc-800 bg-zinc-950/60 p-5">
+              <span className="text-xs text-amber-400">0{index + 1}</span>
+              <h3 className="mt-8 font-serif text-xl text-zinc-100">{title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-500">{copy}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
-export function ReviewsAndPhotos() { return <><section className={sectionClass}><div className="mx-auto max-w-7xl"><Title eyebrow="Reviews" title="Devotee stories" copy="Verified customer reviews will appear here once they are collected and approved. No testimonials are shown until real review data is available." /><div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/40 p-8 text-sm text-zinc-500">Review collection is being prepared.</div></div></section><section className={sectionClass}><div className="mx-auto max-w-7xl"><Title eyebrow="Visual archive" title="Photos & social proof" copy="Customer photographs, packaging moments and ritual imagery can be added here when the brand has approved assets." /><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{["Customer product photos", "Ritual experiences", "Packaging moments", "Brand imagery"].map((label) => <Placeholder key={label} label={label} />)}</div></div></section></>; }
+export function ReviewsAndPhotos() {
+  return (
+    <>
+      <section className={sectionClass}>
+        <div className="mx-auto max-w-7xl">
+          <Title
+            eyebrow="Reviews"
+            title="Devotee stories"
+            copy="Verified customer reviews will appear here once they are collected and approved. No testimonials are shown until real review data is available."
+          />
+          <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/40 p-8 text-sm text-zinc-500">
+            Review collection is being prepared.
+          </div>
+        </div>
+      </section>
+      <section className={sectionClass}>
+        <div className="mx-auto max-w-7xl">
+          <Title
+            eyebrow="Visual archive"
+            title="Photos & social proof"
+            copy="Customer photographs, packaging moments and ritual imagery can be added here when the brand has approved assets."
+          />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              "Customer product photos",
+              "Ritual experiences",
+              "Packaging moments",
+              "Brand imagery",
+            ].map((label) => (
+              <Placeholder key={label} label={label} />
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
