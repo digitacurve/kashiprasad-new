@@ -14,3 +14,5 @@ public
 Mala_1_to_10_Products
 Rudrashaks pngs
 PUJA_KITS_DETAILS.md
+# Generated Migrations and Seeds
+supabase/migrations/*.sql
