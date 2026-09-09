@@ -1,3 +1,11 @@
+/** Canonical Storefront Category Enum / Union */
+export type ProductCategory =
+  | "Puja Kits"
+  | "Mala"
+  | "Rudraksha"
+  | "Ratnas"
+  | "Puja Services";
+
 export interface SpecItem {
   label: string;
   value: string;
@@ -23,6 +31,18 @@ export interface SamagriCategory {
   items: SamagriItem[];
 }
 
+export interface ProductReview {
+  id: string;
+  author: string;
+  location?: string;
+  rating: number;
+  date: string;
+  title: string;
+  comment: string;
+  verifiedPurchase: boolean;
+}
+
+/** Canonical Product Variant */
 export interface ProductVariant {
   id: string;
   name: string;
@@ -37,35 +57,25 @@ export interface ProductVariant {
   divineOfferingOption?: string;
 }
 
-export interface ProductReview {
-  id: string;
-  author: string;
-  location?: string;
-  rating: number;
-  date: string;
-  title: string;
-  comment: string;
-  verifiedPurchase: boolean;
-}
-
+/** Canonical Storefront Product Model */
 export interface Product {
   id: string;
   slug: string;
   name: string;
-  category: "Puja Kits" | "Mala" | "Rudraksha" | "Ratnas";
-  subCategory?: string; // e.g. "Gemstones" | "Stones" | "Collector Beads" | "Nepali Rudraksha"
+  category: ProductCategory;
+  subCategory?: string; // e.g. "Nepali Rudraksha" | "Gemstones" | "Stones" | "Collector Beads"
   image: string;
   images?: string[];
   placeholderIcon?: string;
-  badge: string;
-  rating: number;
-  reviewCount: number;
-  tagline: string;
-  shortDescription: string;
-  detailedOverview: string[];
-  tags: string[];
-  price: number;
-  mrp: number;
+  badge?: string;
+  rating?: number;
+  reviewCount?: number;
+  tagline?: string;
+  shortDescription?: string;
+  detailedOverview?: string[];
+  tags?: string[];
+  price?: number;
+  mrp?: number;
   featured?: boolean;
   inStock?: boolean;
   hasDivineOffering?: boolean;
@@ -81,6 +91,7 @@ export interface Product {
   reviews?: ProductReview[];
 }
 
+/** Canonical Puja Service Model */
 export interface PujaService {
   id: string;
   slug: string;
@@ -103,15 +114,16 @@ export interface PujaService {
   faqs?: FAQItem[];
 }
 
+/** Canonical Store Category Info */
 export interface CategoryInfo {
   id: string;
-  name: string;
+  name: ProductCategory;
   slug: string;
   href: string;
   description: string;
-  itemCount: string;
-  badge: string;
-  visualCode: string;
+  itemCount?: string;
+  badge?: string;
+  visualCode?: string;
   image?: string;
   icon?: string;
   isService?: boolean;
@@ -123,17 +135,19 @@ export interface CategoryInfo {
   }[];
 }
 
+/** Canonical Cart Item */
 export interface CartItem {
+  lineId: string;
   productId: string;
   slug: string;
   name: string;
-  category: string;
+  category?: ProductCategory;
   image: string;
   variantId: string;
   variantName: string;
   price: number;
-  mrp: number;
+  mrp?: number;
   quantity: number;
-  withDivineOffering: boolean;
-  divineOfferingPrice: number;
+  divineOffering: boolean;
+  divineOfferingPrice?: number;
 }

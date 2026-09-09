@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { malaProducts, MalaProduct } from "@/data/malas";
+import { malaProducts } from "@/data/malas";
 
 export default function MalaSection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -299,10 +299,10 @@ export default function MalaSection() {
                         </span>
                         <div className="flex items-baseline gap-1.5 sm:gap-2 mt-0.5">
                           <span className="font-serif text-base sm:text-2xl font-bold text-zinc-100">
-                            ₹{product.price.toLocaleString("en-IN")}
+                            ₹{product.price?.toLocaleString("en-IN")}
                           </span>
                           <span className="text-[10px] sm:text-xs text-zinc-500 line-through">
-                            ₹{product.mrp.toLocaleString("en-IN")}
+                            ₹{product.mrp?.toLocaleString("en-IN")}
                           </span>
                         </div>
                       </div>

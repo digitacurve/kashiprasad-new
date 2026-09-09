@@ -16,9 +16,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   );
 
   const imagesList =
-    (product as { images?: string[] }).images &&
-    (product as { images?: string[] }).images!.length > 0
-      ? (product as { images?: string[] }).images!
+    product.images && product.images.length > 0
+      ? product.images
       : product.image
       ? [product.image]
       : [];
@@ -39,11 +38,13 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
       productId: product.id,
       slug: product.slug,
       name: product.name,
+      category: product.category,
       image: product.image,
       variantId: selectedVariant.id,
       variantName: selectedVariant.name,
       price: selectedVariant.price,
-      divineOffering: Boolean((selectedVariant as { divineOfferingOption?: string }).divineOfferingOption?.toLowerCase().includes("with divine")),
+      mrp: selectedVariant.mrp,
+      divineOffering: Boolean(selectedVariant.divineOfferingOption?.toLowerCase().includes("with divine")),
     });
   };
 
@@ -427,7 +428,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               )}
 
               {/* Tab: Vedic Overview */}
-              {activeTab === "overview" && (
+              {activeTab === "overview" && product.detailedOverview && (
                 <div className="bg-zinc-950/60 border border-zinc-800/80 rounded-xl p-5 sm:p-6 space-y-4 text-xs sm:text-sm text-zinc-300 leading-relaxed">
                   {product.detailedOverview.map((para, idx) => (
                     <p key={idx}>{para}</p>

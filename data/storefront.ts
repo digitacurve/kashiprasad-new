@@ -27,7 +27,7 @@ export const featuredProducts = allProducts
     id: product.id,
     slug: product.slug,
     name: product.name,
-    category: product.category === "Pooja Kits" ? "Puja Kits" : product.category,
+    category: product.category,
     image: product.image,
     price: product.price,
     badge: product.badge,

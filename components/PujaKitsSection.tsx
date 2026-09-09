@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { pujaKitProducts, PujaKitProduct } from "@/data/pujaKits";
+import { pujaKitProducts } from "@/data/pujaKits";
 
 export default function PujaKitsSection() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -261,7 +261,7 @@ export default function PujaKitsSection() {
                           Starting From
                         </span>
                         <span className="font-serif text-sm sm:text-base font-semibold text-zinc-400">
-                          ₹{product.price.toLocaleString("en-IN")}
+                          ₹{product.price?.toLocaleString("en-IN")}
                         </span>
                       </div>
 
@@ -385,10 +385,10 @@ export default function PujaKitsSection() {
                         </span>
                         <div className="flex items-baseline gap-1.5 sm:gap-2 mt-0.5">
                           <span className="font-serif text-base sm:text-2xl font-bold text-zinc-100">
-                            ₹{product.price.toLocaleString("en-IN")}
+                            ₹{product.price?.toLocaleString("en-IN")}
                           </span>
                           <span className="text-[10px] sm:text-xs text-zinc-500 line-through">
-                            ₹{product.mrp.toLocaleString("en-IN")}
+                            ₹{product.mrp?.toLocaleString("en-IN")}
                           </span>
                         </div>
                       </div>

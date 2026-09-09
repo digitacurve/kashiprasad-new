@@ -1,64 +1,27 @@
-export interface SamagriItem {
-  name: string;
-  quantity: string;
-}
+import {
+  Product,
+  ProductVariant,
+  SamagriCategory,
+  SamagriItem,
+  SpecGroup,
+  FAQItem,
+} from "./types";
 
-export interface SamagriCategory {
-  category: string;
-  items: SamagriItem[];
-}
+export type {
+  SamagriItem,
+  SamagriCategory,
+  SpecGroup,
+  FAQItem,
+};
+export type PujaKitVariant = ProductVariant;
+export type PujaKitProduct = Product;
 
-export interface PujaKitVariant {
-  id: string;
-  name: string;
-  price: number;
-  mrp: number;
-  badge: string;
-  suitableFor: string;
-  description: string;
-  keyHighlights: string[];
-  samagriChecklist: SamagriCategory[];
-}
-
-export interface SpecGroup {
-  groupName: string;
-  specs: { label: string; value: string }[];
-}
-
-export interface FAQItem {
-  q: string;
-  a: string;
-}
-
-export interface PujaKitProduct {
-  id: string;
-  slug: string;
-  name: string;
-  category: string;
-  image: string;
-  badge: string;
-  rating: number;
-  reviewCount: number;
-  tagline: string;
-  shortDescription: string;
-  detailedOverview: string[];
-  tags: string[];
-  price: number; // Starting price for card display
-  mrp: number;   // Starting MRP for card display
-  variants: PujaKitVariant[];
-  specifications?: SpecGroup[];
-  faqs?: FAQItem[];
-  shippingGuarantee?: string;
-  isPlaceholder?: boolean;
-  code?: string;
-}
-
-export const pujaKitProducts: PujaKitProduct[] = [
+export const pujaKitProducts: Product[] = [
   {
     "id": "pk-satyanarayan-pooja-kit",
     "slug": "satyanarayan-pooja-kit",
     "name": "Satyanarayan Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/01-satyanarayan-pooja-kit.jpg",
     "badge": "Most Popular",
     "rating": 4.9,
@@ -783,7 +746,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-griha-pravesh-pooja-kit",
     "slug": "griha-pravesh-pooja-kit",
     "name": "Griha Pravesh Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/02-griha-pravesh-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -1572,7 +1535,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-rudrabhishek-pooja-kit",
     "slug": "rudrabhishek-pooja-kit",
     "name": "Rudrabhishek Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/03-rudrabhishek-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -2358,7 +2321,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-lakshmi-pooja-kit",
     "slug": "lakshmi-pooja-kit",
     "name": "Lakshmi Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/06-lakshmi-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -3115,7 +3078,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-navgraha-pooja-kit",
     "slug": "navgraha-pooja-kit",
     "name": "Navgraha Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/07-navgraha-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -3872,7 +3835,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-ganesh-pooja-kit",
     "slug": "ganesh-pooja-kit",
     "name": "Ganesh Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/04-ganesh-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -4605,7 +4568,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-durga-pooja-kit",
     "slug": "durga-pooja-kit",
     "name": "Durga Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/08-durga-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -5354,7 +5317,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-mahamrityunjaya-jaap-kit",
     "slug": "mahamrityunjaya-jaap-kit",
     "name": "Mahamrityunjaya Jaap Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/05-shiv-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -6119,7 +6082,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-sundarkand-path-kit",
     "slug": "sundarkand-path-kit",
     "name": "Sundarkand Path Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/09-sundarkand-path-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -6875,7 +6838,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-hanuman-pooja-kit",
     "slug": "hanuman-pooja-kit",
     "name": "Hanuman Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/10-hanuman-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -7631,7 +7594,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-vishnu-pooja-kit",
     "slug": "vishnu-pooja-kit",
     "name": "Vishnu Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/11-vishnu-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -8363,7 +8326,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-saraswati-pooja-kit",
     "slug": "saraswati-pooja-kit",
     "name": "Saraswati Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/12-saraswati-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -9095,7 +9058,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-shani-dev-pooja-kit",
     "slug": "shani-dev-pooja-kit",
     "name": "Shani Dev Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/13-shani-dev-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -9839,7 +9802,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-surya-dev-pooja-kit",
     "slug": "surya-dev-pooja-kit",
     "name": "Surya Dev Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/14-surya-dev-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -10579,7 +10542,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-sai-baba-pooja-kit",
     "slug": "sai-baba-pooja-kit",
     "name": "Sai Baba Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/15-sai-baba-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -11315,7 +11278,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-kali-mata-pooja-kit",
     "slug": "kali-mata-pooja-kit",
     "name": "Kali Mata Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/16-kali-mata-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -12047,7 +12010,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-vishwakarma-pooja-kit",
     "slug": "vishwakarma-pooja-kit",
     "name": "Vishwakarma Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/17-vishwakarma-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -12767,7 +12730,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-vehicle-pooja-kit",
     "slug": "vehicle-pooja-kit",
     "name": "Vehicle Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/18-vehicle-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,
@@ -13508,7 +13471,7 @@ export const pujaKitProducts: PujaKitProduct[] = [
     "id": "pk-office-opening-pooja-kit",
     "slug": "office-opening-pooja-kit",
     "name": "Office Opening Pooja Kit",
-    "category": "Pooja Kits",
+    "category": "Puja Kits",
     "image": "/assets/puja-kits/19-office-opening-pooja-kit.jpg",
     "badge": "Best Seller",
     "rating": 4.9,

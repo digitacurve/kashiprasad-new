@@ -1,16 +1,9 @@
-import { SpecGroup, FAQItem, PujaKitVariant, PujaKitProduct } from "./pujaKits";
+import { Product, ProductVariant } from "./types";
 
-export interface MalaVariant extends PujaKitVariant {
-  divineOfferingOption?: string;
-  includedItems?: string[];
-}
+export type MalaVariant = ProductVariant;
+export type MalaProduct = Product;
 
-export interface MalaProduct extends PujaKitProduct {
-  images?: string[];
-  variants: MalaVariant[];
-}
-
-export const malaProducts: MalaProduct[] = [
+export const malaProducts: Product[] = [
   {
     id: "mala-original-karungali",
     slug: "original-karungali-mala-108-beads",
