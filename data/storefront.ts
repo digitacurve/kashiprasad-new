@@ -52,16 +52,7 @@ export const storeCategories: StoreCategory[] = [
 
 export const featuredProducts = allProducts
   .filter((product) => !product.isPlaceholder)
-  .slice(0, 6)
-  .map((product) => ({
-    id: product.id,
-    slug: product.slug,
-    name: product.name,
-    category: product.category,
-    image: product.image,
-    price: product.price,
-    badge: product.badge,
-  }));
+  .slice(0, 10);
 
 export const comingSoonProductSlots = [
   { id: "rudraksha-slot", category: "Rudraksha", label: "Product catalogue in preparation" },
