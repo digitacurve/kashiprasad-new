@@ -5,10 +5,12 @@ import { useState } from "react";
 import { Search, ShoppingBag, User, Heart, Menu, X, Sparkles } from "lucide-react";
 import { storeCategories } from "@/data/storefront";
 import { useCart } from "@/components/CartProvider";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
   const { totalItems, openCart, openSearch } = useCart();
+  const { user, isLoggedIn, openAuthModal } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 border-b border-amber-500/20 bg-[#06080c]/95 backdrop-blur-xl transition-all">
@@ -70,14 +72,29 @@ export default function SiteHeader() {
             <Heart className="h-4 w-4" />
           </Link>
 
-          {/* User Account */}
-          <Link
-            aria-label="Account"
-            href="/account"
-            className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-800/80 bg-zinc-900/60 text-zinc-400 hover:border-amber-500/30 hover:text-amber-300 transition"
-          >
-            <User className="h-4 w-4" />
-          </Link>
+          {/* User Account / Login Trigger */}
+          {isLoggedIn ? (
+            <Link
+              aria-label="Account Profile"
+              href="/account"
+              className="flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-gradient-to-r from-amber-500/20 to-amber-600/10 px-3 py-1.5 text-xs font-semibold text-amber-200 hover:border-amber-400 transition"
+            >
+              <User className="h-3.5 w-3.5 text-amber-400" />
+              <span className="hidden sm:inline font-sans text-xs max-w-[90px] truncate">
+                {user?.name.split(" ")[0]}
+              </span>
+            </Link>
+          ) : (
+            <button
+              onClick={() => openAuthModal()}
+              type="button"
+              aria-label="Login to account"
+              className="flex items-center gap-1.5 rounded-full border border-zinc-700/80 bg-zinc-900/80 px-3 py-1.5 text-xs text-zinc-300 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer"
+            >
+              <User className="h-3.5 w-3.5 text-amber-400" />
+              <span className="hidden sm:inline font-sans text-xs">Login</span>
+            </button>
+          )}
 
           {/* Sacred Bag / Cart Trigger */}
           <button

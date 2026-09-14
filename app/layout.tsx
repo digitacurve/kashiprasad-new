@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/components/CartProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import CartDrawer from "@/components/CartDrawer";
 import SearchModal from "@/components/SearchModal";
+import AuthModal from "@/components/AuthModal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,11 +42,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} ${cormorant.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col bg-[#06080c] text-[#f5f5f7] font-sans antialiased">
-        <CartProvider>
-          {children}
-          <CartDrawer />
-          <SearchModal />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+            <SearchModal />
+            <AuthModal />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
