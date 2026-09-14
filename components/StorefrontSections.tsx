@@ -9,7 +9,8 @@ import FeaturedRubyCard from "./FeaturedRubyCard";
 import FeaturedServiceCard from "./FeaturedServiceCard";
 import CategoryCard from "./CategoryCard";
 import TrustPillarCard from "./TrustPillarCard";
-import ArchiveCard from "./ArchiveCard";
+import DevoteeStories from "./DevoteeStories";
+import VisualArchive from "./VisualArchive";
 
 const sectionClass = "border-t border-amber-500/10 px-4 py-16 sm:px-8 sm:py-24";
 
@@ -127,36 +128,27 @@ export function CustomerExperience() {
 export function ReviewsAndPhotos() {
   return (
     <>
+      {/* Devotee Stories & Verified Testimonials */}
       <section className={sectionClass}>
         <div className="mx-auto max-w-7xl">
           <Title
-            eyebrow="Reviews"
-            title="Devotee stories"
-            copy="Verified customer reviews will appear here once they are collected and approved. No testimonials are shown until real review data is available."
+            eyebrow="Blessed Experiences"
+            title="Devotee Stories"
+            copy="Real voices of devotees across India and abroad who received authentic, consecrated sacred items direct from Kashi."
           />
-          <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-950/40 p-8 text-center text-sm text-zinc-500 transition-all duration-300 hover:border-amber-500/40 hover:text-zinc-400 hover:shadow-[0_12px_35px_rgba(0,0,0,0.8),0_0_20px_rgba(223,171,82,0.12)]">
-            Review collection is being prepared.
-          </div>
+          <DevoteeStories />
         </div>
       </section>
 
+      {/* Visual Archive & Social Proof Gallery */}
       <section className={sectionClass}>
         <div className="mx-auto max-w-7xl">
           <Title
-            eyebrow="Visual archive"
-            title="Photos & social proof"
-            copy="Customer photographs, packaging moments and ritual imagery can be added here when the brand has approved assets."
+            eyebrow="Sacred Heritage"
+            title="Photos & Social Proof"
+            copy="An authentic glimpse into Varanasi Ganga Ghat consecrations, premium velvet packaging, artisan beadwork, and certified laboratory testing."
           />
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              "Customer product photos",
-              "Ritual experiences",
-              "Packaging moments",
-              "Brand imagery",
-            ].map((label) => (
-              <ArchiveCard key={label} label={label} />
-            ))}
-          </div>
+          <VisualArchive />
         </div>
       </section>
     </>
