@@ -1,6 +1,8 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Hero from "@/components/hero/Hero";
 import SiteFooter from "@/components/SiteFooter";
+import SpiritualQuiz from "@/components/SpiritualQuiz";
+import FloatingQuizButton from "@/components/FloatingQuizButton";
 import {
   CustomerExperience,
   FeaturedCollection,
@@ -15,9 +17,11 @@ export default function Home() {
         <Hero />
         <FeaturedCollection />
         <ShopByCategory />
+        <SpiritualQuiz />
         <CustomerExperience />
         <ReviewsAndPhotos />
         <SiteFooter />
+        <FloatingQuizButton />
       </main>
     </SmoothScroll>
   );
