@@ -1,4 +1,5 @@
 import CollectionPage from "@/components/CollectionPage";
+import { ratnaProducts } from "@/data/ratnas";
 
 export const metadata = { title: "Ratnas | Kashi Prasad" };
 export default function RatnasPage() {
@@ -6,10 +7,10 @@ export default function RatnasPage() {
     <CollectionPage
       eyebrow="Ratnas"
       title="Gemstones & Stones"
-      description="Ratnas is the single top-level collection for future gemstone and stone catalogues."
-      products={[]}
+      description="Natural, astrologically certified gemstones consecrated along the sacred ghats of Varanasi."
+      products={ratnaProducts}
       subcategories={["Gemstones", "Stones"]}
-      emptyMessage="Approved Ratnas products and imagery will appear here. Gemstones and Stones remain filters within Ratnas, not top-level collections."
+      emptyMessage="Approved Ratnas products and imagery will appear here."
     />
   );
 }

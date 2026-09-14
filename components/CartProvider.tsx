@@ -8,9 +8,17 @@ export type StoredCartItem = CartItem;
 
 interface CartContextValue {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, "lineId" | "quantity">) => void;
+  totalItems: number;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
+  isSearchOpen: boolean;
+  openSearch: () => void;
+  closeSearch: () => void;
+  addItem: (item: Omit<CartItem, "lineId" | "quantity">, quantity?: number) => void;
   updateQuantity: (lineId: string, quantity: number) => void;
   removeItem: (lineId: string) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -19,6 +27,8 @@ const storageKey = "kashi-prasad-cart";
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [ready, setReady] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -42,20 +52,32 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, [items, ready]);
 
+  const totalItems = useMemo(
+    () => items.reduce((sum, item) => sum + (item.quantity || 1), 0),
+    [items]
+  );
+
   const value = useMemo(
     () => ({
       items,
-      addItem(item: Omit<CartItem, "lineId" | "quantity">) {
+      totalItems,
+      isCartOpen,
+      openCart: () => setIsCartOpen(true),
+      closeCart: () => setIsCartOpen(false),
+      isSearchOpen,
+      openSearch: () => setIsSearchOpen(true),
+      closeSearch: () => setIsSearchOpen(false),
+      addItem(item: Omit<CartItem, "lineId" | "quantity">, quantity: number = 1) {
         setItems((current) => {
           const lineId = `${item.productId}:${item.variantId}`;
           const existing = current.find((cartItem) => cartItem.lineId === lineId);
           return existing
             ? current.map((cartItem) =>
                 cartItem.lineId === lineId
-                  ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                  ? { ...cartItem, quantity: cartItem.quantity + quantity }
                   : cartItem
               )
-            : [...current, { ...item, lineId, quantity: 1 }];
+            : [...current, { ...item, lineId, quantity: Math.max(1, quantity) }];
         });
       },
       updateQuantity(lineId: string, quantity: number) {
@@ -68,8 +90,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeItem(lineId: string) {
         setItems((current) => current.filter((item) => item.lineId !== lineId));
       },
+      clearCart() {
+        setItems([]);
+      },
     }),
-    [items]
+    [items, totalItems, isCartOpen, isSearchOpen]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -80,3 +105,4 @@ export function useCart() {
   if (!context) throw new Error("useCart must be used within CartProvider");
   return context;
 }
+

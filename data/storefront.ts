@@ -1,4 +1,7 @@
 import { allProducts } from "./products";
+import { malaProducts } from "./malas";
+import { rudrakshaProducts } from "./rudraksha";
+import { pujaKitProducts } from "./pujaKits";
 
 export type StoreCategoryId = "puja-kits" | "malas" | "rudraksha" | "ratnas" | "puja-services";
 
@@ -32,31 +35,34 @@ export const storeCategories: StoreCategory[] = [
     name: "Rudraksha",
     href: "/rudraksha",
     description: "A dedicated catalogue for sacred beads and mukhi types.",
-    image: "/hero/assets/rudraksha-bead.png",
+    image: "/assets/rudraksha/1-mukhi-rudraksha.png",
   },
   {
     id: "ratnas",
     name: "Ratnas",
     href: "/ratnas",
     description: "Natural gems and stones, organised in one sacred collection.",
+    image: "/assets/ratnas/emerald-panna.png",
     subcategories: ["Gemstones", "Stones"],
   },
   {
     id: "puja-services",
     name: "Puja Services",
     href: "/puja-services",
-    description: "Book a personalised ritual experience when services are available.",
+    description: "Vedic Rudrabhishek, Aartis & Sacred Sevas at Kashi Vishwanath.",
+    image: "/assets/puja-services/kashi-vishwanath-pooja-services.jpg",
     isService: true,
   },
 ];
 
-export const featuredProducts = allProducts
-  .filter((product) => !product.isPlaceholder)
-  .slice(0, 10);
+export const featuredProducts = [
+  rudrakshaProducts[0],
+  malaProducts[0],
+  pujaKitProducts[0],
+];
 
 export const comingSoonProductSlots = [
-  { id: "rudraksha-slot", category: "Rudraksha", label: "Product catalogue in preparation" },
-  { id: "ratnas-slot", category: "Ratnas", label: "Product catalogue in preparation" },
+  { id: "puja-services-slot", category: "Puja Services", label: "Ritual bookings in preparation" },
 ];
 
 export const trustPillars = [

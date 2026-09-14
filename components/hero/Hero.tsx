@@ -3,12 +3,15 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Search, Heart, User, ShoppingBag } from "lucide-react";
+import { useCart } from "@/components/CartProvider";
 import CategoryNavigation from "@/components/CategoryNavigation";
 import styles from "./Hero.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
+  const { totalItems, openCart, openSearch } = useCart();
   const sectionRef = useRef<HTMLElement | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const heroBannerRef = useRef<HTMLImageElement | null>(null);
@@ -309,18 +312,34 @@ export default function Hero() {
             </div>
 
             <div className={styles.utilityLinks}>
-              <button type="button" aria-label="Search" className={styles.utilityButton}>
-                ⌕
+              <button
+                type="button"
+                onClick={openSearch}
+                aria-label="Search"
+                className={styles.utilityButton}
+              >
+                <Search className="w-4 h-4 text-amber-300 transition-colors" />
               </button>
               <a href="/account#wishlist" aria-label="Wishlist" className={styles.utilityButton}>
-                ♡
+                <Heart className="w-4 h-4 text-zinc-300 hover:text-amber-300 transition-colors" />
               </a>
               <a href="/account" aria-label="Account" className={styles.utilityButton}>
-                ◯
+                <User className="w-4 h-4 text-zinc-300 hover:text-amber-300 transition-colors" />
               </a>
-              <a href="/cart" className={styles.navCta}>
-                Cart
-              </a>
+              <button
+                type="button"
+                onClick={openCart}
+                className={styles.navCta}
+                aria-label="Shopping Bag"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 text-zinc-950 inline mr-1" />
+                <span>Bag</span>
+                {totalItems > 0 && (
+                  <span className="ml-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-zinc-950 px-1 text-[10px] font-bold text-amber-400">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
             </div>
           </div>
 

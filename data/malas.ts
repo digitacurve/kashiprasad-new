@@ -1194,5 +1194,596 @@ export const malaProducts: Product[] = [
         ]
       }
     ]
+  },
+  {
+    id: "mala-rosewood-lal-chandan",
+    slug: "rosewood-mala-lal-chandan",
+    name: "Rosewood Mala – Lal Chandan",
+    category: "Mala",
+    image: "/assets/mala/11_mala_regenerated_01.jpg",
+    images: [
+      "/assets/mala/11_mala_regenerated_01.jpg",
+      "/assets/mala/11_mala_regenerated_02.jpg",
+    ],
+    badge: "Standard Offering",
+    rating: 4.9,
+    reviewCount: 248,
+    tagline: "Devotional Japa, Gayatri Mantra, Meditation & Devotion",
+    shortDescription:
+      "A traditional Lal Chandan Mala crafted with smooth reddish-brown wooden beads, suitable for daily japa, mantra chanting, meditation, and spiritual practice. Its natural wood texture and warm finish give it a simple, timeless devotional character.",
+    detailedOverview: [
+      "Crafted with 108+1 genuine Lal Chandan (Rosewood / Red Sandalwood) beads, this revered sacred mala is cherished across traditional spiritual lineages for enhancing focus, calming restless thoughts, and creating an aura of serenity during meditation.",
+      "Each bead is carefully shaped and smoothly polished to highlight its natural reddish-brown wooden grain, strung with a reinforced traditional holy cord and finished with an auspicious red tassel. Every mala is blessed with holy Ganga jal on the sacred ghats of Varanasi prior to dispatch."
+    ],
+    tags: [
+      "Rosewood Mala",
+      "Lal Chandan Mala",
+      "लाल चंदन माला",
+      "108 Beads",
+      "Mala",
+      "Gayatri Mantra",
+      "Daily Japa",
+      "Varanasi Sourced",
+      "Kashi Prasad"
+    ],
+    price: 899,
+    mrp: 1799,
+    specifications: [
+      {
+        groupName: "Mala Specifications",
+        specs: [
+          { label: "Material", value: "Natural Lal Chandan / Rosewood (Red Sandalwood Wood)" },
+          { label: "Bead Count", value: "108 Beads + 1 Guru Bead" },
+          { label: "Bead Diameter", value: "8 mm" },
+          { label: "Thread", value: "Reinforced Traditional Cotton Cord with Auspicious Tassel" },
+          { label: "Presiding Deities", value: "Goddess Gayatri / Goddess Durga / Lord Surya" },
+          { label: "Spiritual Significance", value: "Daily Japa, Mantra Chanting, Meditation & Mental Calmness" },
+          { label: "Origin", value: "Varanasi (Blessed & Purified)" }
+        ]
+      }
+    ],
+    faqs: [
+      {
+        q: "What are the benefits of Lal Chandan (Rosewood) Mala for Japa?",
+        a: "Lal Chandan beads are revered for grounding energy, fostering mental clarity, and maintaining smooth tactile rhythm during Gayatri mantra chanting and daily devotional sadhana."
+      },
+      {
+        q: "How should I care for my Rosewood Mala?",
+        a: "Store your mala in the provided sacred temple pouch when not chanting. Avoid direct contact with harsh chemical soaps and perfumes to preserve the natural wooden texture."
+      }
+    ],
+    variants: [
+      {
+        id: "variant-11-without-offering",
+        name: "Without Divine Offering",
+        price: 899,
+        mrp: 1799,
+        badge: "Standard Offering",
+        suitableFor: "Daily Japa, Meditation & Mantra Sadhana",
+        description:
+          "A traditional Lal Chandan Mala crafted with smooth reddish-brown wooden beads, suitable for daily japa, mantra chanting, meditation, and spiritual practice.",
+        divineOfferingOption: "Without Divine Offering",
+        keyHighlights: [
+          "Smooth reddish-brown natural Lal Chandan (Rosewood) beads",
+          "108 beads + 1 Guru bead (8mm diameter)",
+          "Natural wood texture with a warm, subtle devotional finish",
+          "Ideal for Gayatri mantra chanting and daily prayer",
+          "Purified with holy Ganga jal in Varanasi"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Rosewood Mala – Lal Chandan (108+1 Beads, 8mm)", quantity: "1 Unit" },
+              { name: "Sacred Temple Storage Pouch", quantity: "1 Unit" },
+              { name: "Authenticity & Care Guide", quantity: "1 Document" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-11-with-offering",
+        name: "With Divine Offering (Kashi Prasad)",
+        price: 1199,
+        mrp: 2399,
+        badge: "Divine Offering",
+        suitableFor: "Complete Consecration & Spiritual Blessings",
+        description:
+          "Traditional Rosewood (Lal Chandan) Mala consecrated with Vedic sankalp in Varanasi, accompanied by sanctified Kashi Prasad and sacred temple offerings.",
+        divineOfferingOption: "With Divine Offering - Kashi Prasad",
+        keyHighlights: [
+          "Authentic 108+1 Rosewood (Lal Chandan) Mala (8mm beads)",
+          "Vedic mantra energization and sankalp performed at Varanasi",
+          "Accompanied by sanctified Kashi temple prasad & holy vibhuti",
+          "Consecrated Ganga jal vial included",
+          "Brings positive energy, protection, and divine grace"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Rosewood Mala – Lal Chandan (108+1 Beads, 8mm)", quantity: "1 Unit" },
+              { name: "Sanctified Kashi Temple Prasad Pack", quantity: "1 Pack" },
+              { name: "Sacred Kashi Vishwanath Vibhuti / Bhasma", quantity: "1 Vial" },
+              { name: "Holy Ganga Jal Consecrated Vial", quantity: "1 Vial" },
+              { name: "Premium Temple Silk Storage Pouch", quantity: "1 Unit" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "mala-parad-108",
+    slug: "parad-mala",
+    name: "Parad Mala – 108+1 Beads",
+    category: "Mala",
+    image: "/assets/mala/12_mala_regenerated_01.jpg",
+    images: [
+      "/assets/mala/12_mala_regenerated_01.jpg",
+      "/assets/mala/12_mala_regenerated_02.jpg",
+    ],
+    badge: "Standard Offering",
+    rating: 4.9,
+    reviewCount: 189,
+    tagline: "Divine Purity, Timeless Tradition & Shiva Consciousness",
+    shortDescription:
+      "A traditional 108+1 Parad Mala featuring smooth metallic-finish beads, designed for japa, mantra chanting, meditation, and devotional practice. Its classic silver-toned appearance and traditional construction make it a distinctive choice for daily spiritual practice.",
+    detailedOverview: [
+      "Parad (purified and solidified Mercury) is described in classical Vedic and Tantric scriptures as the purest elemental substance imbued with the spiritual presence of Lord Shiva. Chanting on a Parad Mala creates high vibrational frequencies that stabilize the mind and bring deep meditative peace.",
+      "Each bead is precisely handcrafted with a smooth metallic luster, strung securely with a reinforced traditional holy cord and finished with a silk tassel. Every mala is sanctified with sacred Ganga jal along the holy ghats of Varanasi prior to dispatch."
+    ],
+    tags: [
+      "Parad Mala",
+      "Mercury Mala",
+      "पारद माला",
+      "108 Beads",
+      "Mala",
+      "Lord Shiva",
+      "Mahamrityunjaya Japa",
+      "Varanasi Sourced",
+      "Kashi Prasad"
+    ],
+    price: 2999,
+    mrp: 5999,
+    specifications: [
+      {
+        groupName: "Mala Specifications",
+        specs: [
+          { label: "Material", value: "Pure Solidified Parad (Mercury / Rasamani)" },
+          { label: "Bead Count", value: "108 Beads + 1 Guru Bead" },
+          { label: "Bead Diameter", value: "6 mm" },
+          { label: "Thread", value: "Reinforced Sacred Cord with Traditional Tassel" },
+          { label: "Presiding Deities", value: "Lord Shiva (Mahadev) & Goddess Parvati" },
+          { label: "Spiritual Significance", value: "Chakra Balance, Mahamrityunjaya Japa, Mental Calmness & Shiva Consciousness" },
+          { label: "Origin", value: "Varanasi (Blessed & Purified)" }
+        ]
+      }
+    ],
+    faqs: [
+      {
+        q: "What makes Parad Mala spiritually unique for Japa?",
+        a: "In Vedic tradition, Parad is revered as the seed of Lord Shiva. Chanting mantras like Om Namah Shivaya or Mahamrityunjaya on Parad beads is believed to amplify spiritual focus and cleanse subtle energetic blockages."
+      },
+      {
+        q: "How should I maintain and care for my Parad Mala?",
+        a: "Store the Parad Mala in the sacred storage pouch provided when not in use. Avoid exposing it to extreme friction or harsh chemicals to preserve its smooth metallic sheen."
+      }
+    ],
+    variants: [
+      {
+        id: "variant-12-without-offering",
+        name: "Without Divine Offering",
+        price: 2999,
+        mrp: 5999,
+        badge: "Standard Offering",
+        suitableFor: "Daily Japa, Mahamrityunjaya & Meditation",
+        description:
+          "A traditional 108+1 Parad Mala featuring smooth metallic-finish beads, designed for japa, mantra chanting, meditation, and devotional practice.",
+        divineOfferingOption: "Without Divine Offering",
+        keyHighlights: [
+          "100% genuine solidified Parad (Mercury) beads",
+          "108 beads + 1 Sumeru Guru bead (6mm diameter)",
+          "Smooth metallic silver-tone finish and balanced tactile feel",
+          "Ideal for Lord Shiva sadhana and daily mantra meditation",
+          "Purified with holy Ganga jal in Varanasi"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Parad Mala – 108+1 Beads (6mm)", quantity: "1 Unit" },
+              { name: "Sacred Temple Storage Pouch", quantity: "1 Unit" },
+              { name: "Authenticity & Care Guide", quantity: "1 Document" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-12-with-offering",
+        name: "With Divine Offering (Kashi Prasad)",
+        price: 3299,
+        mrp: 6599,
+        badge: "Divine Offering",
+        suitableFor: "Complete Shiva Consecration & Spiritual Protection",
+        description:
+          "Traditional Parad Mala consecrated with specialized Vedic Rudrabhishek at Varanasi, accompanied by sanctified Kashi Prasad and sacred temple offerings.",
+        divineOfferingOption: "With Divine Offering - Kashi Prasad",
+        keyHighlights: [
+          "Authentic 108+1 Parad (Mercury) Mala (6mm beads)",
+          "Consecrated with Vedic Rudrabhishek sankalp at Kashi",
+          "Accompanied by sanctified Kashi temple prasad & sacred vibhuti",
+          "Consecrated Ganga jal vial included",
+          "Infuses profound tranquility, protection, and divine grace"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Parad Mala – 108+1 Beads (6mm)", quantity: "1 Unit" },
+              { name: "Sanctified Kashi Temple Prasad Pack", quantity: "1 Pack" },
+              { name: "Sacred Kashi Vishwanath Vibhuti / Bhasma", quantity: "1 Vial" },
+              { name: "Holy Ganga Jal Consecrated Vial", quantity: "1 Vial" },
+              { name: "Premium Temple Silk Storage Pouch", quantity: "1 Unit" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "mala-hakik-agate",
+    slug: "hakik-mala-agate",
+    name: "Hakik Mala – Agate",
+    category: "Mala",
+    image: "/assets/mala/13_mala_regenerated_01.jpg",
+    images: [
+      "/assets/mala/13_mala_regenerated_01.jpg",
+      "/assets/mala/13_mala_regenerated_02.jpg",
+    ],
+    badge: "Standard Offering",
+    rating: 4.9,
+    reviewCount: 216,
+    tagline: "Natural Agate, Daily Japa, Meditation & Timeless Devotion",
+    shortDescription:
+      "A traditional 108+1 Hakik Mala crafted with smooth natural Agate beads, suitable for daily japa, mantra chanting, meditation, and devotional practice. Its natural stone texture and classic finish make it a simple and timeless spiritual mala.",
+    detailedOverview: [
+      "Crafted from genuine 108+1 natural Hakik (Agate) stone beads, this revered sacred mala is cherished across traditional spiritual lineages for balancing emotional stability, grounding spiritual energy, and cultivating unwavering focus during daily japa and meditation.",
+      "Each bead is smoothly polished to showcase its natural banded stone texture, strung securely with a reinforced traditional holy cord and finished with an auspicious tassel. Every mala is sanctified with holy Ganga jal along the sacred ghats of Varanasi prior to dispatch."
+    ],
+    tags: [
+      "Hakik Mala",
+      "Agate Mala",
+      "हकीक माला",
+      "108 Beads",
+      "Mala",
+      "Natural Agate",
+      "Daily Japa",
+      "Meditation",
+      "Varanasi Sourced",
+      "Kashi Prasad"
+    ],
+    price: 799,
+    mrp: 1599,
+    specifications: [
+      {
+        groupName: "Mala Specifications",
+        specs: [
+          { label: "Material", value: "Natural Agate / Hakik" },
+          { label: "Bead Count", value: "108 Beads + 1 Guru Bead" },
+          { label: "Bead Diameter", value: "6 mm" },
+          { label: "Thread", value: "Reinforced Sacred Cord with Auspicious Tassel" },
+          { label: "Spiritual Significance", value: "Daily Japa, Mantra Chanting, Meditation & Devotional Practice" },
+          { label: "Origin", value: "Varanasi (Blessed & Purified)" }
+        ]
+      }
+    ],
+    faqs: [
+      {
+        q: "What are the benefits of Hakik (Agate) Mala for Japa?",
+        a: "Natural Hakik (Agate) is traditionally revered for grounding energy, harmonizing emotional balance, and providing a smooth tactile rhythm during mantra chanting and daily devotional sadhana."
+      },
+      {
+        q: "How should I maintain and care for my Hakik Mala?",
+        a: "Store the mala in the provided sacred temple pouch when not chanting. Avoid direct contact with harsh chemical soaps and perfumes to preserve its natural stone luster."
+      }
+    ],
+    variants: [
+      {
+        id: "variant-13-without-offering",
+        name: "Without Divine Offering",
+        price: 799,
+        mrp: 1599,
+        badge: "Standard Offering",
+        suitableFor: "Daily Japa, Meditation & Devotional Practice",
+        description:
+          "A traditional 108+1 Hakik Mala crafted with smooth natural Agate beads, suitable for daily japa, mantra chanting, meditation, and devotional practice.",
+        divineOfferingOption: "Without Divine Offering",
+        keyHighlights: [
+          "100% natural smooth Hakik (Agate) stone beads",
+          "108 beads + 1 Guru bead (6mm diameter)",
+          "Natural stone texture and classic devotional finish",
+          "Ideal for daily japa, mantra chanting, and meditation",
+          "Purified with sacred Ganga jal in Varanasi"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Hakik Mala – Agate (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sacred Temple Storage Pouch", quantity: "1 Unit" },
+              { name: "Authenticity & Care Guide", quantity: "1 Document" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-13-with-offering",
+        name: "With Divine Offering (Kashi Prasad)",
+        price: 1099,
+        mrp: 2199,
+        badge: "Divine Offering",
+        suitableFor: "Complete Consecration & Spiritual Blessings",
+        description:
+          "Traditional Hakik (Agate) Mala consecrated with Vedic sankalp in Varanasi, accompanied by sanctified Kashi Prasad and sacred temple offerings.",
+        divineOfferingOption: "With Divine Offering - Kashi Prasad",
+        keyHighlights: [
+          "Authentic 108+1 Hakik (Agate) Mala (6mm beads)",
+          "Vedic mantra energization and sankalp performed at Varanasi",
+          "Accompanied by sanctified Kashi temple prasad & holy vibhuti",
+          "Consecrated Ganga jal vial included",
+          "Grounding aura protection and divine blessings"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Hakik Mala – Agate (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sanctified Kashi Temple Prasad Pack", quantity: "1 Pack" },
+              { name: "Sacred Kashi Vishwanath Vibhuti / Bhasma", quantity: "1 Vial" },
+              { name: "Holy Ganga Jal Consecrated Vial", quantity: "1 Vial" },
+              { name: "Premium Temple Silk Storage Pouch", quantity: "1 Unit" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "mala-navratna-108",
+    slug: "navratna-mala",
+    name: "Navratna Mala",
+    category: "Mala",
+    image: "/assets/mala/14_mala_regenerated_01.jpg",
+    images: [
+      "/assets/mala/14_mala_regenerated_01.jpg",
+      "/assets/mala/14_mala_regenerated_02.jpg",
+    ],
+    badge: "Standard Offering",
+    rating: 4.9,
+    reviewCount: 274,
+    tagline: "Nine Gemstones, Divine Balance & Timeless Tradition",
+    shortDescription:
+      "A traditional 108+1 Navratna Mala featuring nine gemstone varieties in a harmonious arrangement, designed for japa, mantra chanting, meditation, and devotional practice. Its colorful natural-stone appearance gives the mala a distinctive and traditional spiritual character.",
+    detailedOverview: [
+      "Crafted with 108+1 genuine nine-gemstone beads representing the sacred Navagrahas (nine planetary deities), this revered mala is traditionally used to harmonize cosmic energies, mitigate planetary afflictions, and cultivate deep inner balance during meditation and spiritual practice.",
+      "Each bead is precisely rounded and smoothly polished to showcase its authentic stone brilliance, strung securely with a reinforced traditional holy cord and finished with an auspicious tassel. Every mala is sanctified with holy Ganga jal along the sacred ghats of Varanasi prior to dispatch."
+    ],
+    tags: [
+      "Navratna Mala",
+      "Nine Gemstones Mala",
+      "नवरत्न माला",
+      "108 Beads",
+      "Mala",
+      "Navagraha",
+      "Daily Japa",
+      "Meditation",
+      "Varanasi Sourced",
+      "Kashi Prasad"
+    ],
+    price: 1999,
+    mrp: 3999,
+    specifications: [
+      {
+        groupName: "Mala Specifications",
+        specs: [
+          { label: "Material", value: "Nine Gemstones / Navratna" },
+          { label: "Bead Count", value: "108 Beads + 1 Guru Bead" },
+          { label: "Bead Diameter", value: "6 mm" },
+          { label: "Thread", value: "Reinforced Sacred Cord with Auspicious Tassel" },
+          { label: "Presiding Deities", value: "Navagrahas (Nine Celestial Deities)" },
+          { label: "Spiritual Significance", value: "Planetary Harmony, Navagraha Shanti, Japa & Meditation" },
+          { label: "Origin", value: "Varanasi (Blessed & Purified)" }
+        ]
+      }
+    ],
+    faqs: [
+      {
+        q: "What is the spiritual significance of the Navratna Mala?",
+        a: "The Navratna Mala embodies the energies of the nine planetary deities. Wearing or chanting on this mala helps neutralize planetary malefic influences, foster harmony, and enhance holistic spiritual well-being."
+      },
+      {
+        q: "How should I care for my Navratna Mala?",
+        a: "Store the mala in the provided sacred temple storage pouch when not in use. Avoid contact with harsh chemicals or abrasive surfaces to maintain the natural luster of the gemstones."
+      }
+    ],
+    variants: [
+      {
+        id: "variant-14-without-offering",
+        name: "Without Divine Offering",
+        price: 1999,
+        mrp: 3999,
+        badge: "Standard Offering",
+        suitableFor: "Daily Japa, Meditation & Planetary Harmony",
+        description:
+          "A traditional 108+1 Navratna Mala featuring nine gemstone varieties in a harmonious arrangement, designed for japa, mantra chanting, meditation, and devotional practice.",
+        divineOfferingOption: "Without Divine Offering",
+        keyHighlights: [
+          "108 beads + 1 Guru bead (6mm diameter)",
+          "Authentic combination of nine traditional sacred gemstones",
+          "Smooth natural stone beads with vibrant multi-gem luster",
+          "Balances nine planetary energies (Navagraha Dosha Shanti)",
+          "Purified with sacred Ganga jal in Varanasi"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Navratna Mala (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sacred Temple Storage Pouch", quantity: "1 Unit" },
+              { name: "Authenticity & Care Guide", quantity: "1 Document" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-14-with-offering",
+        name: "With Divine Offering (Kashi Prasad)",
+        price: 2299,
+        mrp: 4599,
+        badge: "Divine Offering",
+        suitableFor: "Complete Navagraha Consecration & Spiritual Protection",
+        description:
+          "Traditional Navratna Mala consecrated with Vedic Navagraha sankalp in Varanasi, accompanied by sanctified Kashi Prasad and sacred temple offerings.",
+        divineOfferingOption: "With Divine Offering - Kashi Prasad",
+        keyHighlights: [
+          "Authentic 108+1 Navratna Mala (6mm beads)",
+          "Consecrated with Vedic Navagraha sankalp at Kashi",
+          "Accompanied by sanctified Kashi temple prasad & holy vibhuti",
+          "Consecrated Ganga jal vial included",
+          "Potent balance of nine planetary forces and divine blessings"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Navratna Mala (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sanctified Kashi Temple Prasad Pack", quantity: "1 Pack" },
+              { name: "Sacred Kashi Vishwanath Vibhuti / Bhasma", quantity: "1 Vial" },
+              { name: "Holy Ganga Jal Consecrated Vial", quantity: "1 Vial" },
+              { name: "Premium Temple Silk Storage Pouch", quantity: "1 Unit" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "mala-gemstone-ratna-based",
+    slug: "gemstone-mala-ratna-based",
+    name: "Gemstone Mala – Ratna Based",
+    category: "Mala",
+    image: "/assets/mala/15_mala_regenerated_01.jpg",
+    images: [
+      "/assets/mala/15_mala_regenerated_01.jpg",
+      "/assets/mala/15_mala_regenerated_02.jpg",
+    ],
+    badge: "Standard Offering",
+    rating: 4.9,
+    reviewCount: 198,
+    tagline: "Natural Gemstones, Positive Energy & Spiritual Elegance",
+    shortDescription:
+      "A premium 108+1 Gemstone Mala featuring a vibrant combination of natural gemstone beads, designed for japa, mantra chanting, meditation, and devotional practice. The varied colors and natural stone character give it a distinctive and elegant spiritual appearance.",
+    detailedOverview: [
+      "Crafted from a harmonious selection of genuine 108+1 natural gemstone beads, this luxury spiritual mala unites diverse mineral energies to support mental serenity, energetic alignment, and profound focus during meditation and daily japa.",
+      "Each gemstone bead is meticulously polished to highlight its natural beauty, accented with refined gold-toned separators, and securely strung with a reinforced traditional holy cord and golden silk tassel. Every mala is blessed with sacred Ganga jal along the ghats of Varanasi prior to dispatch."
+    ],
+    tags: [
+      "Gemstone Mala",
+      "Ratna Mala",
+      "रत्न माला",
+      "108 Beads",
+      "Mala",
+      "Natural Gemstones",
+      "Daily Japa",
+      "Meditation",
+      "Varanasi Sourced",
+      "Kashi Prasad"
+    ],
+    price: 1499,
+    mrp: 2999,
+    specifications: [
+      {
+        groupName: "Mala Specifications",
+        specs: [
+          { label: "Material", value: "Natural Gemstones / Ratna" },
+          { label: "Bead Count", value: "108 Beads + 1 Guru Bead" },
+          { label: "Bead Diameter", value: "6 mm" },
+          { label: "Thread", value: "Reinforced Sacred Cord with Golden Silk Tassel" },
+          { label: "Spiritual Significance", value: "Chakra Balance, Healing Energy, Daily Japa & Meditation" },
+          { label: "Origin", value: "Varanasi (Blessed & Purified)" }
+        ]
+      }
+    ],
+    faqs: [
+      {
+        q: "What makes the Gemstone (Ratna Based) Mala special for Japa?",
+        a: "The synergy of multiple natural gemstones brings a holistic spectrum of subtle earth energies, promoting mental tranquility, spiritual grounding, and an elevated meditative state."
+      },
+      {
+        q: "How do I care for my Gemstone Mala?",
+        a: "Store the mala in its protective sacred silk pouch when not chanting. Cleanse gently with pure water or holy Ganga jal and avoid harsh chemical cleaners."
+      }
+    ],
+    variants: [
+      {
+        id: "variant-15-without-offering",
+        name: "Without Divine Offering",
+        price: 1499,
+        mrp: 2999,
+        badge: "Standard Offering",
+        suitableFor: "Daily Japa, Meditation & Energetic Alignment",
+        description:
+          "A premium 108+1 Gemstone Mala featuring a vibrant combination of natural gemstone beads, designed for japa, mantra chanting, meditation, and devotional practice.",
+        divineOfferingOption: "Without Divine Offering",
+        keyHighlights: [
+          "108 beads + 1 Guru bead (6mm diameter)",
+          "Vibrant combination of multi-colored natural gemstone beads",
+          "Smooth polished natural stone beads with gold-tone accents",
+          "Designed for daily japa, chakra balancing, and meditation",
+          "Purified with holy Ganga jal in Varanasi"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Gemstone Mala – Ratna Based (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sacred Temple Storage Pouch", quantity: "1 Unit" },
+              { name: "Authenticity & Care Guide", quantity: "1 Document" }
+            ]
+          }
+        ]
+      },
+      {
+        id: "variant-15-with-offering",
+        name: "With Divine Offering (Kashi Prasad)",
+        price: 1799,
+        mrp: 3599,
+        badge: "Divine Offering",
+        suitableFor: "Complete Consecration & Spiritual Blessings",
+        description:
+          "Premium Gemstone (Ratna Based) Mala consecrated with Vedic sankalp in Varanasi, accompanied by sanctified Kashi Prasad and sacred temple offerings.",
+        divineOfferingOption: "With Divine Offering - Kashi Prasad",
+        keyHighlights: [
+          "Authentic 108+1 Gemstone Mala (6mm beads)",
+          "Vedic mantra energization and sankalp performed at Varanasi",
+          "Accompanied by sanctified Kashi temple prasad & holy vibhuti",
+          "Consecrated Ganga jal vial included",
+          "Brings holistic harmony, protection, and divine grace"
+        ],
+        samagriChecklist: [
+          {
+            category: "Package Contents",
+            items: [
+              { name: "Gemstone Mala – Ratna Based (108+1 Beads, 6mm)", quantity: "1 Unit" },
+              { name: "Sanctified Kashi Temple Prasad Pack", quantity: "1 Pack" },
+              { name: "Sacred Kashi Vishwanath Vibhuti / Bhasma", quantity: "1 Vial" },
+              { name: "Holy Ganga Jal Consecrated Vial", quantity: "1 Vial" },
+              { name: "Premium Temple Silk Storage Pouch", quantity: "1 Unit" }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];

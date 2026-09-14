@@ -1,12 +1,22 @@
 import { Product } from "./types";
+import { ratnaProducts, rubyProduct, pearlProduct, redCoralProduct, emeraldProduct, yellowSapphireProduct, diamondProduct, blueSapphireProduct, hessoniteProduct, catsEyeProduct } from "./ratnas";
 import { pujaKitProducts } from "./pujaKits";
 import { malaProducts } from "./malas";
 import { rudrakshaProducts } from "./rudraksha";
+import { kashiPoojaServices } from "./pujaServices";
 
 export * from "./types";
-export { pujaKitProducts, malaProducts, rudrakshaProducts };
+export { ratnaProducts, rubyProduct, pearlProduct, redCoralProduct, emeraldProduct, yellowSapphireProduct, diamondProduct, blueSapphireProduct, hessoniteProduct, catsEyeProduct, pujaKitProducts, malaProducts, rudrakshaProducts, kashiPoojaServices };
 
-export const allProducts: Product[] = [...pujaKitProducts, ...malaProducts, ...rudrakshaProducts];
+
+
+
+export const allProducts: Product[] = [
+  ...ratnaProducts,
+  ...pujaKitProducts,
+  ...malaProducts,
+  ...rudrakshaProducts,
+];
 
 export function getProductBySlug(slug: string): Product | undefined {
   return allProducts.find((p) => p.slug === slug);
