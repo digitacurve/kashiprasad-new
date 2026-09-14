@@ -19,6 +19,7 @@ import {
 } from "@/data/ratnas";
 
 import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -961,6 +962,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
         {/* Similar Products Recommendation Grid */}
         <SimilarProducts currentProduct={product} />
       </main>
+
+      {/* Global Site Footer */}
+      <SiteFooter />
 
       {/* Sticky Mobile Purchase Bar */}
       <StickyMobileBar
