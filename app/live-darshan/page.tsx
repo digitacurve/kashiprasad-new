@@ -72,24 +72,24 @@ const AARTI_SCHEDULE: AartiSchedule[] = [
 const FEEDS = [
   {
     id: "ganga-aarti-1",
-    title: "Dashashwamedh Ghat Maha Ganga Aarti (4K Sacred Live Feed)",
+    title: "Dashashwamedh Ghat Maha Ganga Aarti (4K Sacred Ceremony)",
     location: "Dashashwamedh Ghat, Varanasi",
-    embedId: "VZ_byuWG1BM",
-    badge: "Most Auspicious 4K",
+    embedId: "kYJzX81-3jA",
+    badge: "4K Grand Aarti",
   },
   {
     id: "ganga-aarti-2",
-    title: "Varanasi Evening Ganga Aarti & Stotram Chants",
-    location: "Assi Ghat & Dashashwamedh, Varanasi",
-    embedId: "Xz2Zl5V6k-E",
-    badge: "Sacred Chants",
+    title: "Varanasi Evening Ganga Aarti & Sacred Stotram Chants",
+    location: "Assi & Dashashwamedh Ghats, Varanasi",
+    embedId: "F3i9f8wG62c",
+    badge: "Vedic Chants",
   },
   {
     id: "ganga-aarti-3",
-    title: "Ganga Aarti at Dashashwamedh Ghat Varanasi - Full Darshan",
-    location: "Ganga Ghats, Varanasi",
-    embedId: "7uV8r6a1G4g",
-    badge: "Full Aarti",
+    title: "Maa Ganga Maha Aarti & Kashi Ghats Sacred Darshan",
+    location: "Holy Varanasi Ghats",
+    embedId: "p4U-t20k5rA",
+    badge: "Full Darshan",
   },
 ];
 
