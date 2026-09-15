@@ -48,6 +48,7 @@ export default function Hero() {
   // Text & annotation overlay refs
   const headlineRef = useRef<HTMLDivElement | null>(null);
   const explodedTitleRef = useRef<HTMLDivElement | null>(null);
+  const mobileHeroRailRef = useRef<HTMLDivElement | null>(null);
   const tagMalaRef = useRef<HTMLDivElement | null>(null);
   const tagBeadRef = useRef<HTMLDivElement | null>(null);
 
@@ -215,6 +216,11 @@ export default function Hero() {
         });
 
         tl.to(headlineRef.current, { opacity: 0, y: -20, duration: 0.18, ease: "power1.out" }, 0);
+        tl.to(
+          mobileHeroRailRef.current,
+          { opacity: 0, y: -15, pointerEvents: "none", duration: 0.18, ease: "power1.out" },
+          0
+        );
 
         tl.to(
           heroBannerRef.current,
@@ -345,15 +351,6 @@ export default function Hero() {
             <div className={styles.utilityLinks}>
               <button
                 type="button"
-                onClick={openSearch}
-                aria-label="Search"
-                className={styles.utilityButton}
-              >
-                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-colors" />
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setIsWishlistOpen(true)}
                 aria-label="Wishlist"
                 className={`relative ${styles.utilityButton}`}
@@ -369,21 +366,6 @@ export default function Hero() {
                   </span>
                 )}
               </button>
-
-              {isLoggedIn ? (
-                <Link href="/account" aria-label="Account" className={`hidden sm:grid ${styles.utilityButton}`}>
-                  <User className="w-4 h-4 text-amber-300" />
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => openAuthModal()}
-                  aria-label="Login"
-                  className={`hidden sm:grid ${styles.utilityButton}`}
-                >
-                  <User className="w-4 h-4 text-zinc-300 hover:text-amber-300" />
-                </button>
-              )}
 
               <button
                 type="button"
@@ -410,6 +392,15 @@ export default function Hero() {
                 {mobileMenuOpen ? <X className="w-4 h-4 text-amber-400" /> : <Menu className="w-4 h-4 text-zinc-200" />}
               </button>
             </div>
+          </div>
+
+          {/* Mobile Flipkart Search Bar + 5-Category Matrix (Active at top, fades out on scroll for clean exploded view) */}
+          <div
+            ref={mobileHeroRailRef}
+            className="w-full mt-1.5 lg:hidden space-y-1.5 will-change-[opacity,transform]"
+          >
+            <FlipkartSearchBar />
+            <CategoryNavigation isMobile />
           </div>
 
           {/* Luxury Mobile Navigation Drawer */}
