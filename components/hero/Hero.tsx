@@ -345,6 +345,15 @@ export default function Hero() {
             <div className={styles.utilityLinks}>
               <button
                 type="button"
+                onClick={openSearch}
+                aria-label="Search"
+                className={styles.utilityButton}
+              >
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-colors" />
+              </button>
+
+              <button
+                type="button"
                 onClick={() => setIsWishlistOpen(true)}
                 aria-label="Wishlist"
                 className={`relative ${styles.utilityButton}`}
@@ -401,12 +410,6 @@ export default function Hero() {
                 {mobileMenuOpen ? <X className="w-4 h-4 text-amber-400" /> : <Menu className="w-4 h-4 text-zinc-200" />}
               </button>
             </div>
-          </div>
-
-          {/* Mobile Flipkart Search Bar + 5-Category Matrix */}
-          <div className="w-full mt-2 lg:hidden space-y-1.5">
-            <FlipkartSearchBar />
-            <CategoryNavigation isMobile />
           </div>
 
           {/* Luxury Mobile Navigation Drawer */}
