@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Search, ShoppingBag, User, Heart, Menu, X, Sparkles, Truck, Flame, ShieldCheck } from "lucide-react";
 import { storeCategories } from "@/data/storefront";
@@ -23,11 +24,18 @@ export default function SiteHeader() {
         {/* Brand Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2 font-serif text-base sm:text-lg font-bold tracking-[0.2em] text-amber-100 transition"
+          className="group flex items-center gap-2.5 font-serif text-base sm:text-lg font-bold tracking-[0.2em] text-amber-100 transition"
         >
-          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-300 group-hover:border-amber-400 group-hover:shadow-[0_0_12px_rgba(223,171,82,0.4)] transition">
-            <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-          </span>
+          <div className="relative h-8 w-8 sm:h-9 sm:w-9 overflow-hidden rounded-full border border-amber-500/40 shadow-[0_0_12px_rgba(223,171,82,0.35)] group-hover:scale-105 group-hover:border-amber-400 transition-all duration-300">
+            <Image
+              src="/kashi-prasad-logo.png"
+              alt="Kashi Prasad Logo"
+              fill
+              className="object-cover"
+              sizes="36px"
+              priority
+            />
+          </div>
           <span className="bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent">
             KASHI PRASAD
           </span>
