@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import {
-  Search,
   ShoppingBag,
   User,
   Heart,
@@ -24,10 +23,11 @@ import { useWishlist } from "@/components/WishlistProvider";
 import PanchangBanner from "@/components/PanchangBanner";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import CategoryNavigation from "@/components/CategoryNavigation";
+import FlipkartSearchBar from "@/components/FlipkartSearchBar";
 
 export default function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false);
-  const { totalItems, openCart, openSearch } = useCart();
+  const { totalItems, openCart } = useCart();
   const { user, isLoggedIn, openAuthModal } = useAuth();
   const { totalWishlistItems, setIsWishlistOpen } = useWishlist();
 
@@ -40,11 +40,11 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
       }`}
     >
       <PanchangBanner />
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 sm:gap-4 px-3 py-2.5 sm:px-6 sm:py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-2 sm:gap-4 px-3 py-2 sm:px-6 sm:py-2.5">
         {/* Brand Logo */}
         <Link
           href="/"
-          className="group flex items-center gap-2 sm:gap-2.5 font-serif text-sm sm:text-base lg:text-lg font-bold tracking-[0.14em] sm:tracking-[0.2em] text-amber-100 transition flex-shrink-0"
+          className="group flex items-center gap-1.5 sm:gap-2.5 font-serif text-xs sm:text-base lg:text-lg font-bold tracking-[0.1em] sm:tracking-[0.2em] text-amber-100 transition flex-shrink-0"
         >
           <div className="relative h-7 w-7 sm:h-8 sm:w-8 lg:h-9 lg:w-9 overflow-hidden rounded-full border border-amber-500/40 shadow-[0_0_12px_rgba(223,171,82,0.35)] group-hover:scale-105 group-hover:border-amber-400 transition-all duration-300 flex-shrink-0">
             <Image
@@ -56,24 +56,18 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
               priority
             />
           </div>
-          <span className="bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent truncate">
+          <span className="bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400 bg-clip-text text-transparent whitespace-nowrap">
             KASHI PRASAD
           </span>
         </Link>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden items-center gap-4 lg:gap-5 xl:gap-6 lg:flex" aria-label="Main navigation">
-          {storeCategories.map((category) => (
-            <Link
-              key={category.id}
-              href={category.href}
-              className="text-xs font-medium uppercase tracking-wider text-zinc-300 hover:text-amber-300 transition-colors py-1 relative group"
-            >
-              <span>{category.name}</span>
-              <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-amber-400 to-amber-200 transition-all duration-300 group-hover:w-full" />
-            </Link>
-          ))}
+        {/* Desktop Flipkart-Style Search Bar */}
+        <div className="hidden lg:block flex-1 max-w-md mx-3 xl:mx-6">
+          <FlipkartSearchBar />
+        </div>
 
+        {/* Desktop Navigation Links */}
+        <nav className="hidden items-center gap-4 lg:flex xl:gap-5" aria-label="Main navigation">
           {/* Sacred Live Darshan Link */}
           <Link
             href="/live-darshan"
@@ -93,28 +87,12 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
           </Link>
         </nav>
 
-        {/* Action Controls - Perfectly Scaled For Mobile & Desktop */}
+        {/* Action Controls - Scaled for Mobile with Zero Overflow */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 text-zinc-300 flex-shrink-0">
           {/* Desktop Currency Switcher */}
           <div className="hidden md:block">
             <CurrencySwitcher variant="header" />
           </div>
-
-          {/* Quick Search Button */}
-          <button
-            onClick={openSearch}
-            type="button"
-            aria-label="Search catalogue"
-            className="flex h-8 w-8 sm:h-9 sm:w-auto items-center justify-center sm:px-3 sm:py-1.5 rounded-full border border-zinc-700/80 bg-zinc-900/90 text-zinc-400 hover:border-amber-500/50 hover:text-zinc-200 hover:bg-zinc-800/90 shadow-sm transition-all cursor-pointer group"
-          >
-            <Search className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-amber-400 group-hover:scale-110 transition-transform flex-shrink-0" />
-            <span className="hidden xl:inline font-sans text-xs text-zinc-400 group-hover:text-zinc-300 ml-2">
-              Search Malas, Ratnas...
-            </span>
-            <kbd className="hidden sm:inline-flex items-center rounded-md border border-zinc-700 bg-zinc-800 px-1.5 py-0.5 text-[10px] font-mono text-zinc-400 group-hover:border-amber-500/30 group-hover:text-amber-300 ml-2">
-              ⌘K
-            </kbd>
-          </button>
 
           {/* Interactive Wishlist Button */}
           <button
@@ -182,8 +160,13 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
         </div>
       </div>
 
+      {/* Mobile Flipkart-Style Search Bar */}
+      <div className="w-full px-3 py-1.5 lg:hidden bg-[#070a10]/90 border-t border-amber-500/10">
+        <FlipkartSearchBar />
+      </div>
+
       {/* Mobile Visual 5-Category Matrix (100% visible, zero cutoff) */}
-      <div className="w-full px-2 pb-2 pt-0.5 lg:hidden border-t border-amber-500/10 bg-[#06080c]/60">
+      <div className="w-full px-2 pb-2 pt-1 lg:hidden border-t border-amber-500/10 bg-[#06080c]/60">
         <CategoryNavigation isMobile />
       </div>
 

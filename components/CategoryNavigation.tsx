@@ -183,12 +183,12 @@ export default function CategoryNavigation({
                 </div>
 
                 {/* Category Title */}
-                <span className="font-serif font-bold text-[9px] sm:text-[10px] text-zinc-100 uppercase tracking-tight mt-1 text-center truncate max-w-full leading-tight group-hover:text-amber-200">
+                <span className="font-serif font-bold text-[8px] sm:text-[9.5px] text-zinc-100 uppercase tracking-tighter mt-1 text-center whitespace-nowrap leading-none group-hover:text-amber-200">
                   {cat.shortName}
                 </span>
 
                 {/* Micro Tag */}
-                <span className="text-[7.5px] sm:text-[8px] font-mono text-amber-400/90 leading-none truncate max-w-full mt-0.5">
+                <span className="text-[7px] sm:text-[7.5px] font-mono text-amber-400/90 leading-none whitespace-nowrap mt-0.5">
                   {cat.badge}
                 </span>
 

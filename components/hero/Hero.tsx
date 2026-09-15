@@ -24,6 +24,7 @@ import { useWishlist } from "@/components/WishlistProvider";
 import { storeCategories } from "@/data/storefront";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
 import CategoryNavigation from "@/components/CategoryNavigation";
+import FlipkartSearchBar from "@/components/FlipkartSearchBar";
 import styles from "./Hero.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -344,15 +345,6 @@ export default function Hero() {
             <div className={styles.utilityLinks}>
               <button
                 type="button"
-                onClick={openSearch}
-                aria-label="Search"
-                className={styles.utilityButton}
-              >
-                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-colors" />
-              </button>
-
-              <button
-                type="button"
                 onClick={() => setIsWishlistOpen(true)}
                 aria-label="Wishlist"
                 className={`relative ${styles.utilityButton}`}
@@ -411,8 +403,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Mobile Visual 5-Category Matrix (100% visible, zero cutoff) */}
-          <div className="w-full mt-2 lg:hidden">
+          {/* Mobile Flipkart Search Bar + 5-Category Matrix */}
+          <div className="w-full mt-2 lg:hidden space-y-1.5">
+            <FlipkartSearchBar />
             <CategoryNavigation isMobile />
           </div>
 
