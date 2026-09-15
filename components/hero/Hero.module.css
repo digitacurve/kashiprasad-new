@@ -92,16 +92,17 @@
 
 .brandLink {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   text-decoration: none;
   flex-shrink: 0;
 }
 
 .brandName {
   font-family: var(--font-cinzel), serif;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   color: #f7eed7;
   text-transform: uppercase;
   background: linear-gradient(135deg, #ffffff 0%, #ecd09b 50%, #c89547 100%);
@@ -903,7 +904,7 @@
   }
 
   .navbar {
-    padding: 0.75rem 1rem 0;
+    padding: 0.65rem 0.75rem 0;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -916,18 +917,27 @@
   }
 
   .brandName {
-    font-size: 1.1rem;
-    letter-spacing: 0.18em;
+    font-size: 0.95rem;
+    letter-spacing: 0.12em;
   }
 
   .brandSub {
     display: none;
   }
 
+  .utilityLinks {
+    gap: 0.35rem;
+  }
+
+  .utilityButton {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
   .navCta {
-    padding: 0.35rem 0.85rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
+    padding: 0.28rem 0.55rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
   }
 
   .stageContainer {

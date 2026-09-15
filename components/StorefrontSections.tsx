@@ -67,9 +67,9 @@ export function ShopByCategory() {
           title="Shop by Category"
           copy="Five carefully organised paths into the Kashi Prasad experience."
         />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {storeCategories.map((category) => (
-            <CategoryCard key={category.id} category={category} />
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 lg:grid-cols-5 sm:gap-4">
+          {storeCategories.map((category, idx) => (
+            <CategoryCard key={category.id} category={category} index={idx} />
           ))}
         </div>
       </div>

@@ -1,17 +1,38 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Search, Heart, User, ShoppingBag } from "lucide-react";
+import {
+  Search,
+  Heart,
+  User,
+  ShoppingBag,
+  Menu,
+  X,
+  Flame,
+  ShieldCheck,
+  Truck,
+  MessageCircle,
+  ChevronRight,
+} from "lucide-react";
 import { useCart } from "@/components/CartProvider";
+import { useAuth } from "@/components/AuthProvider";
+import { useWishlist } from "@/components/WishlistProvider";
+import { storeCategories } from "@/data/storefront";
+import CurrencySwitcher from "@/components/CurrencySwitcher";
 import CategoryNavigation from "@/components/CategoryNavigation";
 import styles from "./Hero.module.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, openCart, openSearch } = useCart();
+  const { user, isLoggedIn, openAuthModal } = useAuth();
+  const { totalWishlistItems, setIsWishlistOpen } = useWishlist();
   const sectionRef = useRef<HTMLElement | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const heroBannerRef = useRef<HTMLImageElement | null>(null);
@@ -301,10 +322,19 @@ export default function Hero() {
         {/* Top Navigation */}
         <header className={styles.navbar}>
           <div className={styles.navbarTopRow}>
-            <a href="#hero-section" className={styles.brandLink}>
+            <Link href="/" className={styles.brandLink}>
+              <div className="relative h-6 w-6 sm:h-7 sm:w-7 overflow-hidden rounded-full border border-amber-500/40 shadow-[0_0_10px_rgba(223,171,82,0.35)] flex-shrink-0">
+                <Image
+                  src="/kashi-prasad-logo.png"
+                  alt="Kashi Prasad Logo"
+                  fill
+                  className="object-cover"
+                  sizes="28px"
+                  priority
+                />
+              </div>
               <span className={styles.brandName}>KASHI PRASAD</span>
-              <span className={styles.brandSub}>VARANASI • ESTD. CONSECRATED</span>
-            </a>
+            </Link>
 
             {/* Desktop Visual Category Navigation (Top Center Zone) */}
             <div className={styles.desktopNavWrapper}>
@@ -318,35 +348,211 @@ export default function Hero() {
                 aria-label="Search"
                 className={styles.utilityButton}
               >
-                <Search className="w-4 h-4 text-amber-300 transition-colors" />
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 transition-colors" />
               </button>
-              <a href="/account#wishlist" aria-label="Wishlist" className={styles.utilityButton}>
-                <Heart className="w-4 h-4 text-zinc-300 hover:text-amber-300 transition-colors" />
-              </a>
-              <a href="/account" aria-label="Account" className={styles.utilityButton}>
-                <User className="w-4 h-4 text-zinc-300 hover:text-amber-300 transition-colors" />
-              </a>
+
+              <button
+                type="button"
+                onClick={() => setIsWishlistOpen(true)}
+                aria-label="Wishlist"
+                className={`relative ${styles.utilityButton}`}
+              >
+                <Heart
+                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                    totalWishlistItems > 0 ? "fill-amber-400 text-amber-400" : "text-zinc-300 hover:text-amber-300"
+                  }`}
+                />
+                {totalWishlistItems > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-3.5 min-w-3.5 items-center justify-center rounded-full bg-amber-400 px-0.5 text-[8px] font-bold text-zinc-950 font-mono shadow-sm">
+                    {totalWishlistItems}
+                  </span>
+                )}
+              </button>
+
+              {isLoggedIn ? (
+                <Link href="/account" aria-label="Account" className={`hidden sm:grid ${styles.utilityButton}`}>
+                  <User className="w-4 h-4 text-amber-300" />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal()}
+                  aria-label="Login"
+                  className={`hidden sm:grid ${styles.utilityButton}`}
+                >
+                  <User className="w-4 h-4 text-zinc-300 hover:text-amber-300" />
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={openCart}
                 className={styles.navCta}
                 aria-label="Shopping Bag"
               >
-                <ShoppingBag className="w-3.5 h-3.5 text-zinc-950 inline mr-1" />
-                <span>Bag</span>
+                <ShoppingBag className="w-3.5 h-3.5 text-zinc-950 inline mr-0.5 sm:mr-1" />
+                <span className="hidden sm:inline">Bag</span>
                 {totalItems > 0 && (
-                  <span className="ml-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-zinc-950 px-1 text-[10px] font-bold text-amber-400">
+                  <span className="ml-1 sm:ml-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-zinc-950 px-1 text-[9px] sm:text-[10px] font-bold text-amber-400">
                     {totalItems}
                   </span>
                 )}
               </button>
+
+              {/* Mobile Hamburger Menu Toggle */}
+              <button
+                type="button"
+                aria-label="Toggle Menu"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={`lg:hidden ${styles.utilityButton}`}
+              >
+                {mobileMenuOpen ? <X className="w-4 h-4 text-amber-400" /> : <Menu className="w-4 h-4 text-zinc-200" />}
+              </button>
             </div>
           </div>
 
-          {/* Mobile Visual Category Navigation (Top Horizontal Rail) */}
-          <div className={styles.mobileNavWrapper}>
-            <CategoryNavigation isMobile />
-          </div>
+          {/* Luxury Mobile Navigation Drawer */}
+          {mobileMenuOpen && (
+            <div className="fixed inset-x-0 top-[52px] max-h-[calc(100vh-65px)] overflow-y-auto border-t border-amber-500/20 bg-[#06080c]/98 backdrop-blur-2xl px-4 py-5 lg:hidden animate-fadeIn space-y-4 shadow-2xl z-50 text-left">
+              {/* User Profile / Login Card */}
+              <div className="flex items-center justify-between rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/15 via-amber-950/20 to-transparent p-3">
+                {isLoggedIn ? (
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-amber-500/20 border border-amber-400 text-amber-200 font-serif font-bold">
+                      {user?.name.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="text-xs font-medium text-amber-200">Pranam, {user?.name}</p>
+                      <p className="text-[11px] text-zinc-400 truncate max-w-[180px]">{user?.email || user?.phone}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-500/20 text-amber-300">
+                      <User className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-serif font-bold text-amber-200">Kashi Prasad Devotee</p>
+                      <p className="text-[10px] text-zinc-400">Sign in for orders & certificates</p>
+                    </div>
+                  </div>
+                )}
+
+                {isLoggedIn ? (
+                  <Link
+                    href="/account"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg border border-amber-500/40 bg-amber-500/20 px-3 py-1.5 text-xs font-semibold text-amber-200 hover:border-amber-400"
+                  >
+                    Profile
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openAuthModal();
+                    }}
+                    className="rounded-lg border border-amber-400 bg-gradient-to-r from-amber-500 to-amber-600 px-3 py-1.5 text-xs font-bold text-zinc-950 shadow-[0_0_12px_rgba(223,171,82,0.4)]"
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile Currency Switcher */}
+              <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-3">
+                <p className="text-[10px] uppercase font-mono tracking-widest text-zinc-400 mb-2">Select Currency</p>
+                <CurrencySwitcher variant="mobile" />
+              </div>
+
+              {/* Store Categories Grid */}
+              <div>
+                <p className="text-[10px] uppercase font-mono tracking-widest text-amber-400/80 mb-2 px-1">
+                  ✦ Sacred Categories
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {storeCategories.map((category) => (
+                    <Link
+                      onClick={() => setMobileMenuOpen(false)}
+                      key={category.id}
+                      href={category.href}
+                      className="flex items-center gap-2.5 rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-2.5 hover:border-amber-500/40 hover:bg-zinc-900/90 transition"
+                    >
+                      <div className="h-7 w-7 rounded-lg bg-zinc-950 border border-amber-500/20 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                        {category.image ? (
+                          <img src={category.image} alt={category.name} className="h-full w-full object-contain p-0.5" />
+                        ) : (
+                          <span className="text-[10px] text-amber-400">✦</span>
+                        )}
+                      </div>
+                      <span className="font-serif text-xs font-bold text-zinc-200 truncate">{category.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sacred Portals */}
+              <div className="space-y-2 pt-1">
+                <p className="text-[10px] uppercase font-mono tracking-widest text-amber-400/80 mb-2 px-1">
+                  ✦ Devotional Portals
+                </p>
+
+                <Link
+                  onClick={() => setMobileMenuOpen(false)}
+                  href="/live-darshan"
+                  className="flex items-center justify-between rounded-xl border border-red-500/40 bg-gradient-to-r from-red-950/30 to-zinc-900/50 p-3 text-red-200 hover:border-red-400 transition"
+                >
+                  <span className="flex items-center gap-2.5 font-serif text-sm font-semibold">
+                    <Flame className="h-4 w-4 text-red-400 animate-pulse flex-shrink-0" />
+                    Live Kashi Darshan & Aarti
+                  </span>
+                  <span className="flex items-center gap-1.5 rounded-full bg-red-500/20 border border-red-500/40 px-2 py-0.5 text-[9px] font-mono uppercase font-bold text-red-300">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-ping" />
+                    Live
+                  </span>
+                </Link>
+
+                <Link
+                  onClick={() => setMobileMenuOpen(false)}
+                  href="/verify-certificate"
+                  className="flex items-center justify-between rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-3 font-serif text-sm text-zinc-200 hover:border-amber-500/40 hover:text-amber-200 transition"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <ShieldCheck className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                    Verify Pran Pratishtha Certificate
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-zinc-500" />
+                </Link>
+
+                <Link
+                  onClick={() => setMobileMenuOpen(false)}
+                  href="/track-order"
+                  className="flex items-center justify-between rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 font-serif text-sm text-amber-200 hover:border-amber-400 transition"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Truck className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                    Track My Sacred Order
+                  </span>
+                  <ChevronRight className="h-4 w-4 text-amber-400" />
+                </Link>
+
+                <a
+                  href="https://wa.me/918604971503?text=Pranam%20Pandit%20Ji%2C%20I%20need%20guidance%20on%20Kashi%20Prasad%20sacred%20items."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3 font-serif text-sm text-emerald-200 hover:border-emerald-400 transition"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <MessageCircle className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+                    24x7 Shastri Ji Consultation
+                  </span>
+                  <span className="text-[10px] font-mono text-emerald-400">WhatsApp ↗</span>
+                </a>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* Phase 1 Initial Hero Headline & CTA (Scrolls away) */}
