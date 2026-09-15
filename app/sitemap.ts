@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 import { allProducts } from "@/data/products";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kashiprasad.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://kashiprasad.in";
   const currentDate = new Date().toISOString();
 
   // Static routes
