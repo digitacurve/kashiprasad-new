@@ -3,10 +3,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { playLuxuryHaptic } from "@/lib/audio";
 
 export interface NavCategory {
   id: string;
   name: string;
+  shortName: string;
   subtitle: string;
   href: string;
   image?: string;
@@ -19,6 +21,7 @@ export const topLevelCategories: NavCategory[] = [
   {
     id: "nav-puja-kits",
     name: "Puja Kits",
+    shortName: "Puja Kits",
     subtitle: "Vedic Ritual Sets",
     href: "/puja-kits",
     image: "/assets/puja-kits/01-satyanarayan-pooja-kit.png",
@@ -28,38 +31,44 @@ export const topLevelCategories: NavCategory[] = [
   {
     id: "nav-mala",
     name: "Mala",
+    shortName: "Malas",
     subtitle: "108 Sacred Beads",
     href: "/malas",
     image: "/assets/mala/01_mala_regenerated_01.png",
     code: "ML-02",
-    badge: "10 Malas",
+    badge: "108 Beads",
   },
   {
     id: "nav-rudraksha",
     name: "Rudraksha",
+    shortName: "Rudraksha",
     subtitle: "1–21 Mukhi Beads",
     href: "/rudraksha",
     image: "/hero/assets/rudraksha-bead.png",
     code: "RD-03",
-    badge: "100% Nepali",
+    badge: "Nepali",
   },
   {
     id: "nav-ratnas",
     name: "Ratnas",
+    shortName: "Ratnas",
     subtitle: "Gems & Stones",
     href: "/ratnas",
+    image: "/assets/ratnas/emerald-panna.png",
     icon: "💎",
     code: "RT-04",
-    badge: "Lab Certified",
+    badge: "Certified",
   },
   {
     id: "nav-puja-services",
     name: "Puja Services",
+    shortName: "Services",
     subtitle: "Kashi Sankalp",
     href: "/puja-services",
+    image: "/assets/puja-services/kashi-vishwanath-pooja-services.jpg",
     icon: "🕉️",
     code: "SRV-05",
-    badge: "Temple Sankalp",
+    badge: "Sankalp",
   },
 ];
 
@@ -136,12 +145,13 @@ export default function CategoryNavigation({
   }, [hoveredIndex, isMobile]);
 
   if (isMobile) {
-    // Mobile Horizontally Scrollable Header Rail
+    // World-Class 5-Column Non-Cutoff Mobile Category Matrix
     return (
-      <div
-        className={`w-full overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory py-0.5 ${className}`}
+      <nav
+        className={`w-full select-none ${className}`}
+        aria-label="Mobile Category Navigation"
       >
-        <div className="flex items-center gap-2 w-max px-1">
+        <div className="grid grid-cols-5 gap-1 sm:gap-1.5 w-full">
           {topLevelCategories.map((cat) => {
             const isSelected = activeMobileId === cat.id;
 
@@ -149,29 +159,46 @@ export default function CategoryNavigation({
               <Link
                 key={cat.id}
                 href={cat.href}
-                onTouchStart={() => setActiveMobileId(cat.id)}
-                className={`relative flex items-center h-[34px] sm:h-[36px] rounded-lg border backdrop-blur-md px-2 py-1 transition-all select-none snap-start flex-shrink-0 ${
+                onTouchStart={() => {
+                  setActiveMobileId(cat.id);
+                  playLuxuryHaptic();
+                }}
+                className={`group relative flex flex-col items-center justify-center rounded-xl border py-1.5 px-0.5 transition-all duration-200 select-none ${
                   isSelected
-                    ? "border-amber-400 bg-zinc-900/95 shadow-[0_0_12px_rgba(223,171,82,0.3)]"
-                    : "border-amber-500/20 bg-[#0a0d14]/85 active:border-amber-400/50"
+                    ? "border-amber-400 bg-amber-500/20 shadow-[0_0_12px_rgba(223,171,82,0.35)] scale-[0.97]"
+                    : "border-amber-500/25 bg-[#0a0d14]/90 hover:border-amber-500/50 active:border-amber-400 active:scale-95"
                 }`}
               >
-                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-zinc-900 border border-amber-500/30 flex items-center justify-center p-0.5 flex-shrink-0 overflow-hidden">
+                {/* Visual Thumbnail Frame */}
+                <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-b from-zinc-900 to-black border border-amber-500/35 flex items-center justify-center p-0.5 overflow-hidden shadow-inner flex-shrink-0 group-hover:border-amber-400/80">
                   {cat.image ? (
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-contain" />
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="w-full h-full object-contain"
+                    />
                   ) : (
-                    <span className="text-[10px] text-amber-300 font-serif">{cat.icon || "✦"}</span>
+                    <span className="text-xs text-amber-300 font-serif">{cat.icon || "✦"}</span>
                   )}
                 </div>
 
-                <span className="font-serif font-bold text-[10px] sm:text-[11px] text-zinc-100 uppercase tracking-wide ml-1.5 whitespace-nowrap">
-                  {cat.name}
+                {/* Category Title */}
+                <span className="font-serif font-bold text-[9px] sm:text-[10px] text-zinc-100 uppercase tracking-tight mt-1 text-center truncate max-w-full leading-tight group-hover:text-amber-200">
+                  {cat.shortName}
                 </span>
+
+                {/* Micro Tag */}
+                <span className="text-[7.5px] sm:text-[8px] font-mono text-amber-400/90 leading-none truncate max-w-full mt-0.5">
+                  {cat.badge}
+                </span>
+
+                {/* Bottom Gold Indicator */}
+                <div className="absolute bottom-0 left-1 right-1 h-[1px] bg-gradient-to-r from-transparent via-amber-400/30 to-transparent group-hover:via-amber-400" />
               </Link>
             );
           })}
         </div>
-      </div>
+      </nav>
     );
   }
 
@@ -240,3 +267,4 @@ export default function CategoryNavigation({
     </nav>
   );
 }
+

@@ -411,6 +411,11 @@ export default function Hero() {
             </div>
           </div>
 
+          {/* Mobile Visual 5-Category Matrix (100% visible, zero cutoff) */}
+          <div className="w-full mt-2 lg:hidden">
+            <CategoryNavigation isMobile />
+          </div>
+
           {/* Luxury Mobile Navigation Drawer */}
           {mobileMenuOpen && (
             <div className="fixed inset-x-0 top-[52px] max-h-[calc(100vh-65px)] overflow-y-auto border-t border-amber-500/20 bg-[#06080c]/98 backdrop-blur-2xl px-4 py-5 lg:hidden animate-fadeIn space-y-4 shadow-2xl z-50 text-left">

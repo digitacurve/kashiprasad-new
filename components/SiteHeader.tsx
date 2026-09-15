@@ -23,6 +23,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useWishlist } from "@/components/WishlistProvider";
 import PanchangBanner from "@/components/PanchangBanner";
 import CurrencySwitcher from "@/components/CurrencySwitcher";
+import CategoryNavigation from "@/components/CategoryNavigation";
 
 export default function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -179,6 +180,11 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
             {open ? <X className="h-4 w-4 text-amber-400" /> : <Menu className="h-4 w-4 text-zinc-200" />}
           </button>
         </div>
+      </div>
+
+      {/* Mobile Visual 5-Category Matrix (100% visible, zero cutoff) */}
+      <div className="w-full px-2 pb-2 pt-0.5 lg:hidden border-t border-amber-500/10 bg-[#06080c]/60">
+        <CategoryNavigation isMobile />
       </div>
 
       {/* Luxury Mobile Navigation Drawer */}
