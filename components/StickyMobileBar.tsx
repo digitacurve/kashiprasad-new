@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ShoppingBag, Zap } from "lucide-react";
 
+import { useCurrency } from "@/components/CurrencyProvider";
+
 interface StickyMobileBarProps {
   image: string;
   name: string;
@@ -26,6 +28,7 @@ export default function StickyMobileBar({
   addedState = false,
 }: StickyMobileBarProps) {
   const [visible, setVisible] = useState(false);
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,11 +65,11 @@ export default function StickyMobileBar({
             </p>
             <div className="flex items-center gap-1.5 mt-0.5">
               <span className="font-mono text-sm font-bold text-amber-300">
-                ₹{price.toLocaleString("en-IN")}
+                {formatPrice(price)}
               </span>
               {mrp && mrp > price && (
                 <span className="text-[10px] text-zinc-500 line-through">
-                  ₹{mrp.toLocaleString("en-IN")}
+                  {formatPrice(mrp)}
                 </span>
               )}
             </div>

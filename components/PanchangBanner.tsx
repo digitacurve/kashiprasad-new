@@ -91,7 +91,7 @@ export default function PanchangBanner() {
         {/* Right: Quick Action CTA & Dismiss */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <Link
-            href="/services"
+            href="/puja-services"
             className="group flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 px-3 py-1 text-[10px] sm:text-xs font-bold font-mono uppercase text-zinc-950 shadow-[0_0_12px_rgba(223,171,82,0.3)] transition"
           >
             <span>{muhurat.ctaText}</span>

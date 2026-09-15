@@ -22,6 +22,7 @@ import {
 
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 interface ProductDetailClientProps {
   product: Product;
@@ -30,6 +31,7 @@ interface ProductDetailClientProps {
 export default function ProductDetailClient({ product }: ProductDetailClientProps) {
   const router = useRouter();
   const { addItem, openCart } = useCart();
+  const { formatPrice } = useCurrency();
   const [selectedVariantId, setSelectedVariantId] = useState<string>(product.variants[0]?.id || "");
   const [quantity, setQuantity] = useState<number>(1);
   const [addedState, setAddedState] = useState<boolean>(false);
@@ -353,10 +355,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
                       <div className="flex items-baseline gap-2 mt-1.5">
                         <span className="font-serif text-base sm:text-lg font-bold text-zinc-100">
-                          Starting ₹{v.price.toLocaleString("en-IN")}
+                          Starting {formatPrice(v.price)}
                         </span>
                         <span className="text-xs text-zinc-500 line-through">
-                          ₹{v.mrp.toLocaleString("en-IN")}
+                          {formatPrice(v.mrp)}
                         </span>
                       </div>
 
@@ -431,7 +433,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                           <span className="font-medium text-zinc-100">{s.name}</span>
                           <span className="text-[11px] font-mono text-amber-400/90 mt-1">
                             {s.priceAdd > 0
-                              ? `+₹${s.priceAdd.toLocaleString("en-IN")}`
+                              ? `+${formatPrice(s.priceAdd)}`
                               : s.isCustomPricing
                               ? "Custom Pricing"
                               : "Included"}
@@ -474,7 +476,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                             : "bg-zinc-950/60 border-zinc-800 text-zinc-400 hover:border-zinc-700"
                         }`}
                       >
-                        Without Offering (₹0)
+                        Without Offering ({formatPrice(0)})
                       </button>
                       <button
                         type="button"
@@ -485,7 +487,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                             : "bg-zinc-950/60 border-zinc-800 text-amber-300/90 hover:border-amber-500/50"
                         }`}
                       >
-                        + With Divine Offering (+₹1,100)
+                        + With Divine Offering (+{formatPrice(DIVINE_OFFERING_PRICE)})
                       </button>
                     </div>
                   </div>
@@ -867,7 +869,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                       <div>
                         <div className="flex items-baseline gap-2">
                           <span className="font-serif text-2xl sm:text-3xl font-bold text-zinc-100">
-                            ₹{((selectedVariant?.price || 0) + (withDivineOffering ? DIVINE_OFFERING_PRICE : 0)).toLocaleString("en-IN")}
+                            {formatPrice((selectedVariant?.price || 0) + (withDivineOffering ? DIVINE_OFFERING_PRICE : 0))}
                           </span>
                           <span className="text-amber-300 font-serif text-base sm:text-lg font-bold">
                             + {selectedSetting.name}
@@ -880,10 +882,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     ) : (
                       <>
                         <span className="font-serif text-2xl sm:text-3xl font-bold text-zinc-100">
-                          ₹{(dynamicPrice * quantity).toLocaleString("en-IN")}
+                          {formatPrice(dynamicPrice * quantity)}
                         </span>
                         <span className="text-xs text-zinc-500 line-through">
-                          ₹{(dynamicMrp * quantity).toLocaleString("en-IN")}
+                          {formatPrice(dynamicMrp * quantity)}
                         </span>
                         {discountPercent > 0 && (
                           <span className="text-[10px] font-mono uppercase text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
@@ -959,11 +961,15 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Luxury Trust Comparison Table */}
+        {/* Full-Width Luxury Trust Comparison Table */}
+        <div className="mt-12">
           <ProductComparisonTable />
+        </div>
 
-          {/* Sacred FAQs Accordion */}
+        {/* Full-Width Sacred FAQs Accordion */}
+        <div className="mt-8">
           <ProductFaqAccordion />
         </div>
 
