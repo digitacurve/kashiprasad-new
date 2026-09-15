@@ -52,39 +52,10 @@ function Title({ eyebrow, title, copy }: { eyebrow: string; title: string; copy:
   );
 }
 
+import DynamicFeaturedCollection from "./DynamicFeaturedCollection";
+
 export function FeaturedCollection() {
-  return (
-    <section id="collection" className={sectionClass}>
-      <div className="mx-auto max-w-7xl">
-        <Title
-          eyebrow="Curated selection"
-          title="Featured Collection"
-          copy="A rotating selection across the physical collections. Puja services remain separate from the product catalogue."
-        />
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 sm:gap-3.5 lg:gap-4 sm:overflow-visible sm:pb-0">
-          {/* 1st Slot: Ruby Gemstone with Interactive Holographic Parallax */}
-          <div className="w-[68vw] max-w-[240px] shrink-0 snap-start sm:w-auto">
-            <FeaturedRubyCard />
-          </div>
-
-          {/* 2nd, 3rd, 4th Slots: Featured Products */}
-          {featuredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="w-[68vw] max-w-[240px] shrink-0 snap-start sm:w-auto"
-            >
-              <ProductCard product={product} />
-            </div>
-          ))}
-
-          {/* 5th Slot: Kashi Vishwanath Pooja Services */}
-          <div className="w-[68vw] max-w-[240px] shrink-0 snap-start sm:w-auto">
-            <FeaturedServiceCard />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <DynamicFeaturedCollection />;
 }
 
 export function ShopByCategory() {
