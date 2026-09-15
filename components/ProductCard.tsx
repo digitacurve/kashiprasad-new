@@ -4,7 +4,9 @@ import React, { useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/data/types";
-
+import { Heart } from "lucide-react";
+import { useWishlist } from "@/components/WishlistProvider";
+import { useCurrency } from "@/components/CurrencyProvider";
 import { playLuxuryHaptic } from "@/lib/audio";
 
 export interface ProductCardProps {
@@ -31,6 +33,11 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
   const [mousePos, setMousePos] = useState({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
   const isHoveredRef = useRef(false);
 
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { formatPrice } = useCurrency();
+
+  const isFavorite = product.slug ? isInWishlist(product.slug) : false;
+
   const hasRating = typeof product.rating === "number" && product.rating > 0;
   const hasReviews = typeof product.reviewCount === "number" && product.reviewCount > 0;
   const hasDiscount =
@@ -51,7 +58,6 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
     const percentX = (x / rect.width) * 100;
     const percentY = (y / rect.height) * 100;
 
-    // Smooth dynamic 3D tilt angles
     const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 10;
     const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 10;
 
@@ -71,6 +77,22 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
     setIsHovered(false);
     setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
   }, []);
+
+  const handleWishlistClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (product.slug) {
+      toggleWishlist({
+        slug: product.slug,
+        name: product.name,
+        price: product.price ?? 0,
+        image: product.image ?? "",
+        category: product.category ?? "Sacred",
+        shortDescription: "shortDescription" in product ? product.shortDescription : undefined,
+        addedAt: new Date().toISOString(),
+      });
+    }
+  };
 
   const cardInner = (
     <article
@@ -113,6 +135,22 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
           <span className="absolute left-2 top-2 z-10 rounded-md border border-amber-500/30 bg-zinc-950/80 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-medium uppercase tracking-wider text-amber-300 backdrop-blur-md shadow-sm">
             {product.badge}
           </span>
+        )}
+
+        {/* Wishlist Heart Icon Button */}
+        {product.slug && (
+          <button
+            type="button"
+            onClick={handleWishlistClick}
+            aria-label={isFavorite ? "Remove from wishlist" : "Add to wishlist"}
+            className="absolute right-2 top-2 z-20 flex h-7 w-7 items-center justify-center rounded-full border border-zinc-800 bg-zinc-950/80 text-zinc-400 backdrop-blur-md hover:border-amber-400 hover:text-amber-300 transition-all duration-200 cursor-pointer shadow-sm"
+          >
+            <Heart
+              className={`h-3.5 w-3.5 transition-transform active:scale-125 ${
+                isFavorite ? "fill-amber-400 text-amber-400" : ""
+              }`}
+            />
+          </button>
         )}
 
         {product.image ? (
@@ -207,7 +245,7 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
                     Starting from
                   </span>
                   <span className="font-serif text-sm sm:text-base font-bold text-amber-300">
-                    ₹{product.price.toLocaleString("en-IN")}
+                    {formatPrice(product.price)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between pt-0.5">
@@ -222,11 +260,11 @@ export default function ProductCard({ product, className = "" }: ProductCardProp
             ) : (
               <div className="flex items-baseline gap-1.5 sm:gap-2">
                 <span className="font-serif text-sm sm:text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors">
-                  ₹{product.price.toLocaleString("en-IN")}
+                  {formatPrice(product.price)}
                 </span>
                 {hasDiscount && (
                   <span className="text-[11px] sm:text-xs text-zinc-500 line-through">
-                    ₹{product.mrp!.toLocaleString("en-IN")}
+                    {formatPrice(product.mrp!)}
                   </span>
                 )}
                 {hasDiscount && discountPercent > 0 && (

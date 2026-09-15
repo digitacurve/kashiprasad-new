@@ -2,33 +2,40 @@ import Link from "next/link";
 
 const groups = [
   [
-    "Shop",
+    "Sacred Collections",
     [
       ["Puja Kits", "/puja-kits"],
-      ["Mala", "/malas"],
-      ["Rudraksha", "/rudraksha"],
-      ["Ratnas", "/ratnas"],
-    ],
-  ],
-  ["Services", [["Puja Services", "/puja-services"]]],
-  [
-    "Customer",
-    [
-      ["My Account", "/account"],
-      ["Orders", "/account#orders"],
-      ["Wishlist", "/account#wishlist"],
-      ["Support", "/account#support"],
+      ["Rudraksha Malas", "/malas"],
+      ["Nepali Rudraksha", "/rudraksha"],
+      ["Vedic Jyotish Ratnas", "/ratnas"],
+      ["Kashi Temple Services", "/puja-services"],
     ],
   ],
   [
-    "Information",
+    "Devotee Services",
     [
-      ["About", "/about"],
-      ["Shipping", "/shipping"],
-      ["Returns", "/returns"],
-      ["Privacy Policy", "/privacy"],
-      ["Terms & Conditions", "/terms"],
-      ["Contact", "/contact"],
+      ["📹 Live Kashi Darshan & Aarti", "/live-darshan"],
+      ["🛡️ Verify Certificate", "/verify-certificate"],
+      ["📦 Track My Sacred Order", "/track-order"],
+      ["📿 Astrologer Consultation", "https://wa.me/918604971503"],
+    ],
+  ],
+  [
+    "My Account",
+    [
+      ["Devotee Profile", "/account"],
+      ["My Sacred Orders", "/account#orders"],
+      ["Saved Addresses", "/account#addresses"],
+      ["Admin Access", "/admin"],
+    ],
+  ],
+  [
+    "Sacred Trust",
+    [
+      ["Varanasi Consecration Vidhi", "/verify-certificate"],
+      ["100% Authenticity Guarantee", "/verify-certificate"],
+      ["Ganga Purified Packaging", "/track-order"],
+      ["Kashi Vidwat Consecration", "/puja-services"],
     ],
   ],
 ];
@@ -41,19 +48,25 @@ export default function SiteFooter() {
           <p className="font-serif text-xl font-bold tracking-[.18em] text-amber-100">
             KASHI PRASAD
           </p>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-500">
-            A considered home for sacred products and future ritual experiences.
+          <p className="mt-3 max-w-xs text-xs leading-relaxed text-zinc-400">
+            Consecrated Vedic adornments, Nepali Rudrakshas, and authentic Jyotish gems sanctified on the sacred ghats of Kashi, Varanasi.
           </p>
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-mono text-amber-300">
+            <span>✦ 100% Pran Pratishtha Verified</span>
+          </div>
         </div>
         {groups.map(([title, links]) => (
           <div key={title as string}>
-            <h2 className="text-xs font-semibold uppercase tracking-[.2em] text-amber-400">
+            <h2 className="text-xs font-semibold uppercase tracking-[.2em] text-amber-400 font-mono">
               {title as string}
             </h2>
             <ul className="mt-4 space-y-2">
               {(links as string[][]).map(([label, href]) => (
                 <li key={label}>
-                  <Link href={href} className="text-sm text-zinc-500 hover:text-amber-200">
+                  <Link
+                    href={href}
+                    className="text-xs text-zinc-400 hover:text-amber-200 transition-colors"
+                  >
                     {label}
                   </Link>
                 </li>
@@ -61,6 +74,11 @@ export default function SiteFooter() {
             </ul>
           </div>
         ))}
+      </div>
+
+      <div className="mx-auto mt-12 max-w-7xl border-t border-zinc-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 font-mono">
+        <p>© {new Date().getFullYear()} Kashi Prasad. All rights sanctified under Baba Kashi Vishwanath grace.</p>
+        <p className="text-zinc-400">Varanasi, Uttar Pradesh, Bharat</p>
       </div>
     </footer>
   );

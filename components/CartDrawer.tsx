@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { X, Trash2, Plus, Minus, ShoppingBag, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 import { useCart } from "@/components/CartProvider";
+import { useCurrency } from "@/components/CurrencyProvider";
 
 const FREE_SHIPPING_THRESHOLD = 2000;
 
 export default function CartDrawer() {
   const { items, totalItems, isCartOpen, closeCart, updateQuantity, removeItem } = useCart();
+  const { formatPrice } = useCurrency();
   const router = useRouter();
   const [, startTransition] = useTransition();
 
@@ -88,7 +90,7 @@ export default function CartDrawer() {
             {freeShippingLeft > 0 ? (
               <div>
                 <p className="text-xs text-amber-200/90 font-medium">
-                  Add <span className="font-bold text-amber-300">₹{freeShippingLeft.toLocaleString("en-IN")}</span> more for <span className="text-emerald-400 font-semibold">FREE Express Shipping</span>
+                  Add <span className="font-bold text-amber-300">{formatPrice(freeShippingLeft)}</span> more for <span className="text-emerald-400 font-semibold">FREE Express Shipping</span>
                 </p>
                 <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
                   <div
@@ -172,10 +174,10 @@ export default function CartDrawer() {
                     <div className="mt-2.5 flex items-center justify-between">
                       {/* Price */}
                       <div className="text-sm font-bold text-amber-300">
-                        ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                        {formatPrice(item.price * item.quantity)}
                         {item.quantity > 1 && (
                           <span className="text-[10px] font-normal text-zinc-500 ml-1.5">
-                            (₹{item.price.toLocaleString("en-IN")} ea)
+                            ({formatPrice(item.price)} ea)
                           </span>
                         )}
                       </div>
@@ -220,7 +222,7 @@ export default function CartDrawer() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-zinc-300 font-medium">Subtotal</span>
                 <span className="font-serif text-lg font-bold text-amber-300">
-                  ₹{subtotal.toLocaleString("en-IN")}
+                  {formatPrice(subtotal)}
                 </span>
               </div>
 
