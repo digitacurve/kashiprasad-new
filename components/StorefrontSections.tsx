@@ -80,15 +80,22 @@ export function ShopByCategory() {
 export function CustomerExperience() {
   return (
     <section className={sectionClass}>
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[.8fr_1.2fr]">
-        <Title
-          eyebrow="My Kashi Prasad"
-          title="A considered experience"
-          copy="The store is designed to make every part of discovery, purchase and future ritual booking clear and dependable."
-        />
-        <div className="grid gap-3 sm:grid-cols-3">
-          {trustPillars.map(([title, copy], index) => (
-            <TrustPillarCard key={title} title={title} copy={copy} index={index} />
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 text-center max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-amber-300 mb-3">
+            <span>✦ The Sacred Promise</span>
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-200 to-amber-400">
+            Pavitra Kashi Sankalp
+          </h2>
+          <p className="mt-3 text-xs sm:text-sm text-zinc-400 leading-relaxed max-w-2xl mx-auto">
+            Four eternal pillars of authentic Varanasi consecration, lab-tested purity guarantee, complimentary Gangajal gifts, and lifetime priestly guidance.
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {trustPillars.map((pillar, index) => (
+            <TrustPillarCard key={pillar.id} pillar={pillar} index={index} />
           ))}
         </div>
       </div>

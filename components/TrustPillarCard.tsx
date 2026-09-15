@@ -1,16 +1,15 @@
 "use client";
 
 import React, { useRef, useState, useCallback } from "react";
-
+import { TrustPillarItem } from "@/data/storefront";
 import { playLuxuryHaptic } from "@/lib/audio";
+import { Sparkles, CheckCircle2 } from "lucide-react";
 
 export default function TrustPillarCard({
-  title,
-  copy,
+  pillar,
   index,
 }: {
-  title: string;
-  copy: string;
+  pillar: TrustPillarItem;
   index: number;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -50,7 +49,7 @@ export default function TrustPillarCard({
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/70 p-5 sm:p-6 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-amber-500/50 hover:bg-zinc-900/70 hover:shadow-[0_20px_45px_rgba(0,0,0,0.85),0_0_30px_rgba(223,171,82,0.22)] cursor-pointer select-none [perspective:1000px]"
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/90 bg-gradient-to-b from-[#0d1017] via-[#080b10] to-[#05070a] p-5 sm:p-6 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-amber-500/50 hover:shadow-[0_20px_45px_rgba(0,0,0,0.9),0_0_30px_rgba(223,171,82,0.25)] cursor-pointer select-none [perspective:1000px]"
     >
       {/* Dynamic Interactive Cursor Spotlight Shimmer */}
       <div
@@ -68,15 +67,39 @@ export default function TrustPillarCard({
       />
 
       <div className="relative z-10">
-        <span className="text-xs font-mono font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
-          0{index + 1}
-        </span>
-        <h3 className="mt-6 font-serif text-xl font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors drop-shadow-sm">
-          {title}
-        </h3>
-        <p className="mt-3 text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">
-          {copy}
+        {/* Top Header with Icon & Badge */}
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-amber-500/30 bg-amber-500/10 text-2xl shadow-[0_0_12px_rgba(251,191,36,0.2)] group-hover:scale-110 group-hover:border-amber-400 transition-transform duration-300">
+            {pillar.icon}
+          </div>
+          <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/20">
+            0{index + 1} · {pillar.badge}
+          </span>
+        </div>
+
+        {/* Title & Hindi Subtitle */}
+        <div>
+          <span className="text-[11px] font-sans text-amber-400/80 font-medium block mb-0.5">
+            {pillar.hindi}
+          </span>
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-zinc-100 group-hover:text-amber-200 transition-colors drop-shadow-sm">
+            {pillar.title}
+          </h3>
+        </div>
+
+        {/* Copy Description */}
+        <p className="mt-3 text-xs sm:text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">
+          {pillar.copy}
         </p>
+      </div>
+
+      {/* Bottom Highlight Tag */}
+      <div className="mt-5 pt-3 border-t border-zinc-800/80 flex items-center justify-between text-[11px] font-mono text-amber-300/90 relative z-10">
+        <span className="flex items-center gap-1.5">
+          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+          {pillar.tag}
+        </span>
+        <span className="text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
       </div>
     </article>
   );
