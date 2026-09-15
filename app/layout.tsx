@@ -5,6 +5,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import CartDrawer from "@/components/CartDrawer";
 import SearchModal from "@/components/SearchModal";
 import AuthModal from "@/components/AuthModal";
+import WhatsAppConsultation from "@/components/WhatsAppConsultation";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CartDrawer />
             <SearchModal />
             <AuthModal />
+            <WhatsAppConsultation />
           </CartProvider>
         </AuthProvider>
       </body>

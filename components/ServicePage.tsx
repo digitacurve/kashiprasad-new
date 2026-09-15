@@ -308,29 +308,44 @@ export default function ServicePage() {
               </button>
 
               {bookingSuccess ? (
-                <div className="text-center py-8">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-amber-500/20 text-amber-400 mb-4 border border-amber-500/40">
-                    <Sparkles className="h-7 w-7" />
+                <div className="py-6 text-center">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 mb-4 shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                    <Check className="h-7 w-7 stroke-[3]" />
                   </div>
-                  <h3 className="font-serif text-2xl font-bold text-zinc-100 uppercase">
-                    Sankalp Booking Received
+                  <h3 className="font-serif text-2xl font-bold text-amber-200">
+                    Sankalp Registered Successfully!
                   </h3>
-                  <p className="mt-3 text-sm text-zinc-300 leading-relaxed">
-                    Har Har Mahadev! Your request for{" "}
+                  <p className="mt-3 text-sm text-zinc-300">
+                    Your divine seva for{" "}
                     <strong className="text-amber-300">{activeService.name}</strong> (₹
-                    {activeService.price.toLocaleString("en-IN")}) has been registered.
+                    {activeService.price.toLocaleString("en-IN")}) has been registered for{" "}
+                    <strong className="text-amber-300">{formData.devoteeName}</strong> ({formData.gotra || "Kashyap Gotra"}).
                   </p>
                   <p className="mt-2 text-xs text-zinc-400">
                     Our Varanasi temple coordination team will contact you on{" "}
-                    <strong className="text-zinc-200">{formData.phone}</strong> to confirm the exact muhurta and Sankalp time.
+                    <strong className="text-zinc-200">{formData.phone}</strong> to confirm the exact muhurta and ritual recording.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => setShowBookingModal(false)}
-                    className="mt-6 px-6 py-2.5 rounded-xl bg-amber-500 text-zinc-950 font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 cursor-pointer"
-                  >
-                    Done
-                  </button>
+
+                  {/* Direct WhatsApp Confirmation Button */}
+                  <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a
+                      href={`https://wa.me/918604971503?text=${encodeURIComponent(
+                        `Har Har Mahadev Acharyaji, Maine Kashi Vishwanath Pooja "${activeService.name}" book ki hai.\nDevotee: ${formData.devoteeName}\nGotra: ${formData.gotra || "Kashyap"}\nDate: ${formData.preferredDate}\nPhone: ${formData.phone}`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-mono font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-emerald-600/30 transition cursor-pointer flex items-center justify-center gap-2"
+                    >
+                      <span>💬 Share Gotra on WhatsApp</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => setShowBookingModal(false)}
+                      className="w-full sm:w-auto px-6 py-3 rounded-xl bg-zinc-800 text-zinc-300 font-mono font-bold text-xs uppercase tracking-wider hover:bg-zinc-700 cursor-pointer"
+                    >
+                      Close Window
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -342,7 +357,7 @@ export default function ServicePage() {
                       {activeService.name}
                     </h3>
                     <p className="text-xs text-amber-300/90 font-mono mt-1">
-                      Final Seva Dakshina: ₹{activeService.price.toLocaleString("en-IN")}
+                      Final Seva Dakshina: ₹{activeService.price.toLocaleString("en-IN")} · Complete Samagri Included
                     </p>
                   </div>
 
@@ -405,13 +420,29 @@ export default function ServicePage() {
                       />
                     </div>
 
+                    {/* Live Sankalp Video Feature Checkbox */}
+                    <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 flex items-start gap-3">
+                      <input
+                        type="checkbox"
+                        id="videoSankalp"
+                        defaultChecked
+                        className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-amber-500 focus:ring-amber-400"
+                      />
+                      <label htmlFor="videoSankalp" className="text-xs text-zinc-300 leading-snug cursor-pointer">
+                        <span className="text-amber-300 font-semibold block">
+                          📹 WhatsApp HD Video & Sankalp Audio Recording (Complimentary)
+                        </span>
+                        Receive personalized video of Purohit chanting your Gotra and Name during the ritual.
+                      </label>
+                    </div>
+
                     <div>
                       <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
                         Special Sankalp / Prayer Wishes
                       </label>
                       <textarea
                         rows={2}
-                        placeholder="e.g. For health of parents, business growth, birthday blessings..."
+                        placeholder="e.g. For health of family, peace, business growth, birthday..."
                         value={formData.specialWishes}
                         onChange={(e) =>
                           setFormData({ ...formData, specialWishes: e.target.value })
@@ -425,7 +456,7 @@ export default function ServicePage() {
                         type="submit"
                         className="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-zinc-950 font-mono font-bold text-xs uppercase tracking-widest shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
                       >
-                        Confirm & Submit Sankalp Request
+                        Confirm & Register Temple Sankalp
                       </button>
                     </div>
                   </form>

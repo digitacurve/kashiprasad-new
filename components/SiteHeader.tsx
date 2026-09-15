@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Search, ShoppingBag, User, Heart, Menu, X, Sparkles } from "lucide-react";
+import { Search, ShoppingBag, User, Heart, Menu, X, Sparkles, Truck } from "lucide-react";
 import { storeCategories } from "@/data/storefront";
 import { useCart } from "@/components/CartProvider";
 import { useAuth } from "@/components/AuthProvider";
+import PanchangBanner from "@/components/PanchangBanner";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-amber-500/20 bg-[#06080c]/95 backdrop-blur-xl transition-all">
+      <PanchangBanner />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3.5 sm:px-8">
         {/* Brand Logo */}
         <Link
@@ -141,6 +143,17 @@ export default function SiteHeader() {
                 <span className="text-xs text-amber-400 font-mono">✦</span>
               </Link>
             ))}
+            <Link
+              onClick={() => setOpen(false)}
+              href="/track-order"
+              className="flex items-center justify-between rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 font-serif text-base text-amber-200 hover:border-amber-400 transition"
+            >
+              <span className="flex items-center gap-2">
+                <Truck className="h-4 w-4 text-amber-400" />
+                Track My Sacred Order
+              </span>
+              <span className="text-xs text-amber-400 font-mono">→</span>
+            </Link>
           </div>
         </nav>
       )}

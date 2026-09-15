@@ -8,6 +8,8 @@ import { useCart } from "@/components/CartProvider";
 import PincodeEstimator from "@/components/PincodeEstimator";
 import SimilarProducts from "@/components/SimilarProducts";
 import StickyMobileBar from "@/components/StickyMobileBar";
+import ProductComparisonTable from "@/components/ProductComparisonTable";
+import ProductFaqAccordion from "@/components/ProductFaqAccordion";
 import { ChevronDown, ChevronUp, Plus, Minus, ShoppingBag, Zap, Sparkles } from "lucide-react";
 import { playLuxuryHaptic } from "@/lib/audio";
 import {
@@ -957,6 +959,12 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               </div>
             </div>
           </div>
+
+          {/* Luxury Trust Comparison Table */}
+          <ProductComparisonTable />
+
+          {/* Sacred FAQs Accordion */}
+          <ProductFaqAccordion />
         </div>
 
         {/* Similar Products Recommendation Grid */}
