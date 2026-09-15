@@ -73,6 +73,9 @@ export const metadata: Metadata = {
     title: "Kashi Prasad | Sacred Consecrated Malas & Vedic Ratnas",
     description: "Authentic consecrated spiritual adornments blessed in holy Varanasi.",
   },
+  verification: {
+    google: "googled6607382bfe7c86c",
+  },
   robots: {
     index: true,
     follow: true,
