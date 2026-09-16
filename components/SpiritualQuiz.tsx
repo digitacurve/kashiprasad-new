@@ -371,25 +371,27 @@ export default function SpiritualQuiz() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
                 {INTENT_OPTIONS.map((opt) => (
                   <button
                     key={opt.id}
                     onClick={() => handleSelectOption("intent", opt.id)}
-                    className="group relative flex items-start gap-3.5 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 text-left transition-all hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_0_20px_rgba(223,171,82,0.12)] cursor-pointer"
+                    className="group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-[#0d1017] via-[#080b10] to-[#05070a] p-3 sm:p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_12px_28px_rgba(0,0,0,0.8),0_0_24px_rgba(223,171,82,0.18)] active:scale-[0.97] active:border-amber-400/60 active:shadow-[0_10px_25px_rgba(223,171,82,0.25)] touch-luxury-card cursor-pointer"
                   >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-950 border border-zinc-700/80 text-xl group-hover:scale-110 transition-transform">
-                      {opt.emoji}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-serif text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                        <span className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-amber-500/10 border border-amber-500/25 text-base sm:text-xl shadow-[0_0_10px_rgba(251,191,36,0.15)] group-hover:scale-110 group-hover:border-amber-400 transition-transform">
+                          {opt.emoji}
+                        </span>
+                        <ChevronRight className="h-3.5 w-3.5 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                      </div>
+                      <h4 className="font-serif text-xs sm:text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors leading-snug">
                         {opt.title}
                       </h4>
-                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                      <p className="text-[10px] sm:text-xs text-zinc-400 mt-1 sm:mt-1.5 leading-relaxed line-clamp-2 sm:line-clamp-none">
                         {opt.subtitle}
                       </p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0 mt-1" />
                   </button>
                 ))}
               </div>
@@ -416,27 +418,27 @@ export default function SpiritualQuiz() {
                 </button>
               </div>
 
-              <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
                 {PAIN_POINT_OPTIONS.map((opt) => (
                   <button
                     key={opt.id}
                     onClick={() => handleSelectOption("painPoint", opt.id)}
-                    className="group w-full flex items-center justify-between gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 text-left transition-all hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_0_20px_rgba(223,171,82,0.1)] cursor-pointer"
+                    className="group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-[#0d1017] via-[#080b10] to-[#05070a] p-3 sm:p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_12px_28px_rgba(0,0,0,0.8),0_0_24px_rgba(223,171,82,0.18)] active:scale-[0.97] active:border-amber-400/60 active:shadow-[0_10px_25px_rgba(223,171,82,0.25)] touch-luxury-card cursor-pointer"
                   >
-                    <div className="flex items-center gap-3.5">
-                      <span className="text-2xl shrink-0 group-hover:scale-110 transition-transform">
-                        {opt.emoji}
-                      </span>
-                      <div>
-                        <h4 className="font-serif text-sm sm:text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors">
-                          {opt.title}
-                        </h4>
-                        <p className="text-xs text-zinc-400 mt-0.5">
-                          {opt.subtitle}
-                        </p>
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                        <span className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-amber-500/10 border border-amber-500/25 text-base sm:text-xl shadow-[0_0_10px_rgba(251,191,36,0.15)] group-hover:scale-110 group-hover:border-amber-400 transition-transform">
+                          {opt.emoji}
+                        </span>
+                        <ChevronRight className="h-3.5 w-3.5 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0" />
                       </div>
+                      <h4 className="font-serif text-xs sm:text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors leading-snug">
+                        {opt.title}
+                      </h4>
+                      <p className="text-[10px] sm:text-xs text-zinc-400 mt-1 sm:mt-1.5 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                        {opt.subtitle}
+                      </p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0" />
                   </button>
                 ))}
               </div>
@@ -471,12 +473,12 @@ export default function SpiritualQuiz() {
                   <button
                     key={rashi.id}
                     onClick={() => handleSelectOption("rashi", rashi.id)}
-                    className="group rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 text-left transition-all hover:border-amber-500/40 hover:bg-zinc-900/90 cursor-pointer"
+                    className="group rounded-xl border border-zinc-800/80 bg-gradient-to-b from-[#0d1017] to-[#05070a] p-2.5 sm:p-3 text-left transition-all hover:border-amber-500/40 hover:bg-zinc-900/90 hover:shadow-[0_0_15px_rgba(223,171,82,0.12)] active:scale-[0.97] active:border-amber-400/60 touch-luxury-card cursor-pointer"
                   >
-                    <span className="font-serif text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-amber-300 block">
+                    <span className="font-serif text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-amber-300 block leading-tight">
                       {rashi.name}
                     </span>
-                    <span className="text-[10px] font-mono text-zinc-500 block mt-0.5">
+                    <span className="text-[9px] sm:text-[10px] font-mono text-zinc-500 block mt-0.5">
                       {rashi.planet}
                     </span>
                   </button>
@@ -505,21 +507,24 @@ export default function SpiritualQuiz() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
                 {FORM_OPTIONS.map((form) => (
                   <button
                     key={form.id}
                     onClick={() => handleSelectOption("form", form.id)}
-                    className="group flex items-start gap-3.5 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 sm:p-5 text-left transition-all hover:border-amber-500/50 hover:bg-zinc-900/90 cursor-pointer"
+                    className="group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-[#0d1017] via-[#080b10] to-[#05070a] p-3 sm:p-5 text-left transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_12px_28px_rgba(0,0,0,0.8),0_0_24px_rgba(223,171,82,0.18)] active:scale-[0.97] active:border-amber-400/60 active:shadow-[0_10px_25px_rgba(223,171,82,0.25)] touch-luxury-card cursor-pointer"
                   >
-                    <span className="text-2xl shrink-0 group-hover:scale-110 transition-transform">
-                      {form.emoji}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="font-serif text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                        <span className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-amber-500/10 border border-amber-500/25 text-base sm:text-xl shadow-[0_0_10px_rgba(251,191,36,0.15)] group-hover:scale-110 group-hover:border-amber-400 transition-transform">
+                          {form.emoji}
+                        </span>
+                        <ChevronRight className="h-3.5 w-3.5 text-zinc-600 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                      </div>
+                      <h4 className="font-serif text-xs sm:text-base font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors leading-snug">
                         {form.title}
                       </h4>
-                      <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                      <p className="text-[10px] sm:text-xs text-zinc-400 mt-1 sm:mt-1.5 leading-relaxed line-clamp-2 sm:line-clamp-none">
                         {form.subtitle}
                       </p>
                     </div>

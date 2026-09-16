@@ -57,6 +57,15 @@ export function playLuxuryHaptic() {
 
     osc.start(t);
     osc.stop(t + 0.06);
+
+    // Mobile device hardware micro-vibration tactile feedback
+    if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+      try {
+        navigator.vibrate(10);
+      } catch {
+        // Safe ignore
+      }
+    }
   } catch {
     // Graceful fallback
   }

@@ -173,7 +173,7 @@ export default function DynamicFeaturedCollection() {
             className="w-[68vw] max-w-[240px] shrink-0 snap-start sm:w-auto transition-all duration-500 animate-in fade-in zoom-in-95"
           >
             <Link href="/puja-services" className="block h-full select-none">
-              <article className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/70 p-2.5 sm:p-3 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-amber-500/50 hover:bg-zinc-900/70 hover:shadow-[0_20px_45px_rgba(0,0,0,0.85),0_0_30px_rgba(223,171,82,0.22)] cursor-pointer select-none">
+              <article className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/70 p-2.5 sm:p-3 transition-all duration-500 ease-out hover:-translate-y-1.5 hover:border-amber-500/50 hover:bg-zinc-900/70 hover:shadow-[0_20px_45px_rgba(0,0,0,0.85),0_0_30px_rgba(223,171,82,0.22)] active:scale-[0.98] active:border-amber-400/60 active:shadow-[0_10px_25px_rgba(223,171,82,0.25)] touch-luxury-card cursor-pointer select-none">
                 {/* Image */}
                 <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-zinc-800/50 bg-gradient-to-b from-zinc-900 to-zinc-950">
                   <span className="absolute left-2 top-2 z-10 rounded-md border border-amber-500/30 bg-zinc-950/80 px-2 py-0.5 text-[9px] sm:text-[10px] font-mono font-medium uppercase tracking-wider text-amber-300 backdrop-blur-md shadow-sm">
@@ -186,6 +186,7 @@ export default function DynamicFeaturedCollection() {
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-110 pointer-events-none"
                     sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                   />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-amber-200/20 to-transparent opacity-40 animate-mobile-glint" />
                   <div className="pointer-events-none absolute inset-0 rounded-xl border border-amber-400/0 transition-all duration-500 group-hover:border-amber-400/40" />
                 </div>
 

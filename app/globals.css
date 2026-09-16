@@ -235,3 +235,32 @@ html.lenis body {
 .animate-pulse-glow {
   animation: pulseGlow 5s ease-in-out infinite;
 }
+
+@keyframes mobileGlint {
+  0%, 100% {
+    transform: translateX(-150%) translateY(-150%) rotate(35deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateX(150%) translateY(150%) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+.animate-mobile-glint {
+  animation: mobileGlint 7s ease-in-out infinite;
+}
+
+/* Touch-friendly active response for mobile luxury experience */
+@media (hover: none) and (pointer: coarse) {
+  .touch-luxury-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}

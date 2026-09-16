@@ -43,6 +43,47 @@ export default function CategoryCard({
     setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
   }, []);
 
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!cardRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
+
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
+
+    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+    setIsHovered(true);
+    playLuxuryHaptic();
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!cardRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
+
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
+
+    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setTimeout(() => {
+      setIsHovered(false);
+      setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
+    }, 450);
+  }, []);
+
   const handleMouseEnter = useCallback(() => {
     if (!isHoveredRef.current) {
       isHoveredRef.current = true;
@@ -76,15 +117,21 @@ export default function CategoryCard({
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-3 sm:p-5 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/80 hover:shadow-[0_15px_35px_rgba(0,0,0,0.85),0_0_25px_rgba(223,171,82,0.2)] cursor-pointer select-none [perspective:1000px] ${
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+        className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-3 sm:p-5 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/80 hover:shadow-[0_15px_35px_rgba(0,0,0,0.85),0_0_25px_rgba(223,171,82,0.2)] active:scale-[0.98] active:border-amber-400/60 active:shadow-[0_10px_25px_rgba(223,171,82,0.25)] touch-luxury-card cursor-pointer select-none [perspective:1000px] ${
           isFifthItem
             ? "sm:flex-col flex-row items-center sm:items-stretch gap-3 sm:gap-0 bg-gradient-to-r sm:bg-none from-amber-950/20 via-zinc-950 to-zinc-950 border-amber-500/30"
             : ""
         }`}
       >
-        {/* Dynamic Interactive Card-Wide Cursor Spotlight Shimmer */}
+        {/* Dynamic Interactive Card-Wide Cursor/Touch Spotlight Shimmer */}
         <div
-          className="pointer-events-none absolute -inset-px rounded-xl sm:rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className={`pointer-events-none absolute -inset-px rounded-xl sm:rounded-2xl transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+          }`}
           style={{
             background: `radial-gradient(280px circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 235, 180, 0.22), rgba(223, 171, 82, 0.14) 45%, transparent 70%)`,
           }}
@@ -93,7 +140,9 @@ export default function CategoryCard({
 
         {/* Subtle Golden Border Highlight */}
         <div
-          className="pointer-events-none absolute -inset-px rounded-xl sm:rounded-2xl border border-amber-400/0 opacity-0 transition-all duration-300 group-hover:border-amber-400/40 group-hover:opacity-100"
+          className={`pointer-events-none absolute -inset-px rounded-xl sm:rounded-2xl border border-amber-400/0 transition-all duration-300 ${
+            isHovered ? "border-amber-400/50 opacity-100" : "opacity-0 group-hover:border-amber-400/40 group-hover:opacity-100"
+          }`}
           aria-hidden="true"
         />
 
@@ -132,17 +181,19 @@ export default function CategoryCard({
             </div>
           )}
 
-          {/* Prismatic Light Flare Glint Sweep */}
+          {/* Prismatic Light Flare Glint Sweep (Hover + Mobile Ambient) */}
           <div
-            className={`pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent transition-opacity duration-700 ${
-              isHovered ? "opacity-100 animate-luxury-glint" : "opacity-0"
+            className={`pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent via-amber-200/25 to-transparent transition-opacity duration-700 ${
+              isHovered ? "opacity-100 animate-luxury-glint" : "opacity-40 animate-mobile-glint"
             }`}
             aria-hidden="true"
           />
 
           {/* Refined Gold Border Glow */}
           <div
-            className="pointer-events-none absolute inset-0 rounded-lg sm:rounded-xl border border-amber-400/0 transition-all duration-500 group-hover:border-amber-400/40"
+            className={`pointer-events-none absolute inset-0 rounded-lg sm:rounded-xl border transition-all duration-500 ${
+              isHovered ? "border-amber-400/50" : "border-amber-400/0 group-hover:border-amber-400/40"
+            }`}
             aria-hidden="true"
           />
         </div>
