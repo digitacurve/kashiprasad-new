@@ -271,17 +271,23 @@ html.lenis body {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
   }
-
-  .touch-luxury-card {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-    will-change: transform;
-  }
 }
 
-/* GPU hardware acceleration for smooth card rendering */
-.gpu-accelerated {
+.touch-luxury-card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y manipulation;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* GPU hardware acceleration for smooth card rendering & glassmorphism */
+.gpu-accelerated,
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg,
+.backdrop-blur-xl,
+.backdrop-blur-2xl {
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 1000px;
+  -webkit-backface-visibility: hidden;
 }

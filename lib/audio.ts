@@ -3,6 +3,7 @@
 // Shared AudioContext instance for optimal browser performance
 let audioCtx: AudioContext | null = null;
 let lastSoundTime = 0;
+let lastVibrateTime = 0;
 
 /**
  * Ultra-minimal, refined luxury acoustic micro-haptic sound.
@@ -58,10 +59,15 @@ export function playLuxuryHaptic() {
     osc.start(t);
     osc.stop(t + 0.06);
 
-    // Mobile device hardware micro-vibration tactile feedback
-    if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+    // Mobile device hardware micro-vibration tactile feedback (throttled to keep Android thread butter-smooth)
+    if (
+      now - lastVibrateTime > 220 &&
+      typeof navigator !== "undefined" &&
+      typeof navigator.vibrate === "function"
+    ) {
+      lastVibrateTime = now;
       try {
-        navigator.vibrate(10);
+        navigator.vibrate(8);
       } catch {
         // Safe ignore
       }

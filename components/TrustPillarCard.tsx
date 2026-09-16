@@ -15,57 +15,52 @@ export default function TrustPillarCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
   const isHoveredRef = useRef(false);
+  const cardRectRef = useRef<DOMRect | null>(null);
+  const rafRef = useRef<number | null>(null);
+
+  const updateCoordinates = useCallback((clientX: number, clientY: number, maxTilt: number = 8) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const rect = cardRectRef.current || cardRef.current?.getBoundingClientRect();
+      if (!rect || rect.width === 0 || rect.height === 0) return;
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+
+      const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
+      const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
+
+      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * maxTilt;
+      const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * maxTilt;
+
+      setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+    });
+  }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const percentX = (x / rect.width) * 100;
-    const percentY = (y / rect.height) * 100;
-
-    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
-
-    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
-  }, []);
+    if (!cardRectRef.current && cardRef.current) {
+      cardRectRef.current = cardRef.current.getBoundingClientRect();
+    }
+    updateCoordinates(e.clientX, e.clientY, 8);
+  }, [updateCoordinates]);
 
   const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
     if (!cardRef.current || e.touches.length === 0) return;
+    cardRectRef.current = cardRef.current.getBoundingClientRect();
     const touch = e.touches[0];
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-
-    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
-
-    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
-
-    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+    updateCoordinates(touch.clientX, touch.clientY, 8);
     isHoveredRef.current = true;
     playLuxuryHaptic();
-  }, []);
+  }, [updateCoordinates]);
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    if (!cardRef.current || e.touches.length === 0) return;
+    if (e.touches.length === 0) return;
     const touch = e.touches[0];
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = touch.clientX - rect.left;
-    const y = touch.clientY - rect.top;
-
-    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
-    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
-
-    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 8;
-    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 8;
-
-    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
-  }, []);
+    updateCoordinates(touch.clientX, touch.clientY, 8);
+  }, [updateCoordinates]);
 
   const handleTouchEnd = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    cardRectRef.current = null;
     setTimeout(() => {
       isHoveredRef.current = false;
       setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
@@ -73,6 +68,9 @@ export default function TrustPillarCard({
   }, []);
 
   const handleMouseEnter = useCallback(() => {
+    if (cardRef.current) {
+      cardRectRef.current = cardRef.current.getBoundingClientRect();
+    }
     if (!isHoveredRef.current) {
       isHoveredRef.current = true;
       playLuxuryHaptic();
@@ -80,6 +78,8 @@ export default function TrustPillarCard({
   }, []);
 
   const handleMouseLeave = useCallback(() => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    cardRectRef.current = null;
     isHoveredRef.current = false;
     setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
   }, []);

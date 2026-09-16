@@ -31,12 +31,15 @@ export default function StickyMobileBar({
   const { formatPrice } = useCurrency();
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      // Show when scrolled down 400px
-      if (window.scrollY > 400) {
-        setVisible(true);
-      } else {
-        setVisible(false);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const shouldBeVisible = window.scrollY > 400;
+          setVisible((prev) => (prev !== shouldBeVisible ? shouldBeVisible : prev));
+          ticking = false;
+        });
+        ticking = true;
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
