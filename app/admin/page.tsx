@@ -36,93 +36,6 @@ import { allProducts } from "@/data/products";
 const ADMIN_PIN = "108108";
 const ADMIN_SESSION_KEY = "kashi-prasad-admin-auth";
 
-const SAMPLE_ORDERS: PlacedOrder[] = [
-  {
-    id: "ord_sample_1",
-    orderNumber: "KP-782194",
-    date: "14 Sep 2026",
-    total: 3999,
-    status: "In Sanctification",
-    paymentMethod: "UPI",
-    items: [
-      {
-        name: "Original Karungali Mala – 108 Beads",
-        variantName: "8mm • 108 Beads • Ganga Snan Consecrated",
-        price: 3999,
-        quantity: 1,
-        image: "/assets/mala/11_mala_regenerated_01.jpg",
-      },
-    ],
-    shippingAddress: {
-      id: "addr_s1",
-      fullName: "Aditya Sharma",
-      phone: "9876543210",
-      addressLine: "Flat 302, Nilayam Apartments, Gomti Nagar",
-      city: "Lucknow",
-      state: "Uttar Pradesh",
-      pincode: "226010",
-      landmark: "Near City Park",
-      isDefault: true,
-    },
-  },
-  {
-    id: "ord_sample_2",
-    orderNumber: "KP-619283",
-    date: "13 Sep 2026",
-    total: 5999,
-    status: "Confirmed",
-    paymentMethod: "COD",
-    items: [
-      {
-        name: "Emerald (Panna) — पन्ना",
-        variantName: "Standard Astrological • 4.25 Ratti • Silver Setting",
-        price: 5999,
-        quantity: 1,
-        image: "/assets/ratnas/emerald-panna.png",
-      },
-    ],
-    shippingAddress: {
-      id: "addr_s2",
-      fullName: "Pooja Verma",
-      phone: "9811223344",
-      addressLine: "B-42, Sector 62, Noida",
-      city: "Noida",
-      state: "Uttar Pradesh",
-      pincode: "201309",
-      landmark: "Opposite Fortis Hospital",
-      isDefault: true,
-    },
-  },
-  {
-    id: "ord_sample_3",
-    orderNumber: "KP-410298",
-    date: "12 Sep 2026",
-    total: 2450,
-    status: "Dispatched",
-    paymentMethod: "UPI",
-    items: [
-      {
-        name: "Original 5 Mukhi Nepali Rudraksha Mala",
-        variantName: "Collector Grade • 108 Beads",
-        price: 2450,
-        quantity: 1,
-        image: "/assets/mala/12_mala_regenerated_01.jpg",
-      },
-    ],
-    shippingAddress: {
-      id: "addr_s3",
-      fullName: "Rohan Kulkarni",
-      phone: "9988776655",
-      addressLine: "704, Shivaji Park Road, Dadar West",
-      city: "Mumbai",
-      state: "Maharashtra",
-      pincode: "400028",
-      landmark: "Near Shivaji Park",
-      isDefault: true,
-    },
-  },
-];
-
 interface CustomerRecord {
   id: string;
   name: string;
@@ -188,8 +101,6 @@ export default function AdminPage() {
       }
 
       const mergedMap = new Map<string, PlacedOrder>();
-      // Fallback sample orders first
-      SAMPLE_ORDERS.forEach((o) => mergedMap.set(o.id, o));
       // Local Auth orders
       localAuthOrders.forEach((o) => mergedMap.set(o.id, o));
       // Local Saved Admin modifications
@@ -211,9 +122,7 @@ export default function AdminPage() {
     } catch (err) {
       console.warn("API sync error, using local fallback:", err);
       setDbStatus("local");
-      if (ordersList.length === 0) {
-        setOrdersList(localAuthOrders.length > 0 ? localAuthOrders : SAMPLE_ORDERS);
-      }
+      setOrdersList(localAuthOrders);
     } finally {
       setIsLoading(false);
     }
@@ -684,7 +593,17 @@ export default function AdminPage() {
             </div>
 
             {/* Orders Feed */}
-            {filteredOrders.length === 0 ? (
+            {ordersList.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-amber-500/20 bg-zinc-950/40 p-12 text-center space-y-3">
+                <div className="flex h-12 w-12 mx-auto items-center justify-center rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300">
+                  <Package className="h-6 w-6" />
+                </div>
+                <h4 className="font-serif text-lg font-bold text-zinc-200">No Orders Placed Yet</h4>
+                <p className="text-xs text-zinc-400 max-w-md mx-auto leading-relaxed">
+                  Har Har Mahadev! New customer orders placed on the store or via checkout will automatically sync and appear here in real-time.
+                </p>
+              </div>
+            ) : filteredOrders.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-zinc-800 bg-zinc-950/40 p-12 text-center">
                 <p className="text-zinc-400 font-serif text-base">No orders matching your filter</p>
                 <button
