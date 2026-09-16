@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Cinzel, Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { CartProvider } from "@/components/CartProvider";
 import { AuthProvider } from "@/components/AuthProvider";
@@ -99,9 +100,7 @@ const jsonLd = {
       alternateName: ["kashiprasad.in", "KashiPrasad", "Kashi Prasad Varanasi"],
       url: "https://kashiprasad.in",
       logo: "https://kashiprasad.in/favicon.ico",
-      sameAs: [
-        "https://www.instagram.com",
-      ],
+      sameAs: ["https://www.instagram.com"],
       contactPoint: {
         "@type": "ContactPoint",
         telephone: "+91-8604971503",
@@ -152,6 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <AuthModal />
                 <WhatsAppConsultation />
                 <AutoLoginPrompt />
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
               </WishlistProvider>
             </CartProvider>
           </AuthProvider>

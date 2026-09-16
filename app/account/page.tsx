@@ -2,7 +2,20 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { User, Phone, MapPin, Package, ShieldCheck, Plus, Trash2, CheckCircle2, LogOut, Sparkles, ArrowRight, Edit3 } from "lucide-react";
+import {
+  User,
+  Phone,
+  MapPin,
+  Package,
+  ShieldCheck,
+  Plus,
+  Trash2,
+  CheckCircle2,
+  LogOut,
+  Sparkles,
+  ArrowRight,
+  Edit3,
+} from "lucide-react";
 import { useAuth, Address } from "@/components/AuthProvider";
 import CommerceShell, { EmptyState } from "@/components/CommerceShell";
 
@@ -47,11 +60,10 @@ export default function AccountPage() {
           <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 mb-4">
             <User className="h-8 w-8" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-zinc-100">
-            Welcome to Kashi Prasad
-          </h2>
+          <h2 className="font-serif text-2xl font-bold text-zinc-100">Welcome to Kashi Prasad</h2>
           <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
-            Please log in with your mobile number to view past orders, track sacred deliveries, and manage your delivery addresses.
+            Please log in with your mobile number to view past orders, track sacred deliveries, and
+            manage your delivery addresses.
           </p>
           <button
             onClick={() => openAuthModal()}
@@ -185,7 +197,8 @@ export default function AccountPage() {
                 <Package className="h-12 w-12 text-zinc-600 mx-auto mb-3 stroke-[1.5]" />
                 <h3 className="font-serif text-lg text-zinc-200">No Orders Placed Yet</h3>
                 <p className="mt-1 text-xs text-zinc-400 max-w-sm mx-auto">
-                  Your consecrated malas, authentic gemstones, and puja orders will appear here with live tracking.
+                  Your consecrated malas, authentic gemstones, and puja orders will appear here with
+                  live tracking.
                 </p>
                 <Link
                   href="/"
@@ -253,12 +266,18 @@ export default function AccountPage() {
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3.5 w-3.5 text-amber-400" />
                       <span>
-                        Delivering to: {order.shippingAddress.fullName} ({order.shippingAddress.city} - {order.shippingAddress.pincode})
+                        Delivering to: {order.shippingAddress.fullName} (
+                        {order.shippingAddress.city} - {order.shippingAddress.pincode})
                       </span>
                     </div>
-                    <span className="font-mono text-[11px] text-zinc-400">
-                      Payment: {order.paymentMethod}
-                    </span>
+                    <div className="font-mono text-[11px] text-zinc-400 flex flex-wrap items-center gap-2">
+                      <span>Payment: {order.paymentMethod}</span>
+                      {order.balanceDue && order.balanceDue > 0 ? (
+                        <span className="text-amber-300 font-semibold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                          Due on Delivery: ₹{order.balanceDue.toLocaleString("en-IN")}
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 </div>
               ))
@@ -462,20 +481,15 @@ export default function AccountPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-zinc-300 leading-relaxed">
-                      {addr.addressLine}
-                    </p>
+                    <p className="text-xs text-zinc-300 leading-relaxed">{addr.addressLine}</p>
                     <p className="text-xs text-zinc-400 mt-1">
-                      {addr.city}, {addr.state} — <span className="font-mono font-bold text-amber-200">{addr.pincode}</span>
+                      {addr.city}, {addr.state} —{" "}
+                      <span className="font-mono font-bold text-amber-200">{addr.pincode}</span>
                     </p>
                     {addr.landmark && (
-                      <p className="text-[11px] text-zinc-500 mt-1">
-                        Landmark: {addr.landmark}
-                      </p>
+                      <p className="text-[11px] text-zinc-500 mt-1">Landmark: {addr.landmark}</p>
                     )}
-                    <p className="text-xs text-zinc-400 mt-2 font-mono">
-                      Phone: +91 {addr.phone}
-                    </p>
+                    <p className="text-xs text-zinc-400 mt-2 font-mono">Phone: +91 {addr.phone}</p>
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between">
@@ -521,7 +535,8 @@ export default function AccountPage() {
                 Devotee Profile Details
               </h4>
               <p className="text-xs text-zinc-400 mt-0.5">
-                Save your full name once so it is automatically included for your temple orders, delivery labels, and blessings.
+                Save your full name once so it is automatically included for your temple orders,
+                delivery labels, and blessings.
               </p>
             </div>
 

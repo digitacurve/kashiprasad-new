@@ -36,9 +36,12 @@ export interface PlacedOrder {
   orderNumber: string;
   date: string;
   total: number;
+  advancePaid?: number;
+  balanceDue?: number;
+  notes?: string;
   items: OrderItem[];
   shippingAddress: Address;
-  paymentMethod: "COD" | "UPI" | "Card";
+  paymentMethod: "COD" | "UPI" | "Card" | "COD (20% Advance)" | string;
   status: "Confirmed" | "In Sanctification" | "Dispatched" | "Delivered";
 }
 
@@ -279,6 +282,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           id: orderId,
           orderNumber: orderNum,
           total: orderData.total,
+          advancePaid: orderData.advancePaid,
+          balanceDue: orderData.balanceDue,
+          notes: orderData.notes,
           items: orderData.items,
           shippingAddress: orderData.shippingAddress,
           paymentMethod: orderData.paymentMethod,
