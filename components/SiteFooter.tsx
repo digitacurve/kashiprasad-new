@@ -1,4 +1,5 @@
 import Link from "next/link";
+import InternalLinkMatrix from "./InternalLinkMatrix";
 
 const groups = [
   [
@@ -42,7 +43,9 @@ const groups = [
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-amber-500/15 bg-[#050609] px-4 py-12 sm:px-8">
+    <>
+      <InternalLinkMatrix />
+      <footer className="border-t border-amber-500/15 bg-[#050609] px-4 py-12 sm:px-8">
       <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-1">
           <p className="font-serif text-xl font-bold tracking-[.18em] text-amber-100">
@@ -81,5 +84,6 @@ export default function SiteFooter() {
         <p className="text-zinc-400">Varanasi, Uttar Pradesh, Bharat</p>
       </div>
     </footer>
+    </>
   );
 }

@@ -29,7 +29,7 @@ const SAMPLE_CERTS: Record<string, CertificateRecord> = {
     consecrationLocation: "Kashi Vishwanath Jyotirlinga Sanctum & Assi Ghat, Varanasi",
     consecrationDate: "Shravan Somwar / Consecrated under Vedic Muhurta",
     sanctifiedMantra: "Om Hreem Namah & Maha Mrityunjaya Jaap (1008 Chants)",
-    acharya: "Acharya Vidyadhar Shastri (Kashi Vidwat Parishad)",
+    acharya: "Acharya Vikas Shastri (Kashi Vidwat Parishad)",
     labRef: "ISO 9001:2015 / Certified Density & X-Ray Verified",
     status: "Verified Authentic & Consecrated",
   },
@@ -90,7 +90,7 @@ export default function VerifyCertificatePage() {
           year: "numeric",
         }),
         sanctifiedMantra: "Maha Mrityunjaya & Vedic Pran Pratishtha Vidhi",
-        acharya: "Acharya Vidyadhar Shastri (Kashi Prasad)",
+        acharya: "Acharya Vikas Shastri (Kashi Prasad)",
         labRef: "100% Authentic Quality Assured Certificate",
         status: "Verified Authentic & Consecrated",
       });

@@ -60,6 +60,19 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://kashiprasad.in",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/icon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -68,11 +81,20 @@ export const metadata: Metadata = {
     title: "Kashi Prasad | Sacred Consecrated Malas, Ratnas & Divine Adornments",
     description:
       "Authentic consecrated 5-Mukhi Nepali Rudraksha, Certified Vedic Ratnas, and Kashi Vishwanath Puja Services sanctified along the holy ghats of Varanasi.",
+    images: [
+      {
+        url: "https://kashiprasad.in/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: "Kashi Prasad Sacred Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Kashi Prasad | Sacred Consecrated Malas & Vedic Ratnas",
     description: "Authentic consecrated spiritual adornments blessed in holy Varanasi.",
+    images: ["https://kashiprasad.in/logo.png"],
   },
   verification: {
     google: "googled6607382bfe7c86c",
@@ -97,10 +119,19 @@ const jsonLd = {
       "@type": "Organization",
       "@id": "https://kashiprasad.in/#organization",
       name: "Kashi Prasad",
-      alternateName: ["kashiprasad.in", "KashiPrasad", "Kashi Prasad Varanasi"],
+      alternateName: ["kashiprasad", "kashiprasad.in", "KashiPrasad", "Kashi Prasad Varanasi", "Kashi Prasad Store"],
       url: "https://kashiprasad.in",
-      logo: "https://kashiprasad.in/favicon.ico",
-      sameAs: ["https://www.instagram.com"],
+      logo: {
+        "@type": "ImageObject",
+        url: "https://kashiprasad.in/logo.png",
+        width: "1024",
+        height: "1024",
+      },
+      image: "https://kashiprasad.in/logo.png",
+      sameAs: [
+        "https://www.instagram.com",
+        "https://wa.me/918604971503"
+      ],
       contactPoint: {
         "@type": "ContactPoint",
         telephone: "+91-8604971503",
@@ -110,11 +141,44 @@ const jsonLd = {
       },
     },
     {
+      "@type": "Store",
+      "@id": "https://kashiprasad.in/#store",
+      name: "Kashi Prasad",
+      description: "Authentic consecrated Nepali Rudraksha, Vedic Gemstones (Ratnas), Japa Malas, and Kashi Puja Services from Varanasi.",
+      url: "https://kashiprasad.in",
+      telephone: "+91-8604971503",
+      priceRange: "₹₹",
+      image: "https://kashiprasad.in/logo.png",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Kashi Vishwanath Corridor, Dashashwamedh",
+        addressLocality: "Varanasi",
+        addressRegion: "Uttar Pradesh",
+        postalCode: "221001",
+        addressCountry: "IN",
+      },
+      geo: {
+        "@type": "GeoCoordinates",
+        latitude: "25.3176",
+        longitude: "82.9739",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+          opens: "06:00",
+          closes: "22:00",
+        },
+      ],
+      currenciesAccepted: "INR",
+      paymentAccepted: "UPI, Credit Card, Debit Card, Net Banking, Cash on Delivery",
+    },
+    {
       "@type": "WebSite",
       "@id": "https://kashiprasad.in/#website",
       url: "https://kashiprasad.in",
       name: "Kashi Prasad",
-      alternateName: "kashiprasad.in",
+      alternateName: ["kashiprasad", "kashiprasad.in", "KashiPrasad"],
       publisher: {
         "@id": "https://kashiprasad.in/#organization",
       },
@@ -123,6 +187,78 @@ const jsonLd = {
         target: "https://kashiprasad.in/?s={search_term_string}",
         "query-input": "required name=search_term_string",
       },
+    },
+    {
+      "@type": "Brand",
+      "@id": "https://kashiprasad.in/#brand",
+      name: "Kashi Prasad",
+      alternateName: ["kashiprasad", "kashiprasad.in"],
+      url: "https://kashiprasad.in",
+      logo: "https://kashiprasad.in/logo.png",
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://kashiprasad.in/#sitelinks",
+      name: "Kashi Prasad Sacred Collections & Services",
+      description: "Direct access to authentic consecrated spiritual products and temple services from Varanasi.",
+      itemListElement: [
+        {
+          "@type": "SiteNavigationElement",
+          position: 1,
+          name: "Authentic Nepali Rudraksha",
+          description: "100% lab-certified 1 to 14 Mukhi Nepali Rudraksha beads consecrated at Kashi Vishwanath Dham.",
+          url: "https://kashiprasad.in/rudraksha",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 2,
+          name: "Sacred Japa Malas (108 Beads)",
+          description: "Original consecrated Tulsi, Sphatik, Chandan, Kamal Gatta, and Rudraksha prayer malas.",
+          url: "https://kashiprasad.in/malas",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 3,
+          name: "Certified Vedic Ratnas (Gemstones)",
+          description: "Natural unheated Manikya (Ruby), Panna (Emerald), Pukhraj, and Neelam energized with Vedic mantras.",
+          url: "https://kashiprasad.in/ratnas",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 4,
+          name: "Vedic Puja Kits & Hawan Essentials",
+          description: "Complete authentic ritual kits for Rudrabhishek, Mahamrityunjaya, Griha Pravesh, and Navgraha puja.",
+          url: "https://kashiprasad.in/puja-kits",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 5,
+          name: "Vedic Puja Services in Kashi",
+          description: "Personalized Sankalp and live video rituals conducted by learned Varanasi Shastris with prasad dispatch.",
+          url: "https://kashiprasad.in/puja-services",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 6,
+          name: "Live Kashi Darshan & Ganga Aarti",
+          description: "24x7 live streaming of holy Dashashwamedh Ghat Ganga Aarti and Kashi Vishwanath Jyotirlinga sanctum.",
+          url: "https://kashiprasad.in/live-darshan",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 7,
+          name: "Verify Pran Pratishtha Certificate",
+          description: "Verify digital consecration certificates, priest details, and lab authenticity reports.",
+          url: "https://kashiprasad.in/verify-certificate",
+        },
+        {
+          "@type": "SiteNavigationElement",
+          position: 8,
+          name: "Track Order & Prasad Dispatch",
+          description: "Live tracking of holy Varanasi dispatch parcel, tracking ID, and delivery status.",
+          url: "https://kashiprasad.in/track-order",
+        },
+      ],
     },
   ],
 };

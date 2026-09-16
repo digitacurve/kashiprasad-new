@@ -12,7 +12,7 @@ const QUICK_INQUIRIES = [
     icon: "🔮",
     title: "Free Kundali & Gemstone Advisory",
     desc: "Find which Rudraksha or Ratna suits your birth chart",
-    message: "Hari Om Shastriji, Mujhe apni Kundali aur Rashi ke anusaar sahi Rudraksha / Ratna recommendation chahiye.",
+    message: "Hari Om Acharyaji, Mujhe apni Kundali aur Rashi ke anusaar sahi Rudraksha / Ratna recommendation chahiye.",
   },
   {
     id: "pratishtha",
@@ -75,13 +75,13 @@ export default function WhatsAppConsultation() {
               className="hidden sm:flex items-center gap-2 mr-3 px-3.5 py-1.5 rounded-full bg-[#0a0d14] border border-amber-500/30 text-xs text-amber-200 shadow-[0_4px_20px_rgba(0,0,0,0.7)] cursor-pointer hover:border-amber-400 transition animate-bounce"
             >
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Talk to Temple Shastri</span>
+              <span>Talk to Acharya Vikas</span>
             </div>
           )}
 
           <button
             onClick={() => setIsOpen(true)}
-            aria-label="Talk to Temple Shastri on WhatsApp"
+            aria-label="Talk to Acharya Vikas on WhatsApp"
             className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white shadow-[0_8px_25px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_30px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-emerald-300/40 cursor-pointer"
           >
             {/* Pulsing ring */}
@@ -120,12 +120,12 @@ export default function WhatsAppConsultation() {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h3 className="font-serif text-sm sm:text-base font-bold text-amber-200">
-                    Acharya Vidyadhar Shastri
+                    Acharya Vikas
                   </h3>
                   <ShieldCheck className="h-4 w-4 text-emerald-400" />
                 </div>
                 <p className="text-[11px] font-sans text-zinc-400">
-                  Senior Purohit · Kashi Vishwanath Parishad
+                  Senior Vedic Astrologer & Purohit · Kashi Prasad
                 </p>
                 <div className="flex items-center gap-1.5 mt-0.5 text-[10px] font-mono text-emerald-400">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -176,7 +176,7 @@ export default function WhatsAppConsultation() {
               type="text"
               value={customMsg}
               onChange={(e) => setCustomMsg(e.target.value)}
-              placeholder="Type your question for Shastriji..."
+              placeholder="Type your question for Acharya Vikas..."
               className="flex-1 bg-zinc-900/90 border border-zinc-700/60 rounded-xl px-3.5 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-amber-400 transition"
             />
             <button
