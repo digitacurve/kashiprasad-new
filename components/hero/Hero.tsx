@@ -349,26 +349,26 @@ export default function Hero() {
             </div>
 
             <div className={styles.utilityLinks}>
-              {/* Desktop Luxury Search Trigger */}
+              {/* Wide Desktop Search Capsule */}
               <button
                 type="button"
                 onClick={openSearch}
                 aria-label="Search Sacred Offerings"
-                className="hidden xl:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-800/90 bg-zinc-900/70 text-zinc-400 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer"
+                className="hidden 2xl:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-800/90 bg-zinc-900/70 text-zinc-400 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer flex-shrink-0"
               >
                 <Search className="w-3.5 h-3.5 text-amber-400" />
                 <span className="font-mono text-xs text-zinc-400">Search malas, ratnas...</span>
                 <kbd className="rounded bg-zinc-800 px-1.5 py-0.5 text-[9px] font-mono text-zinc-400 border border-zinc-700">⌘K</kbd>
               </button>
 
-              {/* Tablet/Desktop Compact Search Button */}
+              {/* Standard Desktop / Tablet Compact Search Button */}
               <button
                 type="button"
                 onClick={openSearch}
                 aria-label="Search"
-                className={`xl:hidden ${styles.utilityButton}`}
+                className={`hidden sm:inline-flex 2xl:hidden ${styles.utilityButton}`}
               >
-                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-300 hover:text-amber-300" />
+                <Search className="w-3.5 h-3.5 text-zinc-300 hover:text-amber-300" />
               </button>
 
               {/* Wishlist Button */}
@@ -379,7 +379,7 @@ export default function Hero() {
                 className={`relative ${styles.utilityButton}`}
               >
                 <Heart
-                  className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${
+                  className={`w-3.5 h-3.5 ${
                     totalWishlistItems > 0 ? "fill-amber-400 text-amber-400" : "text-zinc-300 hover:text-amber-300"
                   }`}
                 />
@@ -390,37 +390,37 @@ export default function Hero() {
                 )}
               </button>
 
-              {/* Desktop User Account Trigger */}
+              {/* User Account / Login Trigger */}
               {isLoggedIn ? (
                 <Link
                   href="/account"
-                  className="hidden sm:flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-200 hover:border-amber-400 transition"
+                  className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-gradient-to-r from-amber-500/20 to-amber-600/10 px-3 py-1.5 text-xs font-semibold text-amber-200 hover:border-amber-400 transition flex-shrink-0"
                 >
-                  <User className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-xs truncate max-w-[70px]">{user?.name.split(" ")[0]}</span>
+                  <User className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+                  <span className="text-xs font-serif whitespace-nowrap">{user?.name?.split(" ")[0] || "Account"}</span>
                 </Link>
               ) : (
                 <button
                   type="button"
                   onClick={() => openAuthModal()}
-                  className="hidden sm:flex items-center gap-1.5 rounded-full border border-zinc-700/80 bg-zinc-900/80 px-3 py-1.5 text-xs text-zinc-300 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer"
+                  className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-zinc-700/80 bg-zinc-900/80 px-3 py-1.5 text-xs font-serif text-zinc-300 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer flex-shrink-0"
                 >
-                  <User className="w-3.5 h-3.5 text-amber-400" />
+                  <User className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
                   <span>Login</span>
                 </button>
               )}
 
-              {/* Shopping Bag Button */}
+              {/* Shopping Bag CTA */}
               <button
                 type="button"
                 onClick={openCart}
                 className={styles.navCta}
                 aria-label="Shopping Bag"
               >
-                <ShoppingBag className="w-3.5 h-3.5 text-zinc-950 inline mr-0.5 sm:mr-1" />
-                <span className="hidden sm:inline">Bag</span>
+                <ShoppingBag className="w-3.5 h-3.5 text-amber-300 flex-shrink-0" />
+                <span className="hidden sm:inline font-mono text-xs">Bag</span>
                 {totalItems > 0 && (
-                  <span className="ml-1 sm:ml-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-zinc-950 px-1 text-[9px] sm:text-[10px] font-bold text-amber-400">
+                  <span className="ml-1 sm:ml-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-amber-400 px-1 text-[9px] sm:text-[10px] font-bold text-zinc-950 font-mono shadow-[0_0_8px_rgba(223,171,82,0.8)]">
                     {totalItems}
                   </span>
                 )}

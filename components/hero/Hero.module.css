@@ -65,9 +65,11 @@
   z-index: 40;
   width: 100%;
   max-width: 1440px;
-  padding: 1.25rem 2rem 0;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .navbarTopRow {
@@ -75,14 +77,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  flex-wrap: nowrap;
 }
 
 .desktopNavWrapper {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1;
-  max-width: 780px;
-  margin: 0 0.75rem;
+  margin: 0 0.5rem;
+  min-width: 0;
 }
 
 .mobileNavWrapper {
@@ -100,14 +105,15 @@
 
 .brandName {
   font-family: var(--font-cinzel), serif;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.16em;
   color: #f7eed7;
   text-transform: uppercase;
   background: linear-gradient(135deg, #ffffff 0%, #ecd09b 50%, #c89547 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  white-space: nowrap;
 }
 
 .brandSub {
@@ -139,52 +145,61 @@
 }
 
 .navCta {
-  padding: 0.5rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 1rem;
   border-radius: 9999px;
-  background: rgba(223, 171, 82, 0.12);
-  border: 1px solid rgba(223, 171, 82, 0.35);
+  background: linear-gradient(135deg, rgba(223, 171, 82, 0.22) 0%, rgba(223, 171, 82, 0.1) 100%);
+  border: 1px solid rgba(223, 171, 82, 0.4);
   color: #f7eed7;
   font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
   transition: all 0.25s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  cursor: pointer;
 }
 
 .navCta:hover {
-  background: rgba(223, 171, 82, 0.22);
-  border-color: rgba(223, 171, 82, 0.6);
-  box-shadow: 0 0 20px rgba(223, 171, 82, 0.2);
+  background: linear-gradient(135deg, rgba(223, 171, 82, 0.32) 0%, rgba(223, 171, 82, 0.18) 100%);
+  border-color: rgba(223, 171, 82, 0.7);
+  box-shadow: 0 0 16px rgba(223, 171, 82, 0.25);
 }
 
 .utilityLinks {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.5rem;
   flex-shrink: 0;
 }
 
 .utilityButton {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
+  display: inline-flex;
+  width: 2.15rem;
+  height: 2.15rem;
+  align-items: center;
+  justify-content: center;
   border: 1px solid rgba(223, 171, 82, 0.2);
   border-radius: 9999px;
   color: #ecd09b;
-  background: rgba(6, 8, 12, 0.55);
+  background: rgba(6, 8, 12, 0.6);
   text-decoration: none;
   transition:
     border-color 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    transform 0.15s ease;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 .utilityButton:hover {
-  border-color: rgba(223, 171, 82, 0.7);
-  background: rgba(223, 171, 82, 0.12);
+  border-color: rgba(223, 171, 82, 0.6);
+  background: rgba(223, 171, 82, 0.15);
+  color: #fed88b;
 }
 
 /* Headline overlay container - Centered bottom composition (Scaled from Mobile) */
