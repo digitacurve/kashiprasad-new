@@ -9,7 +9,7 @@ import WishlistDrawer from "@/components/WishlistDrawer";
 import SearchModal from "@/components/SearchModal";
 import AuthModal from "@/components/AuthModal";
 import WhatsAppConsultation from "@/components/WhatsAppConsultation";
-import WelcomeOfferModal from "@/components/WelcomeOfferModal";
+import AutoLoginPrompt from "@/components/AutoLoginPrompt";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -151,7 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <SearchModal />
                 <AuthModal />
                 <WhatsAppConsultation />
-                <WelcomeOfferModal />
+                <AutoLoginPrompt />
               </WishlistProvider>
             </CartProvider>
           </AuthProvider>

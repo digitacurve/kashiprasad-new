@@ -349,6 +349,29 @@ export default function Hero() {
             </div>
 
             <div className={styles.utilityLinks}>
+              {/* Desktop Luxury Search Trigger */}
+              <button
+                type="button"
+                onClick={openSearch}
+                aria-label="Search Sacred Offerings"
+                className="hidden xl:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-800/90 bg-zinc-900/70 text-zinc-400 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer"
+              >
+                <Search className="w-3.5 h-3.5 text-amber-400" />
+                <span className="font-mono text-xs text-zinc-400">Search malas, ratnas...</span>
+                <kbd className="rounded bg-zinc-800 px-1.5 py-0.5 text-[9px] font-mono text-zinc-400 border border-zinc-700">⌘K</kbd>
+              </button>
+
+              {/* Tablet/Desktop Compact Search Button */}
+              <button
+                type="button"
+                onClick={openSearch}
+                aria-label="Search"
+                className={`xl:hidden ${styles.utilityButton}`}
+              >
+                <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-300 hover:text-amber-300" />
+              </button>
+
+              {/* Wishlist Button */}
               <button
                 type="button"
                 onClick={() => setIsWishlistOpen(true)}
@@ -367,6 +390,27 @@ export default function Hero() {
                 )}
               </button>
 
+              {/* Desktop User Account Trigger */}
+              {isLoggedIn ? (
+                <Link
+                  href="/account"
+                  className="hidden sm:flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-200 hover:border-amber-400 transition"
+                >
+                  <User className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-xs truncate max-w-[70px]">{user?.name.split(" ")[0]}</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal()}
+                  className="hidden sm:flex items-center gap-1.5 rounded-full border border-zinc-700/80 bg-zinc-900/80 px-3 py-1.5 text-xs text-zinc-300 hover:border-amber-500/40 hover:text-amber-200 transition cursor-pointer"
+                >
+                  <User className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Login</span>
+                </button>
+              )}
+
+              {/* Shopping Bag Button */}
               <button
                 type="button"
                 onClick={openCart}

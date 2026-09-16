@@ -257,10 +257,23 @@ html.lenis body {
   animation: mobileGlint 7s ease-in-out infinite;
 }
 
-/* Touch-friendly active response for mobile luxury experience */
+/* Touch-friendly active response and 120Hz smooth scrolling for mobile */
 @media (hover: none) and (pointer: coarse) {
+  html, body {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
   .touch-luxury-card {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
+    will-change: transform;
   }
+}
+
+/* GPU hardware acceleration for smooth card rendering */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
