@@ -1,5 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
-import { createClient as createServerSupabaseClient } from "../supabase/server";
+import { createClient as createSupabaseClient, SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../supabase/types";
 import type {
   Product,
@@ -17,9 +16,11 @@ import type {
 
 type DbClient = SupabaseClient<Database>;
 
+let anonClient: DbClient | null = null;
+
 /**
  * Resolves a Supabase client: uses the injected client (e.g. for scripts or testing)
- * or creates a standard SSR server client for Next.js Server Components / Actions.
+ * or creates a standard public Supabase client for Next.js catalog queries.
  */
 async function getClient(client?: DbClient): Promise<DbClient | null> {
   if (client) return client;
@@ -27,9 +28,15 @@ async function getClient(client?: DbClient): Promise<DbClient | null> {
     return null;
   }
   try {
-    return await createServerSupabaseClient();
+    if (!anonClient) {
+      anonClient = createSupabaseClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+      );
+    }
+    return anonClient;
   } catch (err) {
-    console.warn("[catalog:getClient] Failed to initialize server Supabase client:", err);
+    console.warn("[catalog:getClient] Failed to initialize Supabase client:", err);
     return null;
   }
 }
