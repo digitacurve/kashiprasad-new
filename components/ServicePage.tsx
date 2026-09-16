@@ -319,7 +319,7 @@ export default function ServicePage() {
                     Your divine seva for{" "}
                     <strong className="text-amber-300">{activeService.name}</strong> (₹
                     {activeService.price.toLocaleString("en-IN")}) has been registered for{" "}
-                    <strong className="text-amber-300">{formData.devoteeName}</strong> ({formData.gotra || "Kashyap Gotra"}).
+                    <strong className="text-amber-300">{formData.devoteeName}</strong>.
                   </p>
                   <p className="mt-2 text-xs text-zinc-400">
                     Our Varanasi temple coordination team will contact you on{" "}
@@ -330,13 +330,13 @@ export default function ServicePage() {
                   <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
                     <a
                       href={`https://wa.me/918604971503?text=${encodeURIComponent(
-                        `Har Har Mahadev Acharyaji, Maine Kashi Vishwanath Pooja "${activeService.name}" book ki hai.\nDevotee: ${formData.devoteeName}\nGotra: ${formData.gotra || "Kashyap"}\nDate: ${formData.preferredDate}\nPhone: ${formData.phone}`
+                        `Har Har Mahadev Acharyaji, Maine Kashi Vishwanath Pooja "${activeService.name}" book ki hai.\nDevotee: ${formData.devoteeName}\nDate: ${formData.preferredDate}\nPhone: ${formData.phone}`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-mono font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-lg shadow-emerald-600/30 transition cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <span>💬 Share Gotra on WhatsApp</span>
+                      <span>💬 Confirm on WhatsApp</span>
                     </a>
                     <button
                       type="button"
@@ -362,30 +362,17 @@ export default function ServicePage() {
                   </div>
 
                   <form onSubmit={handleSubmitBooking} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                        Devotee Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Ramesh Kumar Sharma"
-                        value={formData.devoteeName}
-                        onChange={(e) => setFormData({ ...formData, devoteeName: e.target.value })}
-                        className="w-full rounded-xl border border-zinc-800 bg-zinc-900/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-                      />
-                    </div>
-
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                          Gotra (or Kashyap)
+                          Devotee Full Name *
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. Kashyap / Shandilya"
-                          value={formData.gotra}
-                          onChange={(e) => setFormData({ ...formData, gotra: e.target.value })}
+                          required
+                          placeholder="e.g. Ramesh Kumar Sharma"
+                          value={formData.devoteeName}
+                          onChange={(e) => setFormData({ ...formData, devoteeName: e.target.value })}
                           className="w-full rounded-xl border border-zinc-800 bg-zinc-900/80 px-3.5 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                         />
                       </div>

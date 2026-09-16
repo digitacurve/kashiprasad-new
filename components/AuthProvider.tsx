@@ -19,7 +19,6 @@ export interface UserProfile {
   phone: string;
   name: string;
   email?: string;
-  gotra?: string;
   addresses: Address[];
 }
 
@@ -109,7 +108,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const requestOtp = async (phone: string): Promise<{ success: boolean; otp: string }> => {
-    // Generate deterministic 6-digit OTP or standard demo OTP
     const otp = "123456";
     return { success: true, otp };
   };
@@ -124,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!existingProfile || existingProfile.phone !== cleanPhone) {
       existingProfile = {
-        id: `usr_${Date.now()}`,
+        id: `usr_${cleanPhone}`,
         phone: cleanPhone,
         name: name?.trim() || `Devotee ${cleanPhone.slice(-4)}`,
         addresses: [
@@ -146,6 +144,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     setUser(existingProfile);
+
+    // Sync customer profile to Supabase backend asynchronously
+    try {
+      fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: existingProfile.id,
+          phone: cleanPhone,
+          name: existingProfile.name,
+          email: existingProfile.email,
+        }),
+      }).catch((err) => console.warn("Background customer sync notice:", err));
+    } catch {
+      // safe ignore
+    }
+
     closeAuthModal();
     if (callbackOnSuccess) {
       callbackOnSuccess();
@@ -160,7 +175,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = (data: Partial<UserProfile>) => {
     if (!user) return;
-    setUser({ ...user, ...data });
+    const updated = { ...user, ...data };
+    setUser(updated);
+
+    // Sync to Supabase
+    try {
+      fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: updated.id,
+          phone: updated.phone,
+          name: updated.name,
+          email: updated.email,
+        }),
+      }).catch(() => {});
+    } catch {}
   };
 
   const saveAddress = (addrData: Omit<Address, "id">, id?: string) => {
@@ -202,18 +232,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const placeOrder = (
     orderData: Omit<PlacedOrder, "id" | "orderNumber" | "date" | "status">
   ): PlacedOrder => {
+    const orderId = `ord_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const orderNum = `KP-${Math.floor(100000 + Math.random() * 900000)}`;
+    const formattedDate = new Date().toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
     const newOrder: PlacedOrder = {
       ...orderData,
-      id: `ord_${Date.now()}`,
-      orderNumber: `KP-${Math.floor(100000 + Math.random() * 900000)}`,
-      date: new Date().toLocaleDateString("en-IN", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      }),
+      id: orderId,
+      orderNumber: orderNum,
+      date: formattedDate,
       status: "Confirmed",
     };
+
+    // Save locally for instant UI response
     setOrders((prev) => [newOrder, ...prev]);
+
+    // Asynchronously sync order to Supabase cloud database
+    try {
+      fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: orderId,
+          orderNumber: orderNum,
+          total: orderData.total,
+          items: orderData.items,
+          shippingAddress: orderData.shippingAddress,
+          paymentMethod: orderData.paymentMethod,
+          customerName: orderData.shippingAddress?.fullName || user?.name,
+          customerPhone: orderData.shippingAddress?.phone || user?.phone,
+          customerEmail: user?.email,
+          userId: user?.id || user?.phone,
+        }),
+      }).catch((err) => console.warn("Supabase order sync notice:", err));
+    } catch {
+      // Safe fallback
+    }
+
     return newOrder;
   };
 

@@ -35,14 +35,13 @@ export default function AccountPage() {
 
   // Profile form states
   const [profileName, setProfileName] = useState(user?.name || "");
-  const [gotra, setGotra] = useState(user?.gotra || "");
   const [profileSaved, setProfileSaved] = useState(false);
 
   if (!isLoggedIn || !user) {
     return (
       <CommerceShell
         title="Devotee Account"
-        copy="Sign in to view your sacred consecrated orders, saved delivery addresses, and personal Gotra sankalp details."
+        copy="Sign in to view your sacred consecrated orders, saved delivery addresses, and profile details."
       >
         <div className="mt-10 max-w-md mx-auto text-center rounded-2xl border border-amber-500/20 bg-zinc-950/80 p-8 shadow-2xl">
           <div className="flex h-16 w-16 mx-auto items-center justify-center rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 mb-4">
@@ -111,7 +110,7 @@ export default function AccountPage() {
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    updateProfile({ name: profileName, gotra });
+    updateProfile({ name: profileName });
     setProfileSaved(true);
     setTimeout(() => setProfileSaved(false), 3000);
   };
@@ -165,7 +164,7 @@ export default function AccountPage() {
               }`}
             >
               <User className="h-4 w-4" />
-              <span>Profile & Gotra</span>
+              <span>Profile Details</span>
             </button>
           </div>
 
@@ -511,7 +510,7 @@ export default function AccountPage() {
           </div>
         )}
 
-        {/* Tab 3: Profile & Gotra Settings */}
+        {/* Tab 3: Profile Settings */}
         {activeTab === "profile" && (
           <form
             onSubmit={handleSaveProfile}
@@ -519,10 +518,10 @@ export default function AccountPage() {
           >
             <div>
               <h4 className="font-serif text-lg font-bold text-zinc-100">
-                Devotee Profile & Sacred Sankalp
+                Devotee Profile Details
               </h4>
               <p className="text-xs text-zinc-400 mt-0.5">
-                Save your Name and Gotra once so they are automatically included for temple pooja sankalps and consecration certificates.
+                Save your full name once so it is automatically included for your temple orders, delivery labels, and blessings.
               </p>
             </div>
 
@@ -551,25 +550,12 @@ export default function AccountPage() {
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
                 />
               </div>
-
-              <div>
-                <label className="text-xs font-mono text-zinc-300 block mb-1">
-                  Vedic Gotra (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={gotra}
-                  onChange={(e) => setGotra(e.target.value)}
-                  placeholder="e.g. Kashyap, Bhardwaj, Vatsa, Gautam"
-                  className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
-                />
-              </div>
             </div>
 
             {profileSaved && (
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>Profile & Sankalp details saved successfully!</span>
+                <span>Profile details saved successfully!</span>
               </div>
             )}
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -26,6 +26,9 @@ import {
   ShoppingBag,
   Flame,
   ArrowRight,
+  Trash2,
+  Database,
+  Send,
 } from "lucide-react";
 import { useAuth, PlacedOrder } from "@/components/AuthProvider";
 import { allProducts } from "@/data/products";
@@ -120,8 +123,18 @@ const SAMPLE_ORDERS: PlacedOrder[] = [
   },
 ];
 
+interface CustomerRecord {
+  id: string;
+  name: string;
+  phone: string;
+  city: string;
+  ordersCount: number;
+  totalSpent: number;
+  lastActive?: string;
+}
+
 export default function AdminPage() {
-  const { orders: realOrders } = useAuth();
+  const { orders: localAuthOrders } = useAuth();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState<string | null>(null);
@@ -129,11 +142,19 @@ export default function AdminPage() {
   // Active Admin Tab
   const [activeTab, setActiveTab] = useState<"orders" | "customers" | "products">("orders");
 
-  // Orders State (combining real orders and persistent admin modifications)
+  // Orders State
   const [ordersList, setOrdersList] = useState<PlacedOrder[]>([]);
+  const [serverCustomers, setServerCustomers] = useState<CustomerRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [dbStatus, setDbStatus] = useState<"connected" | "syncing" | "local">("connected");
+
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Tracking inputs per order
+  const [trackingMap, setTrackingMap] = useState<Record<string, { trackingNumber: string; courierName: string }>>({});
 
   // Check existing session
   useEffect(() => {
@@ -143,31 +164,139 @@ export default function AdminPage() {
     }
   }, []);
 
-  // Initialize and merge orders
-  useEffect(() => {
-    const savedAdminOrders = localStorage.getItem("kashi-prasad-admin-orders");
-    if (savedAdminOrders) {
-      try {
-        setOrdersList(JSON.parse(savedAdminOrders));
-      } catch {
-        setOrdersList([...realOrders, ...SAMPLE_ORDERS]);
-      }
-    } else {
-      const merged = realOrders.length > 0 ? realOrders : SAMPLE_ORDERS;
-      setOrdersList(merged);
-    }
-  }, [realOrders]);
+  // Fetch Live Orders & Customers from Cloud API
+  const fetchLiveData = useCallback(async () => {
+    setIsLoading(true);
+    setDbStatus("syncing");
+    try {
+      // 1. Fetch orders from API
+      const ordRes = await fetch("/api/orders");
+      const ordData = await ordRes.json();
 
-  // Save changes to orders list
-  const updateOrderStatus = (
+      let liveOrders: PlacedOrder[] = [];
+      if (ordData.success && Array.isArray(ordData.orders) && ordData.orders.length > 0) {
+        liveOrders = ordData.orders;
+      }
+
+      // Merge with local storage orders if any unique ones exist
+      const savedAdminOrders = localStorage.getItem("kashi-prasad-admin-orders");
+      let localSaved: PlacedOrder[] = [];
+      if (savedAdminOrders) {
+        try {
+          localSaved = JSON.parse(savedAdminOrders);
+        } catch {}
+      }
+
+      const mergedMap = new Map<string, PlacedOrder>();
+      // Fallback sample orders first
+      SAMPLE_ORDERS.forEach((o) => mergedMap.set(o.id, o));
+      // Local Auth orders
+      localAuthOrders.forEach((o) => mergedMap.set(o.id, o));
+      // Local Saved Admin modifications
+      localSaved.forEach((o) => mergedMap.set(o.id, o));
+      // Cloud Supabase Orders take highest priority
+      liveOrders.forEach((o) => mergedMap.set(o.id, o));
+
+      const finalOrders = Array.from(mergedMap.values());
+      setOrdersList(finalOrders);
+
+      // 2. Fetch Customers from API
+      const custRes = await fetch("/api/customers");
+      const custData = await custRes.json();
+      if (custData.success && Array.isArray(custData.customers)) {
+        setServerCustomers(custData.customers);
+      }
+
+      setDbStatus(ordData.source === "supabase" ? "connected" : "local");
+    } catch (err) {
+      console.warn("API sync error, using local fallback:", err);
+      setDbStatus("local");
+      if (ordersList.length === 0) {
+        setOrdersList(localAuthOrders.length > 0 ? localAuthOrders : SAMPLE_ORDERS);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [localAuthOrders]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchLiveData();
+    }
+  }, [isAuthenticated, fetchLiveData]);
+
+  // Update Order Status (Cloud + Local)
+  const updateOrderStatus = async (
     orderId: string,
     newStatus: "Confirmed" | "In Sanctification" | "Dispatched" | "Delivered"
   ) => {
+    setIsUpdating(orderId);
+
+    // Optimistic UI update
     const updated = ordersList.map((ord) =>
       ord.id === orderId ? { ...ord, status: newStatus } : ord
     );
     setOrdersList(updated);
     localStorage.setItem("kashi-prasad-admin-orders", JSON.stringify(updated));
+
+    try {
+      await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+    } catch (err) {
+      console.error("Failed to sync status to Supabase:", err);
+    } finally {
+      setIsUpdating(null);
+    }
+  };
+
+  // Save Tracking Info
+  const saveTrackingInfo = async (orderId: string) => {
+    const info = trackingMap[orderId];
+    if (!info) return;
+
+    setIsUpdating(orderId);
+    try {
+      await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          trackingNumber: info.trackingNumber,
+          courierName: info.courierName,
+          status: "Dispatched",
+        }),
+      });
+
+      const updated = ordersList.map((ord) =>
+        ord.id === orderId ? { ...ord, status: "Dispatched" as const } : ord
+      );
+      setOrdersList(updated);
+      localStorage.setItem("kashi-prasad-admin-orders", JSON.stringify(updated));
+      alert(`Tracking info for order ${orderId} saved & marked Dispatched!`);
+    } catch (err) {
+      console.error("Error saving tracking:", err);
+    } finally {
+      setIsUpdating(null);
+    }
+  };
+
+  // Delete Order
+  const deleteOrder = async (orderId: string, orderNumber: string) => {
+    if (!confirm(`Are you sure you want to delete order ${orderNumber}?`)) return;
+
+    setIsUpdating(orderId);
+    try {
+      await fetch(`/api/orders/${orderId}`, { method: "DELETE" });
+    } catch (err) {
+      console.error("Cloud delete error:", err);
+    }
+
+    const updated = ordersList.filter((ord) => ord.id !== orderId);
+    setOrdersList(updated);
+    localStorage.setItem("kashi-prasad-admin-orders", JSON.stringify(updated));
+    setIsUpdating(null);
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -264,9 +393,22 @@ export default function AdminPage() {
     });
   }, [ordersList, statusFilter, searchQuery]);
 
-  // Derived Customers List from Orders
+  // Derived / Merged Customers List
   const customersList = useMemo(() => {
     const map = new Map<string, { name: string; phone: string; city: string; ordersCount: number; totalSpent: number }>();
+
+    // Add server-side customers first
+    serverCustomers.forEach((c) => {
+      map.set(c.phone, {
+        name: c.name,
+        phone: c.phone,
+        city: c.city || "Varanasi",
+        ordersCount: c.ordersCount || 0,
+        totalSpent: c.totalSpent || 0,
+      });
+    });
+
+    // Merge from current orders list
     ordersList.forEach((ord) => {
       const phone = ord.shippingAddress.phone;
       if (!map.has(phone)) {
@@ -279,12 +421,15 @@ export default function AdminPage() {
         });
       } else {
         const curr = map.get(phone)!;
-        curr.ordersCount += 1;
-        curr.totalSpent += ord.total;
+        if (!serverCustomers.length) {
+          curr.ordersCount += 1;
+          curr.totalSpent += ord.total;
+        }
       }
     });
+
     return Array.from(map.values());
-  }, [ordersList]);
+  }, [ordersList, serverCustomers]);
 
   // 1. PIN LOCK SCREEN
   if (!isAuthenticated) {
@@ -354,7 +499,7 @@ export default function AdminPage() {
 
   // 2. AUTHENTICATED ADMIN DASHBOARD
   return (
-    <div className="min-h-screen bg-[#05070a] text-zinc-100">
+    <div className="min-h-screen bg-[#05070a] text-zinc-100 pb-20">
       {/* Top Admin Navigation Bar */}
       <header className="sticky top-0 z-40 border-b border-amber-500/20 bg-[#080b10]/95 backdrop-blur-xl px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -369,18 +514,30 @@ export default function AdminPage() {
               KASHI PRASAD ADMIN
             </span>
           </Link>
-          <span className="hidden sm:inline-block rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-mono text-emerald-400">
-            ● Secure Live
-          </span>
+
+          {/* Live Supabase Connection Pill */}
+          <div className="hidden md:flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[11px] font-mono text-emerald-300">
+            <Database className="h-3 w-3 animate-pulse" />
+            <span>Supabase Live: aldoirrxsmkurhscnrtm</span>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={fetchLiveData}
+            disabled={isLoading}
+            className="flex items-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-xs font-mono text-amber-300 hover:border-amber-400 transition cursor-pointer"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+            <span className="hidden sm:inline">Refresh Data</span>
+          </button>
+
           <Link
             href="/"
             target="_blank"
             className="hidden sm:flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-amber-300 transition"
           >
-            <span>View Live Store</span>
+            <span>Live Store</span>
             <ExternalLink className="h-3 w-3" />
           </Link>
 
@@ -416,7 +573,7 @@ export default function AdminPage() {
             <p className="font-serif text-2xl sm:text-3xl font-bold text-zinc-100 font-mono">
               {totalOrders}
             </p>
-            <p className="text-[11px] text-zinc-500">Across all categories</p>
+            <p className="text-[11px] text-zinc-500">Synced with cloud database</p>
           </div>
 
           <div className="rounded-2xl border border-amber-500/20 bg-zinc-950/80 p-5 space-y-2">
@@ -432,7 +589,7 @@ export default function AdminPage() {
 
           <div className="rounded-2xl border border-amber-500/20 bg-zinc-950/80 p-5 space-y-2">
             <div className="flex items-center justify-between text-zinc-400 text-xs font-mono uppercase">
-              <span>Total Devotees</span>
+              <span>Devotee Profiles</span>
               <Users className="h-4 w-4 text-amber-400" />
             </div>
             <p className="font-serif text-2xl sm:text-3xl font-bold text-zinc-100 font-mono">
@@ -466,7 +623,7 @@ export default function AdminPage() {
               }`}
             >
               <Users className="h-4 w-4" />
-              <span>Customers ({customersList.length})</span>
+              <span>Devotees CRM ({customersList.length})</span>
             </button>
 
             <button
@@ -559,10 +716,15 @@ export default function AdminPage() {
                         <span className="text-[11px] font-mono uppercase text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                           {ord.paymentMethod}
                         </span>
+                        {isUpdating === ord.id && (
+                          <span className="text-[10px] font-mono text-amber-400 animate-pulse">
+                            Syncing...
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    {/* Status Changer Dropdown */}
+                    {/* Status Changer & Delete Dropdown */}
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-zinc-400 hidden sm:inline">Status:</span>
                       <select
@@ -584,6 +746,14 @@ export default function AdminPage() {
                         <option value="Dispatched">🚚 Dispatched</option>
                         <option value="Delivered">✓ Delivered</option>
                       </select>
+
+                      <button
+                        onClick={() => deleteOrder(ord.id, ord.orderNumber)}
+                        title="Delete Order"
+                        className="p-1.5 rounded-lg border border-zinc-800 text-zinc-500 hover:text-red-400 hover:border-red-500/40 transition cursor-pointer"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
                   </div>
 
@@ -616,13 +786,13 @@ export default function AdminPage() {
                       )}
                     </div>
 
-                    <div className="flex flex-col justify-between border-t md:border-t-0 md:border-l border-zinc-800 md:pl-4 pt-3 md:pt-0 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Phone className="h-3.5 w-3.5 text-amber-400" />
-                        <span className="font-mono text-zinc-200">+91 {ord.shippingAddress.phone}</span>
-                      </div>
+                    <div className="flex flex-col justify-between border-t md:border-t-0 md:border-l border-zinc-800 md:pl-4 pt-3 md:pt-0 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Phone className="h-3.5 w-3.5 text-amber-400" />
+                          <span className="font-mono text-zinc-200">+91 {ord.shippingAddress.phone}</span>
+                        </div>
 
-                      <div className="flex items-center gap-2">
                         <a
                           href={`https://wa.me/91${ord.shippingAddress.phone}?text=${encodeURIComponent(
                             `Namaste ${ord.shippingAddress.fullName}! Your Kashi Prasad sacred order (${ord.orderNumber}) is currently ${ord.status}. Sanctified at holy Varanasi ghats.`
@@ -634,6 +804,46 @@ export default function AdminPage() {
                           <MessageCircle className="h-3.5 w-3.5" />
                           <span>WhatsApp Update</span>
                         </a>
+                      </div>
+
+                      {/* Courier Tracking Dispatch Form */}
+                      <div className="pt-2 border-t border-zinc-800/80 flex flex-wrap items-center gap-2">
+                        <input
+                          type="text"
+                          placeholder="Courier (e.g. Bluedart/Delhivery)"
+                          value={trackingMap[ord.id]?.courierName || ""}
+                          onChange={(e) =>
+                            setTrackingMap({
+                              ...trackingMap,
+                              [ord.id]: {
+                                courierName: e.target.value,
+                                trackingNumber: trackingMap[ord.id]?.trackingNumber || "",
+                              },
+                            })
+                          }
+                          className="flex-1 min-w-[120px] rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-[11px] font-mono text-zinc-200 placeholder-zinc-600 focus:border-amber-400 focus:outline-none"
+                        />
+                        <input
+                          type="text"
+                          placeholder="AWB / Tracking #"
+                          value={trackingMap[ord.id]?.trackingNumber || ""}
+                          onChange={(e) =>
+                            setTrackingMap({
+                              ...trackingMap,
+                              [ord.id]: {
+                                courierName: trackingMap[ord.id]?.courierName || "",
+                                trackingNumber: e.target.value,
+                              },
+                            })
+                          }
+                          className="flex-1 min-w-[120px] rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-1 text-[11px] font-mono text-zinc-200 placeholder-zinc-600 focus:border-amber-400 focus:outline-none"
+                        />
+                        <button
+                          onClick={() => saveTrackingInfo(ord.id)}
+                          className="px-3 py-1 rounded-lg bg-amber-400 text-zinc-950 font-mono font-bold text-[11px] hover:brightness-110 transition cursor-pointer"
+                        >
+                          Save Tracking
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -682,13 +892,18 @@ export default function AdminPage() {
         {/* TAB 2: CUSTOMERS DIRECTORY */}
         {activeTab === "customers" && (
           <div className="rounded-2xl border border-amber-500/20 bg-zinc-950/90 overflow-hidden shadow-xl">
-            <div className="p-5 border-b border-zinc-800">
-              <h3 className="font-serif text-lg font-bold text-zinc-100">
-                Registered Devotees Directory
-              </h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
-                Customers who have placed orders or signed up with mobile authentication.
-              </p>
+            <div className="p-5 border-b border-zinc-800 flex items-center justify-between">
+              <div>
+                <h3 className="font-serif text-lg font-bold text-zinc-100">
+                  Registered Devotees Directory
+                </h3>
+                <p className="text-xs text-zinc-400 mt-0.5">
+                  Live synced devotee database from Supabase cloud & store checkout logins.
+                </p>
+              </div>
+              <span className="font-mono text-xs text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+                {customersList.length} Devotees
+              </span>
             </div>
 
             <div className="overflow-x-auto">
@@ -700,6 +915,7 @@ export default function AdminPage() {
                     <th className="px-5 py-3">Location</th>
                     <th className="px-5 py-3">Orders Placed</th>
                     <th className="px-5 py-3 text-right">Total Spent</th>
+                    <th className="px-5 py-3 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800/80">
@@ -717,6 +933,19 @@ export default function AdminPage() {
                       </td>
                       <td className="px-5 py-3.5 font-mono font-bold text-amber-300 text-right">
                         ₹{cust.totalSpent.toLocaleString("en-IN")}
+                      </td>
+                      <td className="px-5 py-3.5 text-right">
+                        <a
+                          href={`https://wa.me/91${cust.phone}?text=${encodeURIComponent(
+                            `Har Har Mahadev ${cust.name}! Kashi Prasad se hum aapko pranam bhejte hain.`
+                          )}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 hover:underline"
+                        >
+                          <MessageCircle className="h-3 w-3" />
+                          <span>Chat</span>
+                        </a>
                       </td>
                     </tr>
                   ))}

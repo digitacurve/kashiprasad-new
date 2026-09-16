@@ -381,7 +381,7 @@ export default function LiveDarshanPage() {
                   <strong className="text-amber-300">{donorName || "Devotee"}</strong> has been added to your Sacred Bag.
                 </p>
                 <p className="mt-2 text-xs text-zinc-400">
-                  Varanasi priests will chant your Gotra during the Aarti.
+                  Varanasi priests will offer your prayers and deepam with full Vedic rituals.
                 </p>
 
                 <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -397,7 +397,7 @@ export default function LiveDarshanPage() {
                   </button>
                   <a
                     href={`https://wa.me/918604971503?text=${encodeURIComponent(
-                      `Har Har Mahadev Acharyaji, Maine Aarti Deep Daan / Offering book ki hai.\nDevotee: ${donorName || "Devotee"}\nGotra: ${donorGotra || "Kashyap"}\nSeva: ${selectedOffering.name}\nPhone: ${donorPhone || "N/A"}`
+                      `Har Har Mahadev Acharyaji, Maine Aarti Deep Daan / Offering book ki hai.\nDevotee: ${donorName || "Devotee"}\nSeva: ${selectedOffering.name}\nPhone: ${donorPhone || "N/A"}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -418,7 +418,7 @@ export default function LiveDarshanPage() {
                     Perform Sacred Offering
                   </h3>
                   <p className="text-xs text-zinc-400 mt-1">
-                    Select your seva and enter your Gotra for live chanting in Varanasi.
+                    Select your seva and enter your name for live blessings in Varanasi.
                   </p>
                 </div>
 
@@ -432,11 +432,10 @@ export default function LiveDarshanPage() {
                         onClick={() => {
                           setSelectedOffering(opt);
                           setCustomAmount("");
-                          playLuxuryHaptic();
                         }}
-                        className={`rounded-xl border p-3 text-left transition cursor-pointer relative ${
-                          selectedOffering.id === opt.id && !customAmount
-                            ? "border-amber-400 bg-amber-500/15 shadow-[0_0_15px_rgba(251,191,36,0.15)]"
+                        className={`p-3 rounded-xl border text-left transition ${
+                          selectedOffering.id === opt.id
+                            ? "border-amber-400 bg-amber-500/10 shadow-[0_0_15px_rgba(245,158,11,0.15)]"
                             : "border-zinc-800 bg-zinc-900/40 hover:border-zinc-700"
                         }`}
                       >
@@ -452,7 +451,7 @@ export default function LiveDarshanPage() {
                   </div>
 
                   {/* Devotee Details */}
-                  <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     <div>
                       <label className="block text-[11px] font-mono uppercase text-zinc-400 mb-1">
                         Devotee Name *
@@ -468,29 +467,16 @@ export default function LiveDarshanPage() {
                     </div>
                     <div>
                       <label className="block text-[11px] font-mono uppercase text-zinc-400 mb-1">
-                        Gotra (or Kashyap)
+                        WhatsApp Mobile Number
                       </label>
                       <input
-                        type="text"
-                        placeholder="e.g. Bharadwaj / Kashyap"
-                        value={donorGotra}
-                        onChange={(e) => setDonorGotra(e.target.value)}
+                        type="tel"
+                        placeholder="e.g. 9876543210 (For Aarti confirmation)"
+                        value={donorPhone}
+                        onChange={(e) => setDonorPhone(e.target.value)}
                         className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none font-sans"
                       />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-mono uppercase text-zinc-400 mb-1">
-                      WhatsApp Mobile Number
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="e.g. 9876543210 (For Aarti confirmation)"
-                      value={donorPhone}
-                      onChange={(e) => setDonorPhone(e.target.value)}
-                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none font-sans"
-                    />
                   </div>
 
                   {/* Submit CTA */}
