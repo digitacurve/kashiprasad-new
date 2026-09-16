@@ -257,6 +257,14 @@ html.lenis body {
   animation: mobileGlint 7s ease-in-out infinite;
 }
 
+/* Hide Firebase / Google Invisible reCAPTCHA Badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
 /* Touch-friendly active response and 120Hz smooth scrolling for mobile */
 @media (hover: none) and (pointer: coarse) {
   html, body {

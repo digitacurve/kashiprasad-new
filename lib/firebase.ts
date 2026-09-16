@@ -99,9 +99,21 @@ export async function sendFirebaseOtp(
     return { success: true, confirmationResult };
   } catch (err: any) {
     console.error("Firebase send OTP error:", err);
+    let errorMessage = err.message || "Failed to send SMS OTP";
+    
+    if (err.code === "auth/billing-not-enabled" || String(err.message).includes("billing-not-enabled")) {
+      errorMessage = "SMS requires Blaze Plan enabled in Firebase Console (or add this number under 'Phone numbers for testing').";
+    } else if (err.code === "auth/too-many-requests" || String(err.message).includes("too-many-requests")) {
+      errorMessage = "Too many OTP requests. Please wait a minute and try again.";
+    } else if (err.code === "auth/invalid-phone-number") {
+      errorMessage = "Invalid phone number format. Please enter a valid 10-digit number.";
+    } else if (err.code === "auth/quota-exceeded") {
+      errorMessage = "SMS quota exceeded for today. Please try again later.";
+    }
+
     return {
       success: false,
-      error: err.message || "Failed to send SMS OTP",
+      error: errorMessage,
     };
   }
 }
