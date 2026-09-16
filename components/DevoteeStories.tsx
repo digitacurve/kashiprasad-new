@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Star, CheckCircle2, ShieldCheck, Sparkles, MapPin, Heart, MessageSquarePlus, X } from "lucide-react";
 import Link from "next/link";
+import { playLuxuryHaptic } from "@/lib/audio";
 
 interface Review {
   id: string;
@@ -140,11 +141,13 @@ export default function DevoteeStories() {
   );
 
   const toggleHelpful = (id: string) => {
+    playLuxuryHaptic();
     setHelpfulLiked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    playLuxuryHaptic();
     setSubmittedStory(true);
     setTimeout(() => {
       setIsWriteModalOpen(false);
@@ -156,35 +159,35 @@ export default function DevoteeStories() {
   return (
     <div className="space-y-8">
       {/* Top Trust Summary Banner */}
-      <div className="grid grid-cols-1 gap-4 rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-950/30 via-zinc-900/60 to-zinc-950/80 p-5 sm:p-6 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.6)] md:grid-cols-3 md:items-center">
+      <div className="grid grid-cols-1 gap-4 rounded-2xl border border-amber-500/20 bg-gradient-to-r from-amber-950/30 via-zinc-900/60 to-zinc-950/80 p-4 sm:p-6 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.6)] md:grid-cols-3 md:items-center">
         {/* Rating Score */}
-        <div className="flex items-center gap-4 border-b border-amber-500/10 pb-4 md:border-b-0 md:border-r md:pb-0 md:pr-6">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-amber-400/40 bg-gradient-to-br from-amber-400/20 to-amber-600/10 shadow-[0_0_20px_rgba(223,171,82,0.2)]">
-            <span className="font-serif text-2xl font-bold text-amber-300">4.95</span>
+        <div className="flex items-center gap-3 sm:gap-4 border-b border-amber-500/10 pb-4 md:border-b-0 md:border-r md:pb-0 md:pr-6">
+          <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-xl sm:rounded-2xl border border-amber-400/40 bg-gradient-to-br from-amber-400/20 to-amber-600/10 shadow-[0_0_20px_rgba(223,171,82,0.2)]">
+            <span className="font-serif text-xl sm:text-2xl font-bold text-amber-300">4.95</span>
           </div>
           <div>
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(223,171,82,0.8)]" />
+                <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(223,171,82,0.8)]" />
               ))}
             </div>
-            <p className="mt-1 text-xs font-medium text-zinc-300">
+            <p className="mt-1 text-[11px] sm:text-xs font-medium text-zinc-300">
               Based on <span className="font-semibold text-amber-300">2,840+ verified</span> devotee experiences
             </p>
           </div>
         </div>
 
         {/* Spiritual Guarantees */}
-        <div className="flex flex-wrap items-center gap-2.5 text-xs text-zinc-300 border-b border-amber-500/10 pb-4 md:border-b-0 md:border-r md:pb-0 md:px-4">
-          <div className="flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 font-mono text-[11px] text-amber-300">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-300 border-b border-amber-500/10 pb-4 md:border-b-0 md:border-r md:pb-0 md:px-4">
+          <div className="flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-2.5 py-0.5 sm:px-3 sm:py-1 font-mono text-[10px] sm:text-[11px] text-amber-300">
             <Sparkles className="h-3 w-3 text-amber-400" />
             100% Ganga Consecrated
           </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 font-mono text-[11px] text-zinc-300">
+          <div className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-2.5 py-0.5 sm:px-3 sm:py-1 font-mono text-[10px] sm:text-[11px] text-zinc-300">
             <ShieldCheck className="h-3 w-3 text-emerald-400" />
             Govt Lab Tested
           </div>
-          <div className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-3 py-1 font-mono text-[11px] text-zinc-300">
+          <div className="flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-800/60 px-2.5 py-0.5 sm:px-3 sm:py-1 font-mono text-[10px] sm:text-[11px] text-zinc-300">
             <MapPin className="h-3 w-3 text-amber-400" />
             Varanasi Direct
           </div>
@@ -193,8 +196,11 @@ export default function DevoteeStories() {
         {/* CTA Button to write story */}
         <div className="flex justify-start md:justify-end">
           <button
-            onClick={() => setIsWriteModalOpen(true)}
-            className="group inline-flex items-center gap-2 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-amber-400/20 to-amber-500/15 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-amber-200 shadow-[0_0_15px_rgba(223,171,82,0.15)] transition-all duration-300 hover:border-amber-400 hover:bg-amber-400/30 hover:text-white hover:shadow-[0_0_25px_rgba(223,171,82,0.3)] active:scale-95"
+            onClick={() => {
+              playLuxuryHaptic();
+              setIsWriteModalOpen(true);
+            }}
+            className="group inline-flex items-center gap-2 rounded-xl border border-amber-500/40 bg-gradient-to-r from-amber-500/15 via-amber-400/20 to-amber-500/15 px-3.5 py-2 sm:px-4 sm:py-2.5 text-xs font-semibold uppercase tracking-wider text-amber-200 shadow-[0_0_15px_rgba(223,171,82,0.15)] transition-all duration-300 hover:border-amber-400 hover:bg-amber-400/30 hover:text-white hover:shadow-[0_0_25px_rgba(223,171,82,0.3)] active:scale-95 cursor-pointer"
           >
             <MessageSquarePlus className="h-4 w-4 text-amber-400 transition-transform group-hover:scale-110" />
             Share Your Experience
@@ -209,8 +215,11 @@ export default function DevoteeStories() {
           return (
             <button
               key={tab.id}
-              onClick={() => setSelectedCategory(tab.id)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-mono tracking-wider transition-all duration-300 ${
+              onClick={() => {
+                playLuxuryHaptic();
+                setSelectedCategory(tab.id);
+              }}
+              className={`shrink-0 rounded-full px-3.5 py-1 sm:px-4 sm:py-1.5 text-[11px] sm:text-xs font-mono tracking-wider transition-all duration-300 cursor-pointer ${
                 isActive
                   ? "border border-amber-400 bg-amber-400/20 text-amber-200 shadow-[0_0_15px_rgba(223,171,82,0.25)]"
                   : "border border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
@@ -222,92 +231,92 @@ export default function DevoteeStories() {
         })}
       </div>
 
-      {/* Reviews Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Reviews Grid (2 columns on mobile) */}
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
         {filteredReviews.map((review) => {
           const isLiked = helpfulLiked[review.id];
           return (
             <article
               key={review.id}
-              className="group relative flex flex-col justify-between rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900/70 via-zinc-950/80 to-[#090a0d] p-5 sm:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/40 hover:shadow-[0_16px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(223,171,82,0.1)]"
+              className="group relative flex flex-col justify-between rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-gradient-to-b from-zinc-900/70 via-zinc-950/80 to-[#090a0d] p-3 sm:p-5 lg:p-6 transition-all duration-300 hover:-translate-y-1 hover:border-amber-500/40 hover:shadow-[0_16px_35px_rgba(0,0,0,0.8),0_0_25px_rgba(223,171,82,0.1)] active:scale-[0.98] active:border-amber-400/60 touch-luxury-card select-none"
             >
               {/* Subtle gold top border glow */}
-              <div className="pointer-events-none absolute -top-px left-8 right-8 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute -top-px left-4 right-4 sm:left-8 sm:right-8 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-              <div className="space-y-4">
+              <div className="space-y-2.5 sm:space-y-4">
                 {/* Header with Avatar, Name, and Verified Badge */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-amber-500/30 bg-gradient-to-br from-amber-500/20 via-zinc-800 to-zinc-900 font-mono text-xs font-bold text-amber-300 shadow-[0_0_10px_rgba(223,171,82,0.15)]">
+                <div className="flex items-start justify-between gap-1.5 sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div className="flex h-8 w-8 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-full border border-amber-500/30 bg-gradient-to-br from-amber-500/20 via-zinc-800 to-zinc-900 font-mono text-[10px] sm:text-xs font-bold text-amber-300 shadow-[0_0_10px_rgba(223,171,82,0.15)]">
                       {review.avatarText}
                     </div>
-                    <div>
-                      <h4 className="font-serif text-sm font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-serif text-xs sm:text-sm font-semibold text-zinc-100 group-hover:text-amber-200 transition-colors truncate">
                         {review.name}
                       </h4>
-                      <p className="flex items-center gap-1 text-[11px] text-zinc-400">
-                        <MapPin className="h-3 w-3 text-amber-400/80" />
-                        {review.city}
+                      <p className="flex items-center gap-0.5 sm:gap-1 text-[9px] sm:text-[11px] text-zinc-400 truncate">
+                        <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-amber-400/80 shrink-0" />
+                        <span className="truncate">{review.city}</span>
                       </p>
                     </div>
                   </div>
 
-                  <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-mono text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Verified
+                  <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 sm:px-2 sm:py-0.5 text-[8px] sm:text-[10px] font-mono text-emerald-400 shrink-0">
+                    <CheckCircle2 className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                    <span className="hidden sm:inline">Verified</span>
                   </span>
                 </div>
 
                 {/* Rating & Consecration Pill */}
-                <div className="space-y-1.5">
+                <div className="space-y-1 sm:space-y-1.5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-0.5">
                       {[...Array(review.rating)].map((_, i) => (
                         <Star
                           key={i}
-                          className="h-3.5 w-3.5 fill-amber-400 text-amber-400 drop-shadow-[0_0_4px_rgba(223,171,82,0.6)]"
+                          className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 fill-amber-400 text-amber-400 drop-shadow-[0_0_4px_rgba(223,171,82,0.6)]"
                         />
                       ))}
                     </div>
-                    <span className="text-[11px] font-mono text-zinc-500">{review.date}</span>
+                    <span className="text-[9px] sm:text-[11px] font-mono text-zinc-500">{review.date}</span>
                   </div>
 
-                  <div className="inline-flex items-center gap-1.5 rounded-lg border border-amber-500/15 bg-amber-500/5 px-2.5 py-1 text-[10.5px] font-mono text-amber-300/90">
-                    <Sparkles className="h-2.5 w-2.5 text-amber-400 shrink-0" />
+                  <div className="inline-flex items-center gap-1 sm:gap-1.5 rounded-md sm:rounded-lg border border-amber-500/15 bg-amber-500/5 px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[8.5px] sm:text-[10.5px] font-mono text-amber-300/90 max-w-full">
+                    <Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-amber-400 shrink-0" />
                     <span className="truncate">{review.consecrationDetails}</span>
                   </div>
                 </div>
 
                 {/* Review Content */}
-                <div className="space-y-2">
-                  <h5 className="font-medium text-xs sm:text-sm text-zinc-200 leading-snug">
-                    "{review.reviewTitle}"
+                <div className="space-y-1 sm:space-y-2">
+                  <h5 className="font-medium text-[11px] sm:text-sm text-zinc-200 leading-snug line-clamp-2">
+                    &ldquo;{review.reviewTitle}&rdquo;
                   </h5>
-                  <p className="text-xs leading-relaxed text-zinc-400 font-sans">
+                  <p className="text-[10px] sm:text-xs leading-relaxed text-zinc-400 font-sans line-clamp-3 sm:line-clamp-none">
                     {review.reviewText}
                   </p>
                 </div>
               </div>
 
               {/* Bottom Footer with Product Link & Helpful Button */}
-              <div className="mt-5 pt-3.5 border-t border-zinc-800/80 flex items-center justify-between gap-2 text-xs">
+              <div className="mt-3 sm:mt-5 pt-2 sm:pt-3.5 border-t border-zinc-800/80 flex items-center justify-between gap-1 sm:gap-2 text-[10px] sm:text-xs">
                 <Link
                   href={review.productSlug}
-                  className="truncate text-[11px] font-medium text-amber-400/90 hover:text-amber-300 hover:underline"
+                  className="truncate text-[9px] sm:text-[11px] font-medium text-amber-400/90 hover:text-amber-300 hover:underline"
                 >
                   ✦ {review.productName}
                 </Link>
 
                 <button
                   onClick={() => toggleHelpful(review.id)}
-                  className={`flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-mono transition-all ${
+                  className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 sm:px-2 sm:py-1 text-[9px] sm:text-[11px] font-mono transition-all shrink-0 cursor-pointer ${
                     isLiked
                       ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
                       : "text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300"
                   }`}
                   title="Mark as helpful"
                 >
-                  <Heart className={`h-3 w-3 ${isLiked ? "fill-rose-400" : ""}`} />
+                  <Heart className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isLiked ? "fill-rose-400" : ""}`} />
                   <span>{review.helpfulCount + (isLiked ? 1 : 0)}</span>
                 </button>
               </div>

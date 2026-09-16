@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, MapPin, ShieldCheck, Eye, X, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import { playLuxuryHaptic } from "@/lib/audio";
 
 interface VisualItem {
   id: string;
@@ -95,7 +96,52 @@ function ArchivePhotoCard({
     setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
   }, []);
 
-  const handleMouseEnter = useCallback(() => setIsHovered(true), []);
+  const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!cardRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
+
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 6;
+
+    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+    setIsHovered(true);
+    playLuxuryHaptic();
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    if (!cardRef.current || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    const percentX = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    const percentY = Math.max(0, Math.min(100, (y / rect.height) * 100));
+
+    const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+    const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 6;
+
+    setMousePos({ x: percentX, y: percentY, rotateX, rotateY });
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    setTimeout(() => {
+      setIsHovered(false);
+      setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
+    }, 450);
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+    playLuxuryHaptic();
+  }, []);
+
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
     setMousePos({ x: 50, y: 50, rotateX: 0, rotateY: 0 });
@@ -107,12 +153,21 @@ function ArchivePhotoCard({
       onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={() => onOpenModal(item)}
-      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-3.5 sm:p-4 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_20px_45px_rgba(0,0,0,0.9),0_0_30px_rgba(223,171,82,0.2)] cursor-pointer select-none [perspective:1000px]"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
+      onClick={() => {
+        playLuxuryHaptic();
+        onOpenModal(item);
+      }}
+      className="group relative flex h-full flex-col justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-2.5 sm:p-4 transition-all duration-500 ease-out hover:-translate-y-1 hover:border-amber-500/50 hover:bg-zinc-900/90 hover:shadow-[0_20px_45px_rgba(0,0,0,0.9),0_0_30px_rgba(223,171,82,0.2)] active:scale-[0.98] active:border-amber-400/60 touch-luxury-card cursor-pointer select-none [perspective:1000px]"
     >
       {/* Dynamic Cursor Spotlight */}
       <div
-        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className={`pointer-events-none absolute -inset-px rounded-xl sm:rounded-2xl transition-opacity duration-300 ${
+          isHovered ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        }`}
         style={{
           background: `radial-gradient(280px circle at ${mousePos.x}% ${mousePos.y}%, rgba(255, 235, 180, 0.22), rgba(223, 171, 82, 0.12) 45%, transparent 70%)`,
         }}
@@ -121,7 +176,7 @@ function ArchivePhotoCard({
 
       {/* Top Media Display */}
       <div
-        className="relative z-10 aspect-[4/3] w-full overflow-hidden rounded-xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900 to-zinc-950 transition-transform duration-500"
+        className="relative z-10 aspect-[4/3] w-full overflow-hidden rounded-lg sm:rounded-xl border border-zinc-800/60 bg-gradient-to-br from-zinc-900 to-zinc-950 transition-transform duration-500"
         style={{
           transform: isHovered
             ? `rotateX(${mousePos.rotateX}deg) rotateY(${mousePos.rotateY}deg) scale3d(1.02, 1.02, 1.02)`
@@ -133,7 +188,7 @@ function ArchivePhotoCard({
           src={item.image}
           alt={item.title}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover transition-all duration-700 group-hover:scale-108 group-hover:brightness-105"
         />
 
@@ -141,37 +196,37 @@ function ArchivePhotoCard({
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-transparent" />
 
         {/* Top Tag Pill */}
-        <div className="absolute left-3 top-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-black/70 px-2.5 py-1 text-[10px] font-mono font-medium uppercase tracking-wider text-amber-300 backdrop-blur-md shadow-[0_0_12px_rgba(223,171,82,0.2)]">
-            <Sparkles className="h-2.5 w-2.5 text-amber-400" />
-            {item.tag}
+        <div className="absolute left-2 top-2 sm:left-3 sm:top-3">
+          <span className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-amber-500/30 bg-black/75 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8.5px] sm:text-[10px] font-mono font-medium uppercase tracking-wider text-amber-300 backdrop-blur-md shadow-[0_0_12px_rgba(223,171,82,0.2)]">
+            <Sparkles className="h-2 w-2 sm:h-2.5 sm:w-2.5 text-amber-400" />
+            <span className="truncate">{item.tag}</span>
           </span>
         </div>
 
         {/* Hover View Button Icon */}
-        <div className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
-          <Eye className="h-4 w-4 text-amber-300" />
+        <div className="absolute right-2 top-2 sm:right-3 sm:top-3 flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white opacity-0 backdrop-blur-md transition-all duration-300 group-hover:opacity-100 group-hover:scale-110">
+          <Eye className="h-3 w-3 sm:h-4 sm:w-4 text-amber-300" />
         </div>
 
         {/* Bottom Location Overlay */}
-        <div className="absolute bottom-3 left-3 right-3 flex items-center gap-1.5 text-[11px] font-mono text-zinc-300">
-          <MapPin className="h-3 w-3 text-amber-400 shrink-0" />
+        <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 flex items-center gap-1 sm:gap-1.5 text-[8.5px] sm:text-[11px] font-mono text-zinc-300">
+          <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-amber-400 shrink-0" />
           <span className="truncate">{item.location}</span>
         </div>
       </div>
 
       {/* Card Info */}
-      <div className="relative z-10 mt-3.5 space-y-1.5">
-        <h4 className="font-serif text-base font-bold text-zinc-100 group-hover:text-amber-200 transition-colors">
+      <div className="relative z-10 mt-2.5 sm:mt-3.5 space-y-1 sm:space-y-1.5">
+        <h4 className="font-serif text-xs sm:text-base font-bold text-zinc-100 group-hover:text-amber-200 transition-colors line-clamp-1">
           {item.title}
         </h4>
-        <p className="text-xs leading-relaxed text-zinc-400 font-sans line-clamp-2">
+        <p className="text-[10px] sm:text-xs leading-relaxed text-zinc-400 font-sans line-clamp-2">
           {item.shortDesc}
         </p>
 
-        <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-amber-400/90 group-hover:text-amber-300">
-          <span>View Archive Details</span>
-          <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <div className="pt-1.5 sm:pt-2 flex items-center justify-between text-[9px] sm:text-[11px] font-mono text-amber-400/90 group-hover:text-amber-300">
+          <span>View Archive</span>
+          <ArrowUpRight className="h-3 w-3 sm:h-3.5 sm:w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
       </div>
     </article>
@@ -183,8 +238,8 @@ export default function VisualArchive() {
 
   return (
     <div className="space-y-6">
-      {/* 4 Rich Archive Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 4 Rich Archive Cards (2 columns on mobile) */}
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-2 lg:grid-cols-4 sm:gap-4">
         {visualItems.map((item) => (
           <ArchivePhotoCard
             key={item.id}
