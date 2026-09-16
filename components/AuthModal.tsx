@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { X, ShieldCheck, Sparkles, Phone, Lock, ArrowRight, CheckCircle2, User, RefreshCw } from "lucide-react";
+import { X, ShieldCheck, Sparkles, Phone, Lock, ArrowRight, CheckCircle2, User, RefreshCw, MessageSquare } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
+import { isFirebaseConfigured } from "@/lib/firebase";
 
 export default function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, requestOtp, verifyOtp } = useAuth();
@@ -56,13 +57,17 @@ export default function AuthModal() {
     setLoading(true);
     setError(null);
     try {
-      await requestOtp(cleanPhone);
-      setStep("otp");
-      setTimer(30);
-      setCanResend(false);
-      setTimeout(() => otpInputRef.current?.focus(), 50);
+      const res = await requestOtp(cleanPhone);
+      if (res && res.error) {
+        setError(res.error);
+      } else {
+        setStep("otp");
+        setTimer(30);
+        setCanResend(false);
+        setTimeout(() => otpInputRef.current?.focus(), 50);
+      }
     } catch {
-      setError("Failed to send OTP. Please try again.");
+      setError("Failed to send OTP. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -80,7 +85,11 @@ export default function AuthModal() {
     try {
       const success = await verifyOtp(phone, otp, name);
       if (!success) {
-        setError("Invalid OTP. Use demo code: 123456");
+        setError(
+          isFirebaseConfigured
+            ? "Incorrect SMS OTP. Please check the code received on your phone."
+            : "Invalid OTP. Use demo code: 123456"
+        );
       }
     } catch {
       setError("Verification failed. Please try again.");
@@ -206,17 +215,22 @@ export default function AuthModal() {
                     </button>
                   </div>
                   <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
-                    Enter the 6-digit code sent to +91 {phone}
+                    Enter the 6-digit code sent via SMS to <strong className="text-zinc-200 font-mono">+91 {phone}</strong>
                   </p>
                 </div>
 
-                {/* Demo OTP Helper Tag */}
-                <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200 flex items-center justify-between">
-                  <span className="font-mono text-[11px]">✦ Demo Verification Code:</span>
-                  <span className="font-mono font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40">
-                    123456
-                  </span>
-                </div>
+                {/* Demo OTP Helper Tag (Only shown if Firebase is not active) */}
+                {!isFirebaseConfigured && (
+                  <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200 flex items-center justify-between">
+                    <span className="font-mono text-[11px]">✦ Demo Verification Code:</span>
+                    <span className="font-mono font-bold text-amber-300 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/40">
+                      123456
+                    </span>
+                  </div>
+                )}
+
+                {/* Invisible reCAPTCHA container */}
+                <div id="recaptcha-container"></div>
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-mono text-zinc-300 block">

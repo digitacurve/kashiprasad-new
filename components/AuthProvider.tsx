@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import { isFirebaseConfigured, sendFirebaseOtp, verifyFirebaseOtp } from "@/lib/firebase";
 
 export interface Address {
   id: string;
@@ -48,7 +49,7 @@ interface AuthContextValue {
   orders: PlacedOrder[];
   openAuthModal: (onSuccessCallback?: () => void) => void;
   closeAuthModal: () => void;
-  requestOtp: (phone: string) => Promise<{ success: boolean; otp: string }>;
+  requestOtp: (phone: string) => Promise<{ success: boolean; otp?: string; error?: string }>;
   verifyOtp: (phone: string, otp: string, name?: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (data: Partial<UserProfile>) => void;
@@ -107,14 +108,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCallbackOnSuccess(null);
   };
 
-  const requestOtp = async (phone: string): Promise<{ success: boolean; otp: string }> => {
+  const requestOtp = async (
+    phone: string
+  ): Promise<{ success: boolean; otp?: string; error?: string }> => {
+    if (isFirebaseConfigured) {
+      const res = await sendFirebaseOtp(phone, "recaptcha-container");
+      if (!res.success) {
+        return { success: false, error: res.error || "Failed to send SMS OTP" };
+      }
+      return { success: true };
+    }
+
+    // Demo fallback when Firebase keys are not in .env.local
     const otp = "123456";
     return { success: true, otp };
   };
 
   const verifyOtp = async (phone: string, otp: string, name?: string): Promise<boolean> => {
-    if (otp !== "123456" && otp.length !== 6) {
-      return false;
+    if (isFirebaseConfigured) {
+      const res = await verifyFirebaseOtp(otp);
+      if (!res.success) {
+        return false;
+      }
+    } else {
+      if (otp !== "123456" && otp.length !== 6) {
+        return false;
+      }
     }
 
     const cleanPhone = phone.replace(/\D/g, "");
