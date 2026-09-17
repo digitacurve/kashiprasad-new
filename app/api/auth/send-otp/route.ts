@@ -34,13 +34,15 @@ export async function POST(req: Request) {
       expiresAt: Date.now() + 10 * 60 * 1000, // 10 minutes
     });
 
-    // 2. Also trigger Supabase signInWithOtp
+    // 2. Also trigger Supabase signInWithOtp if configured
     try {
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      await supabase.auth.signInWithOtp({
-        email: cleanEmail,
-        options: { shouldCreateUser: true },
-      });
+      if (SUPABASE_ANON_KEY) {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        await supabase.auth.signInWithOtp({
+          email: cleanEmail,
+          options: { shouldCreateUser: true },
+        });
+      }
     } catch (e) {
       console.warn("Supabase signInWithOtp background notice:", e);
     }

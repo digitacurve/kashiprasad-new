@@ -37,25 +37,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, userId: `usr_${cleanEmail.replace(/[^a-zA-Z0-9]/g, "_")}` });
     }
 
-    // 2. Try Supabase verifyOtp
+    // 2. Try Supabase verifyOtp if configured
     try {
-      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      let res = await supabase.auth.verifyOtp({
-        email: cleanEmail,
-        token: cleanOtp,
-        type: "email",
-      });
-
-      if (res.error || !res.data.user) {
-        res = await supabase.auth.verifyOtp({
+      if (SUPABASE_ANON_KEY) {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let res = await supabase.auth.verifyOtp({
           email: cleanEmail,
           token: cleanOtp,
-          type: "signup",
+          type: "email",
         });
-      }
 
-      if (res.data?.user) {
-        return NextResponse.json({ success: true, userId: res.data.user.id });
+        if (res.error || !res.data.user) {
+          res = await supabase.auth.verifyOtp({
+            email: cleanEmail,
+            token: cleanOtp,
+            type: "signup",
+          });
+        }
+
+        if (res.data?.user) {
+          return NextResponse.json({ success: true, userId: res.data.user.id });
+        }
       }
     } catch (e) {
       console.warn("Supabase verify background check notice:", e);
