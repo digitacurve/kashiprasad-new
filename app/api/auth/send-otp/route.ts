@@ -49,39 +49,76 @@ export async function POST(req: Request) {
 
     // 3. Directly send high-priority email via Resend HTTP API
     try {
-      const resendRes = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "Kashi Prasad <onboarding@resend.dev>",
-          to: [cleanEmail],
-          subject: "Your Kashi Prasad Verification Code",
-          html: `
-            <div style="font-family: Arial, sans-serif; background-color: #06080c; color: #f5f5f7; padding: 32px 20px; text-align: center; border-radius: 16px; max-width: 500px; margin: 0 auto; border: 1px solid #dfab5240;">
-              <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 8px; letter-spacing: 2px;">KASHI PRASAD</h2>
-              <p style="font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Devotee Verification</p>
-              
-              <p style="font-size: 14px; color: #d4d4d8; margin: 24px 0 12px;">Your one-time sacred verification code is:</p>
-              
-              <div style="background: #0f131a; border: 1px solid #dfab52; border-radius: 12px; padding: 16px 24px; display: inline-block; margin-bottom: 20px;">
-                <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #fbbf24; font-family: monospace;">${generatedOtp}</span>
+      if (RESEND_API_KEY) {
+        // Try official custom domain first
+        let resendRes = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${RESEND_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Kashi Prasad <orders@kashiprasad.in>",
+            to: [cleanEmail],
+            subject: "Your Kashi Prasad Verification Code",
+            html: `
+              <div style="font-family: Arial, sans-serif; background-color: #06080c; color: #f5f5f7; padding: 32px 20px; text-align: center; border-radius: 16px; max-width: 500px; margin: 0 auto; border: 1px solid #dfab5240;">
+                <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 8px; letter-spacing: 2px;">KASHI PRASAD</h2>
+                <p style="font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Devotee Verification</p>
+                
+                <p style="font-size: 14px; color: #d4d4d8; margin: 24px 0 12px;">Your one-time sacred verification code is:</p>
+                
+                <div style="background: #0f131a; border: 1px solid #dfab52; border-radius: 12px; padding: 16px 24px; display: inline-block; margin-bottom: 20px;">
+                  <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #fbbf24; font-family: monospace;">${generatedOtp}</span>
+                </div>
+                
+                <p style="font-size: 12px; color: #71717a; margin-bottom: 24px;">Enter this 6-digit code on the website to verify your account. This code expires in 10 minutes.</p>
+                
+                <div style="border-top: 1px solid #27272a; padding-top: 16px; font-size: 11px; color: #71717a;">
+                  <span>🕉️ Authentic Consecrated Offerings from Varanasi</span>
+                </div>
               </div>
-              
-              <p style="font-size: 12px; color: #71717a; margin-bottom: 24px;">Enter this 6-digit code on the website to verify your account. This code expires in 10 minutes.</p>
-              
-              <div style="border-top: 1px solid #27272a; padding-top: 16px; font-size: 11px; color: #71717a;">
-                <span>🕉️ Authentic Consecrated Offerings from Varanasi</span>
-              </div>
-            </div>
-          `,
-        }),
-      });
+            `,
+          }),
+        });
 
-      const resendData = await resendRes.json();
-      console.log("Direct Resend email status:", resendRes.status, resendData);
+        // If domain not fully verified yet, fallback to onboarding test domain
+        if (!resendRes.ok) {
+          resendRes = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${RESEND_API_KEY}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "Kashi Prasad <onboarding@resend.dev>",
+              to: [cleanEmail],
+              subject: "Your Kashi Prasad Verification Code",
+              html: `
+                <div style="font-family: Arial, sans-serif; background-color: #06080c; color: #f5f5f7; padding: 32px 20px; text-align: center; border-radius: 16px; max-width: 500px; margin: 0 auto; border: 1px solid #dfab5240;">
+                  <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 8px; letter-spacing: 2px;">KASHI PRASAD</h2>
+                  <p style="font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Devotee Verification</p>
+                  
+                  <p style="font-size: 14px; color: #d4d4d8; margin: 24px 0 12px;">Your one-time sacred verification code is:</p>
+                  
+                  <div style="background: #0f131a; border: 1px solid #dfab52; border-radius: 12px; padding: 16px 24px; display: inline-block; margin-bottom: 20px;">
+                    <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #fbbf24; font-family: monospace;">${generatedOtp}</span>
+                  </div>
+                  
+                  <p style="font-size: 12px; color: #71717a; margin-bottom: 24px;">Enter this 6-digit code on the website to verify your account. This code expires in 10 minutes.</p>
+                  
+                  <div style="border-top: 1px solid #27272a; padding-top: 16px; font-size: 11px; color: #71717a;">
+                    <span>🕉️ Authentic Consecrated Offerings from Varanasi</span>
+                  </div>
+                </div>
+              `,
+            }),
+          });
+        }
+
+        const resendData = await resendRes.json();
+        console.log("Direct Resend email status:", resendRes.status, resendData);
+      }
     } catch (err) {
       console.error("Direct Resend dispatch error:", err);
     }
