@@ -85,6 +85,17 @@ export default function SiteHeader({ transparent = false }: { transparent?: bool
             <ShieldCheck className="h-3.5 w-3.5 text-amber-400/80" />
             <span>Verify</span>
           </Link>
+
+          {/* Acharya WhatsApp Help */}
+          <a
+            href="https://wa.me/918604971503?text=Hari%20Om%20Acharyaji%2C%20Mujhe%20Kashi%20Prasad%20sacred%20items%20aur%20puja%20services%20ke%20bare%20me%20guidance%20chahiye."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wider text-emerald-400 hover:text-emerald-300 transition-colors py-1"
+          >
+            <MessageCircle className="h-3.5 w-3.5 text-emerald-400" />
+            <span>Ask Acharya</span>
+          </a>
         </nav>
 
         {/* Action Controls - Scaled for Mobile with Zero Overflow */}

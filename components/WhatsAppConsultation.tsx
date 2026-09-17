@@ -64,37 +64,32 @@ export default function WhatsAppConsultation() {
   };
 
   return (
-    <div className="fixed bottom-6 right-5 sm:right-8 z-50">
+    <div className="fixed bottom-5 left-4 sm:left-6 z-40">
       {/* Floating Trigger Button & Tooltip */}
       {!isOpen && (
         <div className="relative flex items-center">
-          {/* Subtle popover teaser */}
-          {hasPrompted && (
-            <div
-              onClick={() => setIsOpen(true)}
-              className="hidden sm:flex items-center gap-2 mr-3 px-3.5 py-1.5 rounded-full bg-[#0a0d14] border border-amber-500/30 text-xs text-amber-200 shadow-[0_4px_20px_rgba(0,0,0,0.7)] cursor-pointer hover:border-amber-400 transition animate-bounce"
-            >
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>Talk to Acharya Vikas</span>
-            </div>
-          )}
-
           <button
             onClick={() => setIsOpen(true)}
             aria-label="Talk to Acharya Vikas on WhatsApp"
-            className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white shadow-[0_8px_25px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_30px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-emerald-300/40 cursor-pointer"
+            className="group relative flex h-12 w-12 sm:h-13 sm:w-13 items-center justify-center rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-green-400 text-white shadow-[0_6px_20px_rgba(16,185,129,0.35)] hover:shadow-[0_10px_25px_rgba(16,185,129,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 border border-emerald-300/40 cursor-pointer"
           >
-            {/* Pulsing ring */}
-            <span className="absolute -inset-1 rounded-full bg-emerald-500/30 blur-sm animate-pulse" />
-
             {/* Online indicator dot */}
-            <span className="absolute top-1 right-1 flex h-3.5 w-3.5 items-center justify-center">
+            <span className="absolute top-0.5 right-0.5 flex h-3 w-3 items-center justify-center">
               <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75 animate-ping" />
-              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300 border-2 border-emerald-950" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300 border border-emerald-950" />
             </span>
 
-            <MessageCircle className="h-7 w-7 text-white fill-white/10 group-hover:scale-110 transition-transform relative z-10" />
+            <MessageCircle className="h-6 w-6 text-white fill-white/10 group-hover:scale-110 transition-transform relative z-10" />
           </button>
+
+          {/* Subtle label on desktop hover/idle */}
+          <div
+            onClick={() => setIsOpen(true)}
+            className="hidden lg:flex items-center gap-1.5 ml-2.5 px-3 py-1 rounded-full bg-[#0a0d14]/90 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 shadow-lg backdrop-blur-md cursor-pointer hover:border-emerald-400 transition"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Vedic Advisory</span>
+          </div>
         </div>
       )}
 

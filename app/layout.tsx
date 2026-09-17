@@ -10,7 +10,6 @@ import WishlistDrawer from "@/components/WishlistDrawer";
 import SearchModal from "@/components/SearchModal";
 import AuthModal from "@/components/AuthModal";
 import WhatsAppConsultation from "@/components/WhatsAppConsultation";
-import AutoLoginPrompt from "@/components/AutoLoginPrompt";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -286,7 +285,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <SearchModal />
                 <AuthModal />
                 <WhatsAppConsultation />
-                <AutoLoginPrompt />
                 <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
               </WishlistProvider>
             </CartProvider>
