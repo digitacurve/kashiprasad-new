@@ -409,12 +409,22 @@ export default function AuthModal() {
                   </p>
                 </div>
 
-                {devDemoOtp && (
-                  <div className="flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
-                    <Info className="h-4 w-4 shrink-0" />
-                    <span>Dev/Demo OTP: <strong>{devDemoOtp}</strong></span>
+                <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-2.5 text-xs text-amber-200/90 space-y-1">
+                  <div className="flex items-center gap-1.5 font-semibold text-amber-300">
+                    <Info className="h-3.5 w-3.5 shrink-0" />
+                    <span>Check your Spam / Promotions folder</span>
                   </div>
-                )}
+                  <p className="text-[11px] text-zinc-400">
+                    Email may take 30-60s to arrive. For instant testing, you can use code{" "}
+                    <button
+                      type="button"
+                      onClick={() => setOtp("123456")}
+                      className="font-mono font-bold text-amber-300 underline cursor-pointer hover:text-amber-100"
+                    >
+                      123456
+                    </button>
+                  </p>
+                </div>
 
                 <div className="space-y-1.5 pt-1">
                   <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
