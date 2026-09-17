@@ -105,8 +105,8 @@ export default function AuthModal() {
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otp.length !== 6) {
-      setError("Please enter the 6-digit verification code.");
+    if (otp.length < 6) {
+      setError("Please enter the verification code sent to your email.");
       return;
     }
 
@@ -428,21 +428,21 @@ export default function AuthModal() {
 
                 <div className="space-y-1.5 pt-1">
                   <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
-                    6-Digit Email Code
+                    Verification Code
                   </label>
                   <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
                     <Lock className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
                     <input
                       ref={otpInputRef}
                       type="text"
-                      maxLength={6}
+                      maxLength={8}
                       value={otp}
                       onChange={(e) => {
                         setOtp(e.target.value.replace(/\D/g, ""));
                         if (error) setError(null);
                       }}
                       placeholder="• • • • • •"
-                      className="w-full bg-transparent px-3.5 py-3.5 text-lg font-mono tracking-[0.4em] text-center text-zinc-100 placeholder-zinc-600 focus:outline-none font-bold"
+                      className="w-full bg-transparent px-3.5 py-3.5 text-lg font-mono tracking-[0.25em] text-center text-zinc-100 placeholder-zinc-600 focus:outline-none font-bold"
                     />
                   </div>
                 </div>
@@ -456,7 +456,7 @@ export default function AuthModal() {
 
                 <button
                   type="submit"
-                  disabled={loading || otp.length !== 6}
+                  disabled={loading || otp.length < 6}
                   className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-zinc-950 shadow-[0_0_20px_rgba(223,171,82,0.3)] hover:brightness-110 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition font-mono cursor-pointer"
                 >
                   {loading ? (

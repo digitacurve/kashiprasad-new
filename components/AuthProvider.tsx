@@ -160,21 +160,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         try {
           const supabase = createClient();
-          const { data, error } = await supabase.auth.verifyOtp({
+          // Try email type first
+          let res = await supabase.auth.verifyOtp({
             email: cleanEmail,
             token: otp.trim(),
             type: "email",
           });
-          if (error || !data.user) {
+
+          // If email type fails, try signup type
+          if (res.error || !res.data.user) {
+            res = await supabase.auth.verifyOtp({
+              email: cleanEmail,
+              token: otp.trim(),
+              type: "signup",
+            });
+          }
+
+          if (res.error || !res.data.user) {
             return false;
           }
-          authUserId = data.user.id;
+          authUserId = res.data.user.id;
         } catch {
           return false;
         }
       }
     } else {
-      if (otp !== "123456" && otp !== "999999" && otp.length !== 6) {
+      if (otp !== "123456" && otp !== "999999" && otp.length < 6) {
         return false;
       }
     }
