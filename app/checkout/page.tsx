@@ -25,19 +25,35 @@ import CommerceShell, { EmptyState } from "@/components/CommerceShell";
 
 export default function CheckoutPage() {
   const { items, clearCart } = useCart();
-  const { user, isLoggedIn, openAuthModal, placeOrder } = useAuth();
+  const { user, isLoggedIn, openAuthModal, placeOrder, saveAddress } = useAuth();
 
   const [selectedAddressId, setSelectedAddressId] = useState<string>(
     user?.addresses.find((a) => a.isDefault)?.id || user?.addresses[0]?.id || ""
   );
 
+  // Inline Add Address for Logged-In User
+  const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
+  const [newAddrName, setNewAddrName] = useState(user?.name || "");
+  const [newAddrPhone, setNewAddrPhone] = useState(user?.phone || "");
+  const [newAddrAltPhone, setNewAddrAltPhone] = useState("");
+  const [newAddrLine, setNewAddrLine] = useState("");
+  const [newAddrLandmark, setNewAddrLandmark] = useState("");
+  const [newAddrCity, setNewAddrCity] = useState("Varanasi");
+  const [newAddrState, setNewAddrState] = useState("Uttar Pradesh");
+  const [newAddrPincode, setNewAddrPincode] = useState("221001");
+
   // Guest Address State (if user prefers not logging in)
   const [guestName, setGuestName] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
+  const [guestAltPhone, setGuestAltPhone] = useState("");
   const [guestAddress, setGuestAddress] = useState("");
+  const [guestLandmark, setGuestLandmark] = useState("");
   const [guestCity, setGuestCity] = useState("Varanasi");
   const [guestState, setGuestState] = useState("Uttar Pradesh");
   const [guestPincode, setGuestPincode] = useState("221001");
+
+  // Puja Sankalp & Delivery Instructions Note
+  const [sankalpNotes, setSankalpNotes] = useState("");
 
   const [paymentMethod, setPaymentMethod] = useState<"COD" | "UPI">("COD");
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
@@ -51,18 +67,54 @@ export default function CheckoutPage() {
   // 20% Advance for Cash on Delivery (COD)
   const codAdvanceAmount = Math.max(1, Math.round(totalAmount * 0.2));
   const codBalanceAmount = totalAmount - codAdvanceAmount;
-  const payableNow = paymentMethod === "COD" ? codAdvanceAmount : totalAmount;
+
+  // Handle saving new inline address for logged in user
+  const handleSaveInlineAddress = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAddrName.trim() || newAddrPhone.length !== 10 || !newAddrLine.trim() || !newAddrCity.trim() || newAddrPincode.length !== 6) {
+      alert("Please fill all required delivery details with valid 10-digit phone and 6-digit pincode.");
+      return;
+    }
+
+    const addrId = `addr_${Date.now()}`;
+    saveAddress({
+      fullName: newAddrName.trim(),
+      phone: newAddrPhone.trim(),
+      alternatePhone: newAddrAltPhone.trim() || undefined,
+      addressLine: newAddrLine.trim(),
+      landmark: newAddrLandmark.trim() || undefined,
+      city: newAddrCity.trim(),
+      state: newAddrState.trim(),
+      pincode: newAddrPincode.trim(),
+      isDefault: true,
+    }, addrId);
+
+    setSelectedAddressId(addrId);
+    setIsAddingNewAddress(false);
+  };
 
   // Selected address object
   const activeAddress: Address | null =
     isLoggedIn && user
-      ? user.addresses.find((a) => a.id === selectedAddressId) || user.addresses[0] || null
+      ? user.addresses.find((a) => a.id === selectedAddressId) || user.addresses[0] || (isAddingNewAddress && newAddrLine && newAddrPhone.length === 10 ? {
+          id: "temp",
+          fullName: newAddrName,
+          phone: newAddrPhone,
+          alternatePhone: newAddrAltPhone || undefined,
+          addressLine: newAddrLine,
+          landmark: newAddrLandmark || undefined,
+          city: newAddrCity,
+          state: newAddrState,
+          pincode: newAddrPincode,
+        } : null)
       : guestName && guestPhone && guestAddress
         ? {
             id: "guest",
             fullName: guestName,
             phone: guestPhone,
+            alternatePhone: guestAltPhone || undefined,
             addressLine: guestAddress,
+            landmark: guestLandmark || undefined,
             city: guestCity,
             state: guestState,
             pincode: guestPincode,
@@ -75,10 +127,20 @@ export default function CheckoutPage() {
 
     if (!activeAddress) {
       if (!isLoggedIn) {
-        alert("Please enter delivery address details or log in.");
+        setPaymentError("Please provide all required delivery details (Name, 10-digit mobile, address & 6-digit pincode).");
       } else {
-        alert("Please select or add a delivery address.");
+        setPaymentError("Please select or add a valid delivery address with 10-digit phone.");
       }
+      return;
+    }
+
+    if (activeAddress.phone.replace(/\D/g, "").length !== 10) {
+      setPaymentError("Receiver's primary mobile number must be exactly 10 digits for courier delivery.");
+      return;
+    }
+
+    if (activeAddress.pincode.replace(/\D/g, "").length !== 6) {
+      setPaymentError("Please enter a valid 6-digit postal pincode.");
       return;
     }
 
@@ -142,14 +204,20 @@ export default function CheckoutPage() {
               throw new Error(verifyErr.error || "Payment signature verification failed");
             }
 
+            const notesText = [
+              paymentMethod === "COD"
+                ? `20% Advance of ₹${amountToCharge} received via Razorpay (Txn ID: ${response.razorpay_payment_id}). Cash on delivery balance: ₹${codBalanceAmount}.`
+                : `100% Prepaid via Razorpay (Txn ID: ${response.razorpay_payment_id}).`,
+              sankalpNotes ? `Devotee Sankalp / Delivery Notes: ${sankalpNotes}` : "",
+              activeAddress.alternatePhone ? `Alt / WhatsApp Contact: +91 ${activeAddress.alternatePhone}` : "",
+              activeAddress.landmark ? `Landmark: ${activeAddress.landmark}` : "",
+            ].filter(Boolean).join(" | ");
+
             const order = placeOrder({
               total: totalAmount,
               advancePaid: amountToCharge,
               balanceDue: paymentMethod === "COD" ? codBalanceAmount : 0,
-              notes:
-                paymentMethod === "COD"
-                  ? `20% Advance of ₹${amountToCharge} received via Razorpay (Txn ID: ${response.razorpay_payment_id}). Cash on delivery balance: ₹${codBalanceAmount}.`
-                  : `100% Prepaid via Razorpay (Txn ID: ${response.razorpay_payment_id}).`,
+              notes: notesText,
               items: items.map((i) => ({
                 name: i.name,
                 variantName: i.variantName,
@@ -175,8 +243,11 @@ export default function CheckoutPage() {
         },
         notes: {
           address: activeAddress.addressLine,
+          landmark: activeAddress.landmark || "",
           city: activeAddress.city,
           pincode: activeAddress.pincode,
+          alternate_phone: activeAddress.alternatePhone || "",
+          sankalp_notes: sankalpNotes || "",
           payment_type: paymentMethod === "COD" ? "COD_20_PERCENT_ADVANCE" : "FULL_PREPAID",
         },
         theme: {
@@ -378,14 +449,19 @@ export default function CheckoutPage() {
                   1. Delivery Address
                 </h3>
               </div>
-              {isLoggedIn && (
-                <Link href="/account" className="text-xs font-mono text-amber-400 hover:underline">
-                  + Add New Address
-                </Link>
+              {isLoggedIn && user && user.addresses.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setIsAddingNewAddress(!isAddingNewAddress)}
+                  className="text-xs font-mono text-amber-400 hover:underline cursor-pointer"
+                >
+                  {isAddingNewAddress ? "← Select Saved Address" : "+ Add New Address"}
+                </button>
               )}
             </div>
 
-            {isLoggedIn && user && user.addresses.length > 0 ? (
+            {/* Logged in User with Saved Addresses */}
+            {isLoggedIn && user && user.addresses.length > 0 && !isAddingNewAddress ? (
               <div className="grid gap-3 sm:grid-cols-2">
                 {user.addresses.map((addr) => {
                   const isSelected = (selectedAddressId || user.addresses[0]?.id) === addr.id;
@@ -410,19 +486,29 @@ export default function CheckoutPage() {
                         )}
                       </div>
                       <p className="text-xs text-zinc-300 line-clamp-2">{addr.addressLine}</p>
+                      {addr.landmark && (
+                        <p className="text-[11px] text-zinc-400 mt-0.5">Landmark: {addr.landmark}</p>
+                      )}
                       <p className="text-xs text-zinc-400 mt-1">
-                        {addr.city}, {addr.state} — {addr.pincode}
+                        {addr.city}, {addr.state} —{" "}
+                        <span className="font-mono text-amber-200 font-semibold">{addr.pincode}</span>
                       </p>
-                      <p className="text-[11px] font-mono text-zinc-400 mt-2">
-                        Phone: +91 {addr.phone}
-                      </p>
+                      <div className="text-[11px] font-mono text-zinc-400 mt-2 space-y-0.5">
+                        <p>Phone: +91 {addr.phone}</p>
+                        {addr.alternatePhone && (
+                          <p className="text-zinc-500">Alt: +91 {addr.alternatePhone}</p>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
               </div>
-            ) : (
-              // Guest Address Inputs
+            ) : isLoggedIn && isAddingNewAddress ? (
+              /* Inline Address Form for Logged In User */
               <div className="space-y-3 pt-1">
+                <div className="flex items-center justify-between pb-1">
+                  <span className="text-xs font-mono text-amber-300">Enter New Delivery Details:</span>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-mono text-zinc-400 block mb-1">
@@ -431,23 +517,57 @@ export default function CheckoutPage() {
                     <input
                       type="text"
                       required
-                      value={guestName}
-                      onChange={(e) => setGuestName(e.target.value)}
+                      value={newAddrName}
+                      onChange={(e) => setNewAddrName(e.target.value)}
                       placeholder="Receiver's name"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
                     />
                   </div>
                   <div>
                     <label className="text-xs font-mono text-zinc-400 block mb-1">
-                      Mobile Number *
+                      Mobile Number (10-Digit) *
+                    </label>
+                    <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-900 focus-within:border-amber-400 overflow-hidden">
+                      <span className="px-2.5 text-xs font-mono text-amber-300 border-r border-zinc-700 bg-zinc-900/90">+91</span>
+                      <input
+                        type="tel"
+                        required
+                        maxLength={10}
+                        value={newAddrPhone}
+                        onChange={(e) => setNewAddrPhone(e.target.value.replace(/\D/g, ""))}
+                        placeholder="10-digit number"
+                        className="w-full bg-transparent px-2.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Alternate Mobile / WhatsApp (Optional)
+                    </label>
+                    <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-900 focus-within:border-amber-400 overflow-hidden">
+                      <span className="px-2.5 text-xs font-mono text-zinc-400 border-r border-zinc-700 bg-zinc-900/90">+91</span>
+                      <input
+                        type="tel"
+                        maxLength={10}
+                        value={newAddrAltPhone}
+                        onChange={(e) => setNewAddrAltPhone(e.target.value.replace(/\D/g, ""))}
+                        placeholder="Optional secondary phone"
+                        className="w-full bg-transparent px-2.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Famous Landmark (Optional)
                     </label>
                     <input
-                      type="tel"
-                      required
-                      maxLength={10}
-                      value={guestPhone}
-                      onChange={(e) => setGuestPhone(e.target.value.replace(/\D/g, ""))}
-                      placeholder="10-digit phone"
+                      type="text"
+                      value={newAddrLandmark}
+                      onChange={(e) => setNewAddrLandmark(e.target.value)}
+                      placeholder="Near temple, school, or metro"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
                     />
                   </div>
@@ -455,26 +575,164 @@ export default function CheckoutPage() {
 
                 <div>
                   <label className="text-xs font-mono text-zinc-400 block mb-1">
-                    Complete Address *
+                    House / Flat No., Building Name, Street & Area *
                   </label>
                   <textarea
                     required
                     rows={2}
-                    value={guestAddress}
-                    onChange={(e) => setGuestAddress(e.target.value)}
-                    placeholder="House/Flat No., Street, Area"
+                    value={newAddrLine}
+                    onChange={(e) => setNewAddrLine(e.target.value)}
+                    placeholder="e.g. Flat 402, Ganga Heights, Dashashwamedh Ghat Road"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-xs font-mono text-zinc-400 block mb-1">City *</label>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">City / District *</label>
+                    <input
+                      type="text"
+                      required
+                      value={newAddrCity}
+                      onChange={(e) => setNewAddrCity(e.target.value)}
+                      placeholder="City"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">State *</label>
+                    <input
+                      type="text"
+                      required
+                      value={newAddrState}
+                      onChange={(e) => setNewAddrState(e.target.value)}
+                      placeholder="State"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">Pincode (6-Digit) *</label>
+                    <input
+                      type="text"
+                      required
+                      maxLength={6}
+                      value={newAddrPincode}
+                      onChange={(e) => setNewAddrPincode(e.target.value.replace(/\D/g, ""))}
+                      placeholder="e.g. 221001"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={handleSaveInlineAddress}
+                    className="rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 px-4 py-2 text-xs font-bold uppercase tracking-wider text-zinc-950 font-mono hover:brightness-110 transition cursor-pointer"
+                  >
+                    Save Address to Profile
+                  </button>
+                  {user && user.addresses.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setIsAddingNewAddress(false)}
+                      className="text-xs font-mono text-zinc-400 hover:text-zinc-200"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* Guest Address Form */
+              <div className="space-y-3 pt-1">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Receiver Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={guestName}
+                      onChange={(e) => setGuestName(e.target.value)}
+                      placeholder="e.g. Rahul Sharma"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Primary Mobile Number *
+                    </label>
+                    <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-900 focus-within:border-amber-400 overflow-hidden">
+                      <span className="px-2.5 text-xs font-mono text-amber-300 border-r border-zinc-700 bg-zinc-900/90">+91</span>
+                      <input
+                        type="tel"
+                        required
+                        maxLength={10}
+                        value={guestPhone}
+                        onChange={(e) => setGuestPhone(e.target.value.replace(/\D/g, ""))}
+                        placeholder="10-digit mobile"
+                        className="w-full bg-transparent px-2.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Alternate Mobile / WhatsApp (Optional)
+                    </label>
+                    <div className="flex items-center rounded-xl border border-zinc-700 bg-zinc-900 focus-within:border-amber-400 overflow-hidden">
+                      <span className="px-2.5 text-xs font-mono text-zinc-400 border-r border-zinc-700 bg-zinc-900/90">+91</span>
+                      <input
+                        type="tel"
+                        maxLength={10}
+                        value={guestAltPhone}
+                        onChange={(e) => setGuestAltPhone(e.target.value.replace(/\D/g, ""))}
+                        placeholder="Secondary contact"
+                        className="w-full bg-transparent px-2.5 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Famous Landmark (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={guestLandmark}
+                      onChange={(e) => setGuestLandmark(e.target.value)}
+                      placeholder="Near temple, school, hospital"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-xs font-mono text-zinc-400 block mb-1">
+                    Complete Street Address / House No. / Building *
+                  </label>
+                  <textarea
+                    required
+                    rows={2}
+                    value={guestAddress}
+                    onChange={(e) => setGuestAddress(e.target.value)}
+                    placeholder="House/Flat No., Building Name, Street, Area"
+                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">City / District *</label>
                     <input
                       type="text"
                       required
                       value={guestCity}
                       onChange={(e) => setGuestCity(e.target.value)}
+                      placeholder="City"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none"
                     />
                   </div>
@@ -485,23 +743,39 @@ export default function CheckoutPage() {
                       required
                       value={guestState}
                       onChange={(e) => setGuestState(e.target.value)}
+                      placeholder="State"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-mono text-zinc-400 block mb-1">Pincode *</label>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">Pincode (6-Digit) *</label>
                     <input
                       type="text"
                       required
                       maxLength={6}
                       value={guestPincode}
                       onChange={(e) => setGuestPincode(e.target.value.replace(/\D/g, ""))}
-                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none"
+                      placeholder="e.g. 221001"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 focus:border-amber-400 focus:outline-none font-mono"
                     />
                   </div>
                 </div>
               </div>
             )}
+
+            {/* Special Puja Sankalp & Delivery Instructions Note */}
+            <div className="pt-2 border-t border-zinc-800/80">
+              <label className="text-xs font-mono text-amber-300 block mb-1">
+                ✦ Puja Sankalp / Delivery Instructions (Optional)
+              </label>
+              <input
+                type="text"
+                value={sankalpNotes}
+                onChange={(e) => setSankalpNotes(e.target.value)}
+                placeholder="e.g. Sankalp in the name of Sharma family (Kashyap Gotra) or Call before delivery"
+                className="w-full rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+              />
+            </div>
           </div>
 
           {/* 3. Payment Method */}
@@ -714,6 +988,13 @@ export default function CheckoutPage() {
               <Truck className="h-3.5 w-3.5 text-amber-400 shrink-0" />
               <span>Dispatched with Sacred Vedic Packaging</span>
             </div>
+            <p className="text-[10px] text-zinc-600 leading-tight text-center pt-2 border-t border-zinc-800/40">
+              By placing order, you agree to our{" "}
+              <Link href="/refund-policy" className="underline hover:text-zinc-400">
+                Terms of Supply & Sacred Policy
+              </Link>
+              . (Images are illustrative; items non-returnable; transit damages 100% replaced).
+            </p>
           </div>
         </aside>
       </form>

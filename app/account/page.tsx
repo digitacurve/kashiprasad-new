@@ -39,6 +39,7 @@ export default function AccountPage() {
   // Address form states
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
+  const [alternatePhone, setAlternatePhone] = useState("");
   const [addressLine, setAddressLine] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("Uttar Pradesh");
@@ -62,14 +63,14 @@ export default function AccountPage() {
           </div>
           <h2 className="font-serif text-2xl font-bold text-zinc-100">Welcome to Kashi Prasad</h2>
           <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
-            Please log in with your mobile number to view past orders, track sacred deliveries, and
+            Please log in with your email or Google to view past orders, track sacred deliveries, and
             manage your delivery addresses.
           </p>
           <button
             onClick={() => openAuthModal()}
             className="mt-6 w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-zinc-950 shadow-[0_0_20px_rgba(223,171,82,0.3)] hover:brightness-110 active:scale-[0.99] transition font-mono cursor-pointer"
           >
-            <span>Login with Mobile & OTP</span>
+            <span>Sign In with Email OTP</span>
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
@@ -85,11 +86,12 @@ export default function AccountPage() {
       {
         fullName,
         phone,
+        alternatePhone: alternatePhone || undefined,
         addressLine,
         city,
         state,
         pincode,
-        landmark,
+        landmark: landmark || undefined,
         isDefault,
       },
       editingAddressId || undefined
@@ -100,6 +102,7 @@ export default function AccountPage() {
     // Reset form
     setFullName("");
     setPhone("");
+    setAlternatePhone("");
     setAddressLine("");
     setCity("");
     setPincode("");
@@ -111,6 +114,7 @@ export default function AccountPage() {
     setEditingAddressId(addr.id);
     setFullName(addr.fullName);
     setPhone(addr.phone);
+    setAlternatePhone(addr.alternatePhone || "");
     setAddressLine(addr.addressLine);
     setCity(addr.city);
     setState(addr.state);
@@ -130,7 +134,7 @@ export default function AccountPage() {
   return (
     <CommerceShell
       title={`Namaste, ${user.name}`}
-      copy={`Account registered with +91 ${user.phone}. Manage your sacred orders and saved addresses.`}
+      copy={`Account registered with ${user.email || (user.phone ? '+91 ' + user.phone : 'Kashi Prasad')}. Manage your sacred orders and saved addresses.`}
     >
       <div className="mt-8 space-y-6">
         {/* Navigation Tabs */}
@@ -359,6 +363,34 @@ export default function AccountPage() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Alternate Phone / WhatsApp (Optional)
+                    </label>
+                    <input
+                      type="tel"
+                      maxLength={10}
+                      value={alternatePhone}
+                      onChange={(e) => setAlternatePhone(e.target.value.replace(/\D/g, ""))}
+                      placeholder="Optional 10-digit number"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-mono text-zinc-400 block mb-1">
+                      Landmark (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={landmark}
+                      onChange={(e) => setLandmark(e.target.value)}
+                      placeholder="Near temple, school, or landmark"
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label className="text-xs font-mono text-zinc-400 block mb-1">
                     Street Address / House No. / Area *
@@ -410,19 +442,6 @@ export default function AccountPage() {
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
                     />
                   </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-mono text-zinc-400 block mb-1">
-                    Landmark (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={landmark}
-                    onChange={(e) => setLandmark(e.target.value)}
-                    placeholder="Near temple, school, or landmark"
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-zinc-100 placeholder-zinc-500 focus:border-amber-400 focus:outline-none"
-                  />
                 </div>
 
                 <div className="flex items-center gap-2 pt-1">
@@ -489,7 +508,12 @@ export default function AccountPage() {
                     {addr.landmark && (
                       <p className="text-[11px] text-zinc-500 mt-1">Landmark: {addr.landmark}</p>
                     )}
-                    <p className="text-xs text-zinc-400 mt-2 font-mono">Phone: +91 {addr.phone}</p>
+                    <div className="text-xs text-zinc-400 mt-2 font-mono space-y-0.5">
+                      <p>Phone: +91 {addr.phone}</p>
+                      {addr.alternatePhone && (
+                        <p className="text-zinc-500">Alt / WA: +91 {addr.alternatePhone}</p>
+                      )}
+                    </div>
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between">
@@ -543,12 +567,12 @@ export default function AccountPage() {
             <div className="space-y-3 pt-2">
               <div>
                 <label className="text-xs font-mono text-zinc-300 block mb-1">
-                  Registered Mobile
+                  Registered Email
                 </label>
                 <input
                   type="text"
                   disabled
-                  value={`+91 ${user.phone}`}
+                  value={user.email || "—"}
                   className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-3 py-2 text-xs font-mono text-zinc-400 cursor-not-allowed"
                 />
               </div>

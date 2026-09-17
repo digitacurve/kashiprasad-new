@@ -58,18 +58,19 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { phone, name, email, id } = body;
 
-    if (!phone) {
+    if (!phone && !email && !id) {
       return NextResponse.json(
-        { success: false, error: "Phone number is required" },
+        { success: false, error: "Email or Phone number is required" },
         { status: 400 }
       );
     }
 
     const supabase = createAdminClient();
 
+    const profileId = id || (email ? `usr_${email.replace(/[^a-zA-Z0-9]/g, "_")}` : `usr_${phone}`);
     const profileData = {
-      id: id || phone,
-      phone,
+      id: profileId,
+      phone: phone || null,
       name: name || "Blessed Devotee",
       email: email || null,
       updated_at: new Date().toISOString(),
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from("profiles")
-      .upsert(profileData, { onConflict: "phone" })
+      .upsert(profileData, { onConflict: "id" })
       .select();
 
     if (error) {

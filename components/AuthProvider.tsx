@@ -1,12 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
-import { isFirebaseConfigured, sendFirebaseOtp, verifyFirebaseOtp } from "@/lib/firebase";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 export interface Address {
   id: string;
   fullName: string;
   phone: string;
+  alternatePhone?: string;
   addressLine: string;
   city: string;
   state: string;
@@ -17,9 +18,9 @@ export interface Address {
 
 export interface UserProfile {
   id: string;
-  phone: string;
+  email: string;
+  phone?: string;
   name: string;
-  email?: string;
   addresses: Address[];
 }
 
@@ -52,8 +53,9 @@ interface AuthContextValue {
   orders: PlacedOrder[];
   openAuthModal: (onSuccessCallback?: () => void) => void;
   closeAuthModal: () => void;
-  requestOtp: (phone: string) => Promise<{ success: boolean; otp?: string; error?: string }>;
-  verifyOtp: (phone: string, otp: string, name?: string) => Promise<boolean>;
+  requestOtp: (email: string) => Promise<{ success: boolean; otp?: string; error?: string }>;
+  verifyOtp: (email: string, otp: string, name?: string) => Promise<boolean>;
+  signInWithGoogle: () => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<UserProfile>) => void;
   saveAddress: (address: Omit<Address, "id">, id?: string) => void;
@@ -112,25 +114,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const requestOtp = async (
-    phone: string
+    email: string
   ): Promise<{ success: boolean; otp?: string; error?: string }> => {
-    if (isFirebaseConfigured) {
-      const res = await sendFirebaseOtp(phone, "recaptcha-container");
-      if (!res.success) {
-        return { success: false, error: res.error || "Failed to send SMS OTP" };
-      }
-      return { success: true };
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes("@")) {
+      return { success: false, error: "Please enter a valid email address." };
     }
 
-    // Demo fallback when Firebase keys are not in .env.local
+    if (isSupabaseConfigured) {
+      try {
+        const supabase = createClient();
+        const { error } = await supabase.auth.signInWithOtp({
+          email: cleanEmail,
+          options: {
+            shouldCreateUser: true,
+          },
+        });
+        if (error) {
+          return { success: false, error: error.message };
+        }
+        return { success: true };
+      } catch (err: any) {
+        return { success: false, error: err?.message || "Failed to send OTP to email." };
+      }
+    }
+
+    // Demo fallback when Supabase keys are not configured yet
     const otp = "123456";
     return { success: true, otp };
   };
 
-  const verifyOtp = async (phone: string, otp: string, name?: string): Promise<boolean> => {
-    if (isFirebaseConfigured) {
-      const res = await verifyFirebaseOtp(otp);
-      if (!res.success) {
+  const verifyOtp = async (email: string, otp: string, name?: string): Promise<boolean> => {
+    const cleanEmail = email.trim().toLowerCase();
+    let authUserId: string | null = null;
+
+    if (isSupabaseConfigured) {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase.auth.verifyOtp({
+          email: cleanEmail,
+          token: otp.trim(),
+          type: "email",
+        });
+        if (error || !data.user) {
+          return false;
+        }
+        authUserId = data.user.id;
+      } catch {
         return false;
       }
     } else {
@@ -139,27 +169,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     }
 
-    const cleanPhone = phone.replace(/\D/g, "");
-    let existingProfile = user;
+    const userId = authUserId || `usr_${cleanEmail.replace(/[^a-zA-Z0-9]/g, "_")}`;
+    const displayName = name?.trim() || user?.name || cleanEmail.split("@")[0] || "Blessed Devotee";
 
-    if (!existingProfile || existingProfile.phone !== cleanPhone) {
+    let existingProfile: UserProfile = user || {
+      id: userId,
+      email: cleanEmail,
+      phone: "",
+      name: displayName,
+      addresses: [],
+    };
+
+    if (existingProfile.email !== cleanEmail) {
       existingProfile = {
-        id: `usr_${cleanPhone}`,
-        phone: cleanPhone,
-        name: name?.trim() || `Devotee ${cleanPhone.slice(-4)}`,
-        addresses: [
-          {
-            id: `addr_${Date.now()}`,
-            fullName: name?.trim() || "Devotee",
-            phone: cleanPhone,
-            addressLine: "Ganga Ghat Road, Near Temple",
-            city: "Varanasi",
-            state: "Uttar Pradesh",
-            pincode: "221001",
-            landmark: "Near Kashi Vishwanath",
-            isDefault: true,
-          },
-        ],
+        ...existingProfile,
+        id: userId,
+        email: cleanEmail,
+        name: displayName,
       };
     } else if (name?.trim()) {
       existingProfile.name = name.trim();
@@ -174,9 +200,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: existingProfile.id,
-          phone: cleanPhone,
+          email: cleanEmail,
+          phone: existingProfile.phone || null,
           name: existingProfile.name,
-          email: existingProfile.email,
         }),
       }).catch((err) => console.warn("Background customer sync notice:", err));
     } catch {
@@ -189,6 +215,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCallbackOnSuccess(null);
     }
     return true;
+  };
+
+  const signInWithGoogle = async () => {
+    if (isSupabaseConfigured) {
+      try {
+        const supabase = createClient();
+        await supabase.auth.signInWithOAuth({
+          provider: "google",
+          options: {
+            redirectTo: typeof window !== "undefined" ? `${window.location.origin}/account` : undefined,
+          },
+        });
+      } catch (err) {
+        console.error("Google sign in error:", err);
+      }
+    } else {
+      // Demo simulated login
+      const mockEmail = "devotee@kashiprasad.com";
+      setUser({
+        id: "usr_google_demo",
+        email: mockEmail,
+        name: "Blessed Devotee",
+        phone: "",
+        addresses: [],
+      });
+      closeAuthModal();
+    }
   };
 
   const logout = () => {
@@ -311,6 +364,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       closeAuthModal,
       requestOtp,
       verifyOtp,
+      signInWithGoogle,
       logout,
       updateProfile,
       saveAddress,

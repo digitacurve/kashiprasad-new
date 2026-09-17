@@ -1,36 +1,39 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { X, ShieldCheck, Sparkles, Phone, Lock, ArrowRight, CheckCircle2, User, RefreshCw, AlertCircle } from "lucide-react";
+import { X, ShieldCheck, Sparkles, Mail, Lock, ArrowRight, CheckCircle2, User, RefreshCw, AlertCircle, Info } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { playLuxuryHaptic } from "@/lib/audio";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, requestOtp, verifyOtp } = useAuth();
-  const [phone, setPhone] = useState("");
+  const { isAuthModalOpen, closeAuthModal, requestOtp, verifyOtp, signInWithGoogle } = useAuth();
+  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [name, setName] = useState("");
-  const [step, setStep] = useState<"phone" | "otp">("phone");
+  const [step, setStep] = useState<"email" | "otp">("email");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
+  const [devDemoOtp, setDevDemoOtp] = useState<string | null>(null);
 
-  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
   const otpInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isAuthModalOpen) {
       document.body.style.overflow = "hidden";
-      setStep("phone");
+      setStep("email");
       setError(null);
-      setTimeout(() => phoneInputRef.current?.focus(), 80);
+      setDevDemoOtp(null);
+      setTimeout(() => emailInputRef.current?.focus(), 80);
     } else {
       document.body.style.overflow = "";
-      setPhone("");
+      setEmail("");
       setOtp("");
       setName("");
       setError(null);
+      setDevDemoOtp(null);
     }
   }, [isAuthModalOpen]);
 
@@ -48,19 +51,22 @@ export default function AuthModal() {
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cleanPhone = phone.replace(/\D/g, "");
-    if (cleanPhone.length !== 10) {
-      setError("Please enter a valid 10-digit mobile number.");
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes("@") || !cleanEmail.includes(".")) {
+      setError("Please enter a valid email address.");
       return;
     }
 
     setLoading(true);
     setError(null);
     try {
-      const res = await requestOtp(cleanPhone);
+      const res = await requestOtp(cleanEmail);
       if (res && res.error) {
         setError(res.error);
       } else {
+        if (res && res.otp) {
+          setDevDemoOtp(res.otp);
+        }
         setStep("otp");
         setTimer(30);
         setCanResend(false);
@@ -77,16 +83,16 @@ export default function AuthModal() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (otp.length !== 6) {
-      setError("Please enter the 6-digit verification code received on SMS.");
+      setError("Please enter the 6-digit verification code.");
       return;
     }
 
     setLoading(true);
     setError(null);
     try {
-      const success = await verifyOtp(phone, otp, name);
+      const success = await verifyOtp(email, otp, name);
       if (!success) {
-        setError("Invalid OTP code. Please check your SMS and enter the correct 6-digit code.");
+        setError("Invalid OTP code. Please check your email inbox (and spam folder) and try again.");
       } else {
         playLuxuryHaptic();
       }
@@ -106,11 +112,8 @@ export default function AuthModal() {
         aria-hidden="true"
       />
 
-      {/* Invisible reCAPTCHA container for Google/Firebase Phone Auth */}
-      <div id="recaptcha-container"></div>
-
       <div className="relative min-h-screen px-4 pt-12 pb-20 sm:px-6 flex justify-center items-center">
-        {/* Flipkart / Amazon Style Clean Luxury Dialog */}
+        {/* Luxury Dialog Box */}
         <div className="relative w-full max-w-md transform rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#0f131a] via-[#090c12] to-[#05070a] shadow-2xl transition-all overflow-hidden">
           {/* Top Gold Ambient Glow */}
           <div
@@ -144,39 +147,34 @@ export default function AuthModal() {
 
           {/* Modal Body */}
           <div className="p-6 sm:p-7">
-            {step === "phone" ? (
+            {step === "email" ? (
               <form onSubmit={handleSendOtp} className="space-y-4">
                 <div>
                   <h4 className="font-serif text-2xl font-bold text-zinc-100">
                     Login or Sign up
                   </h4>
                   <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed">
-                    Enter your mobile number to view past consecrated orders, saved delivery addresses, and track shipments.
+                    Enter your email to receive an instant 6-digit verification code. View past consecrated orders and track shipments.
                   </p>
                 </div>
 
                 <div className="space-y-1.5 pt-2">
                   <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
-                    Mobile Number
+                    Email Address
                   </label>
                   <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
-                    <div className="flex items-center gap-1.5 pl-3.5 pr-2.5 py-3 border-r border-zinc-700/80 text-xs font-mono font-bold text-amber-300">
-                      <span>🇮🇳</span>
-                      <span>+91</span>
-                    </div>
+                    <Mail className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
                     <input
-                      ref={phoneInputRef}
-                      type="tel"
-                      maxLength={10}
-                      value={phone}
+                      ref={emailInputRef}
+                      type="email"
+                      value={email}
                       onChange={(e) => {
-                        setPhone(e.target.value.replace(/\D/g, ""));
+                        setEmail(e.target.value);
                         if (error) setError(null);
                       }}
-                      placeholder="Enter 10-digit mobile number"
-                      className="w-full bg-transparent px-3.5 py-3 text-sm font-mono text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wider"
+                      placeholder="devotee@example.com"
+                      className="w-full bg-transparent px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wide"
                     />
-                    <Phone className="h-4 w-4 text-zinc-500 mr-3.5 shrink-0" />
                   </div>
                 </div>
 
@@ -189,17 +187,52 @@ export default function AuthModal() {
 
                 <button
                   type="submit"
-                  disabled={loading || phone.length !== 10}
+                  disabled={loading || !email.includes("@")}
                   className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-zinc-950 shadow-[0_0_20px_rgba(223,171,82,0.3)] hover:brightness-110 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition font-mono cursor-pointer"
                 >
                   {loading ? (
-                    <span>Sending SMS OTP...</span>
+                    <span>Sending Email OTP...</span>
                   ) : (
                     <>
-                      <span>Continue with OTP</span>
+                      <span>Send Verification Code</span>
                       <ArrowRight className="h-4 w-4" />
                     </>
                   )}
+                </button>
+
+                {/* Google Sign-in Alternative */}
+                <div className="relative flex items-center justify-center pt-2">
+                  <div className="border-t border-zinc-800 w-full" />
+                  <span className="bg-[#090c12] px-3 text-[11px] font-mono uppercase tracking-widest text-zinc-500 shrink-0">
+                    OR
+                  </span>
+                  <div className="border-t border-zinc-800 w-full" />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => signInWithGoogle()}
+                  className="w-full flex items-center justify-center gap-2.5 rounded-2xl border border-zinc-700 bg-zinc-900/80 px-4 py-3 text-xs font-medium text-zinc-200 hover:border-amber-400/60 hover:text-white transition cursor-pointer"
+                >
+                  <svg className="h-4 w-4" viewBox="0 0 24 24">
+                    <path
+                      fill="#EA4335"
+                      d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.3 0 10.6 0 13s.6 4.7 1.6 6.6l3.7-2.9z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z"
+                    />
+                  </svg>
+                  <span>Continue with Google</span>
                 </button>
 
                 {/* Trust and Privacy Note */}
@@ -209,7 +242,7 @@ export default function AuthModal() {
                   </p>
                   <div className="flex items-center justify-center gap-1.5 text-[11px] text-amber-400/80 pt-1 font-mono">
                     <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
-                    <span>100% Secure & Sanctified</span>
+                    <span>100% Free & Sanctified Access</span>
                   </div>
                 </div>
               </form>
@@ -222,20 +255,27 @@ export default function AuthModal() {
                     </h4>
                     <button
                       type="button"
-                      onClick={() => setStep("phone")}
+                      onClick={() => setStep("email")}
                       className="text-xs text-amber-400 hover:underline font-mono"
                     >
-                      Change (+91 {phone})
+                      Change ({email})
                     </button>
                   </div>
                   <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
-                    Please enter the 6-digit verification code sent to <strong className="text-amber-200 font-mono">+91 {phone}</strong>
+                    Please enter the 6-digit code sent to <strong className="text-amber-200">{email}</strong>
                   </p>
                 </div>
 
+                {devDemoOtp && (
+                  <div className="flex items-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+                    <Info className="h-4 w-4 shrink-0" />
+                    <span>Dev/Demo OTP: <strong>{devDemoOtp}</strong></span>
+                  </div>
+                )}
+
                 <div className="space-y-1.5 pt-1">
                   <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
-                    6-Digit SMS Code
+                    6-Digit Email Code
                   </label>
                   <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
                     <Lock className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
@@ -301,12 +341,12 @@ export default function AuthModal() {
                       onClick={() => {
                         setTimer(30);
                         setCanResend(false);
-                        requestOtp(phone);
+                        requestOtp(email);
                       }}
                       className="inline-flex items-center gap-1.5 text-xs font-mono text-amber-400 hover:underline cursor-pointer"
                     >
                       <RefreshCw className="h-3.5 w-3.5" />
-                      <span>Resend SMS OTP</span>
+                      <span>Resend Email OTP</span>
                     </button>
                   ) : (
                     <p className="text-xs text-zinc-500 font-mono">
@@ -322,3 +362,4 @@ export default function AuthModal() {
     </div>
   );
 }
+

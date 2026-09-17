@@ -79,9 +79,15 @@ export default function SiteFooter() {
         ))}
       </div>
 
-      <div className="mx-auto mt-12 max-w-7xl border-t border-zinc-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400 font-mono">
-        <p>© {new Date().getFullYear()} Kashi Prasad. All rights sanctified under Baba Kashi Vishwanath grace.</p>
-        <p className="text-zinc-400">Varanasi, Uttar Pradesh, Bharat</p>
+      <div className="mx-auto mt-12 max-w-7xl border-t border-zinc-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-mono">
+        <p className="text-[11px]">© {new Date().getFullYear()} Kashi Prasad. All rights sanctified under Baba Kashi Vishwanath grace.</p>
+        <div className="flex items-center gap-4 text-[11px] text-zinc-500">
+          <Link href="/refund-policy" className="hover:text-zinc-400 transition">
+            Sanctification & Return Policy
+          </Link>
+          <span>•</span>
+          <span className="text-zinc-500">Varanasi, Bharat</span>
+        </div>
       </div>
     </footer>
     </>
