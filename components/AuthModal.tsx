@@ -1,16 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { X, ShieldCheck, Sparkles, Mail, Lock, ArrowRight, CheckCircle2, User, RefreshCw, AlertCircle, Info } from "lucide-react";
+import { X, ShieldCheck, Sparkles, Mail, Lock, ArrowRight, CheckCircle2, User, Phone, RefreshCw, AlertCircle, Info, LogIn, UserPlus } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 import { playLuxuryHaptic } from "@/lib/audio";
 
 export default function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, requestOtp, verifyOtp, signInWithGoogle } = useAuth();
+  const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
   const [name, setName] = useState("");
-  const [step, setStep] = useState<"email" | "otp">("email");
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [step, setStep] = useState<"form" | "otp">("form");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [timer, setTimer] = useState(30);
@@ -18,24 +20,32 @@ export default function AuthModal() {
   const [devDemoOtp, setDevDemoOtp] = useState<string | null>(null);
 
   const emailInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const otpInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isAuthModalOpen) {
       document.body.style.overflow = "hidden";
-      setStep("email");
+      setStep("form");
       setError(null);
       setDevDemoOtp(null);
-      setTimeout(() => emailInputRef.current?.focus(), 80);
+      setTimeout(() => {
+        if (mode === "signup") {
+          nameInputRef.current?.focus();
+        } else {
+          emailInputRef.current?.focus();
+        }
+      }, 80);
     } else {
       document.body.style.overflow = "";
       setEmail("");
-      setOtp("");
       setName("");
+      setPhone("");
+      setOtp("");
       setError(null);
       setDevDemoOtp(null);
     }
-  }, [isAuthModalOpen]);
+  }, [isAuthModalOpen, mode]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -55,6 +65,19 @@ export default function AuthModal() {
     if (!cleanEmail || !cleanEmail.includes("@") || !cleanEmail.includes(".")) {
       setError("Please enter a valid email address.");
       return;
+    }
+
+    if (mode === "signup" && !name.trim()) {
+      setError("Please enter your full name to create an account.");
+      return;
+    }
+
+    if (mode === "signup" && phone.trim()) {
+      const cleanPhone = phone.replace(/\D/g, "");
+      if (cleanPhone.length !== 10) {
+        setError("Please enter a valid 10-digit mobile number or leave it blank.");
+        return;
+      }
     }
 
     setLoading(true);
@@ -90,7 +113,7 @@ export default function AuthModal() {
     setLoading(true);
     setError(null);
     try {
-      const success = await verifyOtp(email, otp, name);
+      const success = await verifyOtp(email, otp, name, phone);
       if (!success) {
         setError("Invalid OTP code. Please check your email inbox (and spam folder) and try again.");
       } else {
@@ -112,7 +135,7 @@ export default function AuthModal() {
         aria-hidden="true"
       />
 
-      <div className="relative min-h-screen px-4 pt-12 pb-20 sm:px-6 flex justify-center items-center">
+      <div className="relative min-h-screen px-4 pt-10 pb-20 sm:px-6 flex justify-center items-center">
         {/* Luxury Dialog Box */}
         <div className="relative w-full max-w-md transform rounded-3xl border border-amber-500/30 bg-gradient-to-b from-[#0f131a] via-[#090c12] to-[#05070a] shadow-2xl transition-all overflow-hidden">
           {/* Top Gold Ambient Glow */}
@@ -132,14 +155,14 @@ export default function AuthModal() {
                   KASHI PRASAD
                 </h3>
                 <p className="text-[10px] font-mono uppercase tracking-widest text-amber-400/80">
-                  Devotee Sign-in & Orders
+                  {mode === "login" ? "Devotee Sign-in & Orders" : "New Devotee Registration"}
                 </p>
               </div>
             </div>
             <button
               onClick={closeAuthModal}
               className="rounded-full p-1.5 text-zinc-400 hover:bg-zinc-800 hover:text-white transition cursor-pointer"
-              aria-label="Close login modal"
+              aria-label="Close modal"
             >
               <X className="h-4 w-4" />
             </button>
@@ -147,115 +170,235 @@ export default function AuthModal() {
 
           {/* Modal Body */}
           <div className="p-6 sm:p-7">
-            {step === "email" ? (
-              <form onSubmit={handleSendOtp} className="space-y-4">
+            {step === "form" ? (
+              <div className="space-y-5">
+                {/* Mode Tab Switcher: Log In vs Sign Up */}
+                <div className="grid grid-cols-2 p-1 rounded-2xl border border-amber-500/20 bg-zinc-950/80 backdrop-blur-sm">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("login");
+                      setError(null);
+                    }}
+                    className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      mode === "login"
+                        ? "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-zinc-950 shadow-[0_0_15px_rgba(223,171,82,0.35)] font-bold"
+                        : "text-zinc-400 hover:text-amber-200"
+                    }`}
+                  >
+                    <LogIn className="h-3.5 w-3.5" />
+                    <span>Log In</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("signup");
+                      setError(null);
+                    }}
+                    className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                      mode === "signup"
+                        ? "bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-zinc-950 shadow-[0_0_15px_rgba(223,171,82,0.35)] font-bold"
+                        : "text-zinc-400 hover:text-amber-200"
+                    }`}
+                  >
+                    <UserPlus className="h-3.5 w-3.5" />
+                    <span>Sign Up</span>
+                  </button>
+                </div>
+
+                {/* Form Heading */}
                 <div>
                   <h4 className="font-serif text-2xl font-bold text-zinc-100">
-                    Login or Sign up
+                    {mode === "login" ? "Devotee Log In" : "Create Devotee Account"}
                   </h4>
-                  <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed">
-                    Enter your email to receive an instant 6-digit verification code. View past consecrated orders and track shipments.
+                  <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
+                    {mode === "login"
+                      ? "Enter your registered email to access your account and view consecrated orders."
+                      : "Register with your name and email to track sacred shipments and manage your offerings."}
                   </p>
                 </div>
 
-                <div className="space-y-1.5 pt-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
-                    Email Address
-                  </label>
-                  <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
-                    <Mail className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
-                    <input
-                      ref={emailInputRef}
-                      type="email"
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (error) setError(null);
-                      }}
-                      placeholder="devotee@example.com"
-                      className="w-full bg-transparent px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wide"
-                    />
-                  </div>
-                </div>
-
-                {error && (
-                  <div className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
-                    <AlertCircle className="h-4 w-4 shrink-0" />
-                    <span>{error}</span>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading || !email.includes("@")}
-                  className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-zinc-950 shadow-[0_0_20px_rgba(223,171,82,0.3)] hover:brightness-110 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition font-mono cursor-pointer"
-                >
-                  {loading ? (
-                    <span>Sending Email OTP...</span>
-                  ) : (
-                    <>
-                      <span>Send Verification Code</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </>
+                <form onSubmit={handleSendOtp} className="space-y-3.5">
+                  {/* If Sign Up, Ask for Full Name */}
+                  {mode === "signup" && (
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
+                        Full Name <span className="text-amber-400">*</span>
+                      </label>
+                      <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
+                        <User className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
+                        <input
+                          ref={nameInputRef}
+                          type="text"
+                          value={name}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                            if (error) setError(null);
+                          }}
+                          placeholder="e.g. Ramesh Kumar"
+                          className="w-full bg-transparent px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wide"
+                        />
+                      </div>
+                    </div>
                   )}
-                </button>
 
-                {/* Google Sign-in Alternative */}
-                <div className="relative flex items-center justify-center pt-2">
-                  <div className="border-t border-zinc-800 w-full" />
-                  <span className="bg-[#090c12] px-3 text-[11px] font-mono uppercase tracking-widest text-zinc-500 shrink-0">
-                    OR
-                  </span>
-                  <div className="border-t border-zinc-800 w-full" />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => signInWithGoogle()}
-                  className="w-full flex items-center justify-center gap-2.5 rounded-2xl border border-zinc-700 bg-zinc-900/80 px-4 py-3 text-xs font-medium text-zinc-200 hover:border-amber-400/60 hover:text-white transition cursor-pointer"
-                >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24">
-                    <path
-                      fill="#EA4335"
-                      d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"
-                    />
-                    <path
-                      fill="#4285F4"
-                      d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.3 0 10.6 0 13s.6 4.7 1.6 6.6l3.7-2.9z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z"
-                    />
-                  </svg>
-                  <span>Continue with Google</span>
-                </button>
-
-                {/* Trust and Privacy Note */}
-                <div className="pt-2 border-t border-zinc-800/80 text-center space-y-1">
-                  <p className="text-[11px] text-zinc-500 leading-tight">
-                    By continuing, you agree to Kashi Prasad's Terms of Use and Privacy Policy.
-                  </p>
-                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-amber-400/80 pt-1 font-mono">
-                    <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
-                    <span>100% Free & Sanctified Access</span>
+                  {/* Email Address */}
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
+                      Email Address <span className="text-amber-400">*</span>
+                    </label>
+                    <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
+                      <Mail className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
+                      <input
+                        ref={emailInputRef}
+                        type="email"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          if (error) setError(null);
+                        }}
+                        placeholder="devotee@example.com"
+                        className="w-full bg-transparent px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wide"
+                      />
+                    </div>
                   </div>
-                </div>
-              </form>
+
+                  {/* If Sign Up, Optional Phone for delivery alerts */}
+                  {mode === "signup" && (
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-mono uppercase tracking-wider text-zinc-300 block">
+                        Mobile Number <span className="text-zinc-500 text-[10px] lowercase">(optional for updates)</span>
+                      </label>
+                      <div className="relative flex items-center rounded-2xl border border-zinc-700 bg-zinc-900/90 focus-within:border-amber-400 transition shadow-inner">
+                        <Phone className="h-4 w-4 text-amber-400 ml-3.5 shrink-0" />
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          value={phone}
+                          onChange={(e) => {
+                            setPhone(e.target.value.replace(/\D/g, ""));
+                            if (error) setError(null);
+                          }}
+                          placeholder="10-digit mobile number"
+                          className="w-full bg-transparent px-3.5 py-3 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none tracking-wide"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+                      <AlertCircle className="h-4 w-4 shrink-0" />
+                      <span>{error}</span>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading || !email.includes("@")}
+                    className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 px-5 py-3.5 text-xs font-bold uppercase tracking-wider text-zinc-950 shadow-[0_0_20px_rgba(223,171,82,0.3)] hover:brightness-110 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed transition font-mono cursor-pointer"
+                  >
+                    {loading ? (
+                      <span>Sending Email Code...</span>
+                    ) : (
+                      <>
+                        <span>{mode === "login" ? "Send Login Code" : "Create Account & Send Code"}</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+
+                  {/* Google Sign-in Alternative */}
+                  <div className="relative flex items-center justify-center pt-2">
+                    <div className="border-t border-zinc-800 w-full" />
+                    <span className="bg-[#090c12] px-3 text-[11px] font-mono uppercase tracking-widest text-zinc-500 shrink-0">
+                      OR
+                    </span>
+                    <div className="border-t border-zinc-800 w-full" />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => signInWithGoogle()}
+                    className="w-full flex items-center justify-center gap-2.5 rounded-2xl border border-zinc-700 bg-zinc-900/80 px-4 py-3 text-xs font-medium text-zinc-200 hover:border-amber-400/60 hover:text-white transition cursor-pointer"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24">
+                      <path
+                        fill="#EA4335"
+                        d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.3 8.9 5 12 5z"
+                      />
+                      <path
+                        fill="#4285F4"
+                        d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5.1 3.7-8.8z"
+                      />
+                      <path
+                        fill="#FBBC05"
+                        d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.3 0 10.6 0 13s.6 4.7 1.6 6.6l3.7-2.9z"
+                      />
+                      <path
+                        fill="#34A853"
+                        d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.3-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z"
+                      />
+                    </svg>
+                    <span>Continue with Google</span>
+                  </button>
+
+                  {/* Mode switcher link below */}
+                  <div className="pt-2 text-center text-xs">
+                    {mode === "login" ? (
+                      <p className="text-zinc-400">
+                        New devotee?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("signup");
+                            setError(null);
+                          }}
+                          className="text-amber-400 font-semibold hover:underline cursor-pointer ml-1"
+                        >
+                          Create an Account
+                        </button>
+                      </p>
+                    ) : (
+                      <p className="text-zinc-400">
+                        Already have an account?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("login");
+                            setError(null);
+                          }}
+                          className="text-amber-400 font-semibold hover:underline cursor-pointer ml-1"
+                        >
+                          Log In here
+                        </button>
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Trust and Privacy Note */}
+                  <div className="pt-2 border-t border-zinc-800/80 text-center space-y-1">
+                    <p className="text-[11px] text-zinc-500 leading-tight">
+                      By continuing, you agree to Kashi Prasad's Terms of Use and Privacy Policy.
+                    </p>
+                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-amber-400/80 pt-1 font-mono">
+                      <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
+                      <span>100% Free & Sanctified Access</span>
+                    </div>
+                  </div>
+                </form>
+              </div>
             ) : (
               <form onSubmit={handleVerifyOtp} className="space-y-4">
                 <div>
                   <div className="flex items-center justify-between">
                     <h4 className="font-serif text-2xl font-bold text-zinc-100">
-                      Verify OTP
+                      {mode === "login" ? "Verify Log In" : "Verify Sign Up"}
                     </h4>
                     <button
                       type="button"
-                      onClick={() => setStep("email")}
+                      onClick={() => setStep("form")}
                       className="text-xs text-amber-400 hover:underline font-mono"
                     >
                       Change ({email})
@@ -294,23 +437,6 @@ export default function AuthModal() {
                   </div>
                 </div>
 
-                {/* Optional Name for Profile */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-zinc-400 block">
-                    Your Full Name (Optional)
-                  </label>
-                  <div className="relative flex items-center rounded-2xl border border-zinc-800 bg-zinc-900/60 focus-within:border-amber-400 transition">
-                    <User className="h-4 w-4 text-zinc-500 ml-3.5 shrink-0" />
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="e.g. Ramesh Kumar"
-                      className="w-full bg-transparent px-3 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
                 {error && (
                   <div className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
                     <AlertCircle className="h-4 w-4 shrink-0" />
@@ -328,7 +454,7 @@ export default function AuthModal() {
                   ) : (
                     <>
                       <CheckCircle2 className="h-4 w-4" />
-                      <span>Verify & Continue</span>
+                      <span>{mode === "login" ? "Verify & Log In" : "Verify & Complete Registration"}</span>
                     </>
                   )}
                 </button>
@@ -362,4 +488,3 @@ export default function AuthModal() {
     </div>
   );
 }
-

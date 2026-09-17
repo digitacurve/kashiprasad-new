@@ -54,7 +54,7 @@ interface AuthContextValue {
   openAuthModal: (onSuccessCallback?: () => void) => void;
   closeAuthModal: () => void;
   requestOtp: (email: string) => Promise<{ success: boolean; otp?: string; error?: string }>;
-  verifyOtp: (email: string, otp: string, name?: string) => Promise<boolean>;
+  verifyOtp: (email: string, otp: string, name?: string, phone?: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<UserProfile>) => void;
@@ -144,7 +144,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { success: true, otp };
   };
 
-  const verifyOtp = async (email: string, otp: string, name?: string): Promise<boolean> => {
+  const verifyOtp = async (
+    email: string,
+    otp: string,
+    name?: string,
+    phone?: string
+  ): Promise<boolean> => {
     const cleanEmail = email.trim().toLowerCase();
     let authUserId: string | null = null;
 
@@ -175,7 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let existingProfile: UserProfile = user || {
       id: userId,
       email: cleanEmail,
-      phone: "",
+      phone: phone?.trim() || "",
       name: displayName,
       addresses: [],
     };
@@ -186,9 +191,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: userId,
         email: cleanEmail,
         name: displayName,
+        phone: phone?.trim() || existingProfile.phone || "",
       };
-    } else if (name?.trim()) {
-      existingProfile.name = name.trim();
+    } else {
+      if (name?.trim()) existingProfile.name = name.trim();
+      if (phone?.trim()) existingProfile.phone = phone.trim();
     }
 
     setUser(existingProfile);
