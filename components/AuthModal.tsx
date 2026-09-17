@@ -83,9 +83,20 @@ export default function AuthModal() {
     setLoading(true);
     setError(null);
     try {
-      const res = await requestOtp(cleanEmail);
+      const res = await requestOtp(cleanEmail, mode);
       if (res && res.error) {
         setError(res.error);
+        if (res.notRegistered) {
+          // Auto switch to Sign Up mode after a gentle pause so devotee can register
+          setTimeout(() => {
+            setMode("signup");
+          }, 1800);
+        } else if (res.alreadyRegistered) {
+          // Auto switch to Log In mode
+          setTimeout(() => {
+            setMode("login");
+          }, 1800);
+        }
       } else {
         if (res && res.otp) {
           setDevDemoOtp(res.otp);
@@ -97,7 +108,7 @@ export default function AuthModal() {
         setTimeout(() => otpInputRef.current?.focus(), 80);
       }
     } catch {
-      setError("Failed to send OTP. Please check your connection and try again.");
+      setError("Failed to send verification code. Please check your connection and try again.");
     } finally {
       setLoading(false);
     }

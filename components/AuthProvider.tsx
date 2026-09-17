@@ -53,7 +53,7 @@ interface AuthContextValue {
   orders: PlacedOrder[];
   openAuthModal: (onSuccessCallback?: () => void) => void;
   closeAuthModal: () => void;
-  requestOtp: (email: string) => Promise<{ success: boolean; otp?: string; error?: string }>;
+  requestOtp: (email: string, mode?: "login" | "signup") => Promise<{ success: boolean; otp?: string; error?: string; notRegistered?: boolean; alreadyRegistered?: boolean }>;
   verifyOtp: (email: string, otp: string, name?: string, phone?: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<void>;
   logout: () => void;
@@ -114,8 +114,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const requestOtp = async (
-    email: string
-  ): Promise<{ success: boolean; otp?: string; error?: string }> => {
+    email: string,
+    mode: "login" | "signup" = "login"
+  ): Promise<{ success: boolean; otp?: string; error?: string; notRegistered?: boolean; alreadyRegistered?: boolean }> => {
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !cleanEmail.includes("@")) {
       return { success: false, error: "Please enter a valid email address." };
@@ -126,11 +127,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const apiRes = await fetch("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail }),
+        body: JSON.stringify({ email: cleanEmail, mode }),
       });
       const data = await apiRes.json();
       if (data && data.success) {
         return { success: true };
+      }
+      if (data && data.error) {
+        return {
+          success: false,
+          error: data.error,
+          notRegistered: data.notRegistered,
+          alreadyRegistered: data.alreadyRegistered,
+        };
       }
     } catch {
       // safe fallback
@@ -142,7 +151,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const { error } = await supabase.auth.signInWithOtp({
           email: cleanEmail,
           options: {
-            shouldCreateUser: true,
+            shouldCreateUser: mode === "signup",
           },
         });
         if (error) {

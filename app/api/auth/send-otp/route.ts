@@ -20,11 +20,47 @@ const otpStore = global.__kashiOtpStore || (global.__kashiOtpStore = new Map<str
 
 export async function POST(req: Request) {
   try {
-    const { email } = await req.json();
+    const { email, mode } = await req.json();
     const cleanEmail = email?.trim()?.toLowerCase();
 
     if (!cleanEmail || !cleanEmail.includes("@")) {
       return NextResponse.json({ success: false, error: "Valid email address required." }, { status: 400 });
+    }
+
+    // Check user registration status in Supabase
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (serviceKey) {
+      try {
+        const supabaseAdmin = createClient(SUPABASE_URL, serviceKey, {
+          auth: { autoRefreshToken: false, persistSession: false },
+        });
+        const { data: usersData } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+        const isExistingUser = usersData?.users?.some((u) => u.email?.toLowerCase() === cleanEmail);
+
+        if (mode === "login" && !isExistingUser) {
+          return NextResponse.json(
+            {
+              success: false,
+              notRegistered: true,
+              error: "No account found with this email. Please Sign Up first to create your sacred account.",
+            },
+            { status: 404 }
+          );
+        }
+
+        if (mode === "signup" && isExistingUser) {
+          return NextResponse.json(
+            {
+              success: false,
+              alreadyRegistered: true,
+              error: "An account with this email already exists. Please switch to Log In.",
+            },
+            { status: 400 }
+          );
+        }
+      } catch (err) {
+        console.warn("User existence check notice:", err);
+      }
     }
 
     // 1. Generate a crisp 6-digit OTP
@@ -40,7 +76,7 @@ export async function POST(req: Request) {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         await supabase.auth.signInWithOtp({
           email: cleanEmail,
-          options: { shouldCreateUser: true },
+          options: { shouldCreateUser: mode === "signup" },
         });
       }
     } catch (e) {
