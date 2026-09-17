@@ -63,7 +63,10 @@ export async function POST(req: Request) {
             subject: "Your Kashi Prasad Verification Code",
             html: `
               <div style="font-family: Arial, sans-serif; background-color: #06080c; color: #f5f5f7; padding: 32px 20px; text-align: center; border-radius: 16px; max-width: 500px; margin: 0 auto; border: 1px solid #dfab5240;">
-                <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 8px; letter-spacing: 2px;">KASHI PRASAD</h2>
+                <div style="text-align: center; margin-bottom: 12px;">
+                  <img src="https://kashiprasad.in/logo.png" alt="Kashi Prasad Logo" width="60" height="60" style="border-radius: 50%; border: 2px solid #dfab52; display: inline-block;" />
+                </div>
+                <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 6px; letter-spacing: 2px; margin-top: 0;">KASHI PRASAD</h2>
                 <p style="font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Devotee Verification</p>
                 
                 <p style="font-size: 14px; color: #d4d4d8; margin: 24px 0 12px;">Your one-time sacred verification code is:</p>
@@ -96,7 +99,10 @@ export async function POST(req: Request) {
               subject: "Your Kashi Prasad Verification Code",
               html: `
                 <div style="font-family: Arial, sans-serif; background-color: #06080c; color: #f5f5f7; padding: 32px 20px; text-align: center; border-radius: 16px; max-width: 500px; margin: 0 auto; border: 1px solid #dfab5240;">
-                  <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 8px; letter-spacing: 2px;">KASHI PRASAD</h2>
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <img src="https://kashiprasad.in/logo.png" alt="Kashi Prasad Logo" width="60" height="60" style="border-radius: 50%; border: 2px solid #dfab52; display: inline-block;" />
+                  </div>
+                  <h2 style="font-family: Georgia, serif; color: #dfab52; margin-bottom: 6px; letter-spacing: 2px; margin-top: 0;">KASHI PRASAD</h2>
                   <p style="font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 0;">Devotee Verification</p>
                   
                   <p style="font-size: 14px; color: #d4d4d8; margin: 24px 0 12px;">Your one-time sacred verification code is:</p>
